@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ExecutionBoard } from '@/lib/types';
+import { Language, detectLanguage, t } from '@/lib/i18n';
+import LoadingState from './LoadingState';
 import toast from 'react-hot-toast';
 
 interface OnboardingFormProps {
@@ -9,17 +11,22 @@ interface OnboardingFormProps {
 }
 
 export default function OnboardingForm({ onBoardGenerated }: OnboardingFormProps) {
+  const [lang, setLang] = useState<Language>('en');
   const [goal, setGoal] = useState('');
   const [context, setContext] = useState('');
   const [timeAvailable, setTimeAvailable] = useState('');
   const [obstacles, setObstacles] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setLang(detectLanguage());
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!goal.trim()) {
-      toast.error('Please enter your goal');
+      toast.error(t('goalRequired', lang));
       return;
     }
 
@@ -36,6 +43,7 @@ export default function OnboardingForm({ onBoardGenerated }: OnboardingFormProps
           context: context.trim() || undefined,
           timeAvailable: timeAvailable || undefined,
           obstacles: obstacles.trim() ? obstacles.split(',').map(o => o.trim()) : undefined,
+          language: lang,
         }),
       });
 
@@ -45,111 +53,222 @@ export default function OnboardingForm({ onBoardGenerated }: OnboardingFormProps
       }
 
       const board: ExecutionBoard = await response.json();
-      toast.success('Execution board generated!');
+      toast.success(t('boardGenerated', lang));
       onBoardGenerated(board);
     } catch (error: any) {
       console.error('Error generating board:', error);
-      toast.error(error.message || 'Failed to generate board. Please try again.');
+      toast.error(t('errorGenerate', lang));
     } finally {
       setLoading(false);
     }
   };
 
+  if (loading) {
+    return <LoadingState lang={lang} />;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8 md:p-12">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
-            GlowAppLify
-          </h1>
-          <p className="text-lg text-gray-600">
-            Transform your goal into an execution board in seconds
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8" style={{ background: 'var(--background-alt)' }}>
+      <div className="w-full max-w-4xl">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-2xl"
+              style={{
+                background: 'linear-gradient(135deg, var(--primary-500), var(--accent-500))',
+                color: '#FFFFFF',
+              }}
+            >
+              G
+            </div>
+            <h1
+              className="text-4xl md:text-5xl font-bold"
+              style={{ color: 'var(--foreground)' }}
+            >
+              {t('appName', lang)}
+            </h1>
+          </div>
+          <p
+            className="text-xl md:text-2xl max-w-2xl mx-auto"
+            style={{ color: 'var(--foreground-muted)' }}
+          >
+            {t('tagline', lang)}
           </p>
+
+          {/* Language switcher */}
+          <div className="mt-6 flex justify-center gap-2">
+            <button
+              onClick={() => setLang('en')}
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              style={{
+                background: lang === 'en' ? 'var(--primary-500)' : 'var(--gray-200)',
+                color: lang === 'en' ? '#FFFFFF' : 'var(--foreground-muted)',
+              }}
+            >
+              English
+            </button>
+            <button
+              onClick={() => setLang('es')}
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              style={{
+                background: lang === 'es' ? 'var(--primary-500)' : 'var(--gray-200)',
+                color: lang === 'es' ? '#FFFFFF' : 'var(--foreground-muted)',
+              }}
+            >
+              Español
+            </button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="goal" className="block text-sm font-semibold text-gray-700 mb-2">
-              What's your ONE goal for the next 90 days? *
-            </label>
-            <textarea
-              id="goal"
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-              placeholder="Example: I want to launch my online business, lose 20 pounds, learn to code, write a book..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-              rows={4}
-              disabled={loading}
-            />
+        {/* Form Card */}
+        <div
+          className="rounded-3xl p-8 md:p-12"
+          style={{
+            background: 'var(--background)',
+            boxShadow: 'var(--shadow-2xl)',
+          }}
+        >
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Main Goal Input */}
+            <div>
+              <label
+                htmlFor="goal"
+                className="block text-lg font-bold mb-3"
+                style={{ color: 'var(--foreground)' }}
+              >
+                {t('goalLabel', lang)} <span style={{ color: 'var(--error)' }}>*</span>
+              </label>
+              <textarea
+                id="goal"
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                placeholder={t('goalPlaceholder', lang)}
+                className="w-full px-6 py-4 rounded-xl resize-none text-lg focus:outline-none focus:ring-2"
+                style={{
+                  border: '2px solid var(--gray-300)',
+                  color: 'var(--foreground)',
+                  background: 'var(--background)',
+                }}
+                rows={4}
+                disabled={loading}
+              />
+            </div>
+
+            {/* Optional Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  htmlFor="context"
+                  className="block text-sm font-semibold mb-2"
+                  style={{ color: 'var(--foreground-muted)' }}
+                >
+                  {t('contextLabel', lang)}
+                </label>
+                <input
+                  id="context"
+                  type="text"
+                  value={context}
+                  onChange={(e) => setContext(e.target.value)}
+                  placeholder={t('contextPlaceholder', lang)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2"
+                  style={{
+                    border: '1px solid var(--gray-300)',
+                    color: 'var(--foreground)',
+                    background: 'var(--background)',
+                  }}
+                  disabled={loading}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="time"
+                  className="block text-sm font-semibold mb-2"
+                  style={{ color: 'var(--foreground-muted)' }}
+                >
+                  {t('timeLabel', lang)}
+                </label>
+                <input
+                  id="time"
+                  type="text"
+                  value={timeAvailable}
+                  onChange={(e) => setTimeAvailable(e.target.value)}
+                  placeholder={t('timePlaceholder', lang)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2"
+                  style={{
+                    border: '1px solid var(--gray-300)',
+                    color: 'var(--foreground)',
+                    background: 'var(--background)',
+                  }}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="obstacles"
+                className="block text-sm font-semibold mb-2"
+                style={{ color: 'var(--foreground-muted)' }}
+              >
+                {t('obstaclesLabel', lang)}
+              </label>
+              <input
+                id="obstacles"
+                type="text"
+                value={obstacles}
+                onChange={(e) => setObstacles(e.target.value)}
+                placeholder={t('obstaclesPlaceholder', lang)}
+                className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2"
+                style={{
+                  border: '1px solid var(--gray-300)',
+                  color: 'var(--foreground)',
+                  background: 'var(--background)',
+                }}
+                disabled={loading}
+              />
+              <p className="text-sm mt-2" style={{ color: 'var(--foreground-muted)' }}>
+                {t('obstaclesHint', lang)}
+              </p>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading || !goal.trim()}
+              className="w-full py-5 px-8 rounded-xl font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: 'linear-gradient(135deg, var(--primary-500), var(--accent-500))',
+                color: '#FFFFFF',
+                boxShadow: 'var(--shadow-lg)',
+              }}
+            >
+              {t('generateButton', lang)}
+            </button>
+          </form>
+        </div>
+
+        {/* Trust indicators */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm" style={{ color: 'var(--foreground-muted)' }}>
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{lang === 'es' ? 'Generación en 10-30s' : 'Generated in 10-30s'}</span>
           </div>
-
-          <div>
-            <label htmlFor="context" className="block text-sm font-semibold text-gray-700 mb-2">
-              What's your situation? (optional)
-            </label>
-            <input
-              id="context"
-              type="text"
-              value={context}
-              onChange={(e) => setContext(e.target.value)}
-              placeholder="Example: full-time student, working 9-5, entrepreneur, parent..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              disabled={loading}
-            />
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span>{lang === 'es' ? 'Privado y seguro' : 'Private & Secure'}</span>
           </div>
-
-          <div>
-            <label htmlFor="time" className="block text-sm font-semibold text-gray-700 mb-2">
-              How much time can you dedicate per day? (optional)
-            </label>
-            <input
-              id="time"
-              type="text"
-              value={timeAvailable}
-              onChange={(e) => setTimeAvailable(e.target.value)}
-              placeholder="Example: 15 minutes, 1 hour, 2-3 hours..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              disabled={loading}
-            />
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            <span>{lang === 'es' ? 'Totalmente editable' : 'Fully Editable'}</span>
           </div>
-
-          <div>
-            <label htmlFor="obstacles" className="block text-sm font-semibold text-gray-700 mb-2">
-              What obstacles have stopped you before? (optional)
-            </label>
-            <input
-              id="obstacles"
-              type="text"
-              value={obstacles}
-              onChange={(e) => setObstacles(e.target.value)}
-              placeholder="Example: lack of time, procrastination, unclear plan..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              disabled={loading}
-            />
-            <p className="text-sm text-gray-500 mt-1">Separate multiple obstacles with commas</p>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading || !goal.trim()}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Generating your execution board...
-              </span>
-            ) : (
-              'Generate My Execution Board'
-            )}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>This usually takes 10-30 seconds</p>
         </div>
       </div>
     </div>

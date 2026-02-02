@@ -44,16 +44,26 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
-        <div className="text-lg text-gray-600">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--background-alt)' }}>
+        <div className="text-lg" style={{ color: 'var(--gray-600)' }}>Loading...</div>
       </div>
     );
   }
 
   return (
     <>
-      <Toaster position="top-right" />
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: 'var(--background)',
+            color: 'var(--foreground)',
+            boxShadow: 'var(--shadow-lg)',
+            border: '1px solid var(--gray-200)',
+          },
+        }}
+      />
+      <div className="min-h-screen">
         {view === 'onboarding' && (
           <OnboardingForm onBoardGenerated={handleBoardGenerated} />
         )}

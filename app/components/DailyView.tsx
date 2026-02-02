@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ExecutionBoard, DailyAction } from '@/lib/types';
 import { getTodayLog, saveDailyLog } from '@/lib/storage';
+import { detectLanguage, t, Language } from '@/lib/i18n';
 import toast from 'react-hot-toast';
 
 interface DailyViewProps {
@@ -14,6 +15,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
   const [completedActions, setCompletedActions] = useState<Set<string>>(new Set());
   const [mood, setMood] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
   const [reflection, setReflection] = useState('');
+  const [language, setLanguage] = useState<Language>('en');
 
   const today = new Date();
   const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
@@ -22,6 +24,14 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
   // Get current week actions
   const currentWeek = board.execution[0]; // For MVP, using first week
   const todayActions: DailyAction[] = currentWeek?.days[dayName] || [];
+
+  useEffect(() => {
+    // Detect language from localStorage or browser
+    const savedLang = typeof window !== 'undefined'
+      ? (localStorage.getItem('language') as Language)
+      : null;
+    setLanguage(savedLang || detectLanguage());
+  }, []);
 
   useEffect(() => {
     // Load today's log if exists
@@ -39,8 +49,10 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
     const newCompleted = new Set(completedActions);
     if (newCompleted.has(actionId)) {
       newCompleted.delete(actionId);
+      toast.success(language === 'en' ? 'Unchecked!' : '¡Desmarcado!', { duration: 1000 });
     } else {
       newCompleted.add(actionId);
+      toast.success(language === 'en' ? '✓ Completed!' : '✓ ¡Completado!', { duration: 1500, icon: '🎯' });
     }
     setCompletedActions(newCompleted);
 
@@ -56,6 +68,19 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
     }
   };
 
+  const handleMoodChange = (newMood: 1 | 2 | 3 | 4 | 5) => {
+    setMood(newMood);
+    if (board.id) {
+      saveDailyLog({
+        boardId: board.id,
+        date: dateString,
+        completedActions: Array.from(completedActions),
+        mood: newMood,
+        reflection: reflection || undefined,
+      });
+    }
+  };
+
   const handleSaveReflection = () => {
     if (board.id) {
       saveDailyLog({
@@ -65,7 +90,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
         mood: mood || undefined,
         reflection: reflection || undefined,
       });
-      toast.success('Daily reflection saved!');
+      toast.success(t('checkinSaved', language));
     }
   };
 
@@ -74,179 +99,475 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
     : 0;
 
   const oneThingAction = todayActions.find(a => a.isOneThingAction);
+  const oneThingCompleted = oneThingAction ? completedActions.has(oneThingAction.id) : false;
+
+  const toggleLanguage = () => {
+    const newLang = language === 'en' ? 'es' : 'en';
+    setLanguage(newLang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', newLang);
+    }
+  };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8">
-      {/* Header */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6">
-        <button
-          onClick={onBackToBoard}
-          className="mb-4 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+    <div className="min-h-screen" style={{ background: 'var(--background-alt)' }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header with gradient */}
+        <div
+          className="rounded-3xl shadow-2xl mb-8 overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, var(--primary-600) 0%, var(--accent-600) 100%)',
+          }}
         >
-          ← Back to Board
-        </button>
-
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-          Today's Execution
-        </h1>
-        <p className="text-lg text-gray-600">
-          {today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-        </p>
-
-        <div className="mt-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-gray-700">Daily Progress</span>
-            <span className="text-sm font-semibold text-gray-700">{completionRate}%</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
-            <div
-              className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${completionRate}%` }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Vision Reminder */}
-      <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl shadow-xl p-6 mb-6 text-white">
-        <p className="text-xl font-bold mb-2">{board.vision.mantra}</p>
-        <p className="italic">{board.vision.identity}</p>
-      </div>
-
-      {/* ONE Thing Action */}
-      {oneThingAction && (
-        <div className="bg-yellow-50 border-2 border-yellow-400 rounded-2xl shadow-xl p-6 mb-6">
-          <h2 className="text-xl font-bold text-yellow-900 mb-3">⭐ Your ONE Thing Today</h2>
-          <label className="flex items-start gap-4 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={completedActions.has(oneThingAction.id)}
-              onChange={() => toggleAction(oneThingAction.id)}
-              className="mt-1 w-6 h-6 text-yellow-600 rounded focus:ring-2 focus:ring-yellow-500"
-            />
-            <div className="flex-1">
-              <p className="text-lg text-gray-900 group-hover:text-yellow-900 transition-colors">
-                {oneThingAction.description}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">{oneThingAction.duration}</p>
-            </div>
-          </label>
-        </div>
-      )}
-
-      {/* Today's Actions */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Today's Actions</h2>
-
-        {todayActions.length === 0 ? (
-          <p className="text-gray-600">No actions scheduled for today.</p>
-        ) : (
-          <div className="space-y-3">
-            {todayActions.filter(a => !a.isOneThingAction).map((action) => (
-              <label
-                key={action.id}
-                className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors border border-gray-200"
+          <div className="p-8 md:p-10">
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={onBackToBoard}
+                className="px-4 py-2 rounded-xl font-medium transition-all duration-200"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
               >
-                <input
-                  type="checkbox"
-                  checked={completedActions.has(action.id)}
-                  onChange={() => toggleAction(action.id)}
-                  className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="flex-1">
-                  <p className={`text-gray-900 ${completedActions.has(action.id) ? 'line-through text-gray-500' : ''}`}>
-                    {action.description}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">{action.duration}</p>
-                </div>
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Evening Check-in */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Evening Check-in</h2>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              How did today go?
-            </label>
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <button
-                  key={value}
-                  onClick={() => setMood(value as 1 | 2 | 3 | 4 | 5)}
-                  className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
-                    mood === value
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="text-2xl mb-1">
-                    {value === 1 && '😔'}
-                    {value === 2 && '😕'}
-                    {value === 3 && '😐'}
-                    {value === 4 && '😊'}
-                    {value === 5 && '🎉'}
-                  </div>
-                  <div className="text-xs">
-                    {value === 1 && 'Struggled'}
-                    {value === 2 && 'OK'}
-                    {value === 3 && 'Good'}
-                    {value === 4 && 'Great'}
-                    {value === 5 && 'Amazing'}
-                  </div>
-                </button>
-              ))}
+                ← {t('backToBoard', language)}
+              </button>
+              <button
+                onClick={toggleLanguage}
+                className="px-4 py-2 rounded-xl font-medium transition-all duration-200"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+              >
+                🌐 {language === 'en' ? 'ES' : 'EN'}
+              </button>
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="reflection" className="block text-sm font-semibold text-gray-700 mb-2">
-              Daily Reflection (optional)
-            </label>
-            <textarea
-              id="reflection"
-              value={reflection}
-              onChange={(e) => setReflection(e.target.value)}
-              placeholder="What went well? What could be improved? Any insights?"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              rows={4}
-            />
-          </div>
-
-          <button
-            onClick={handleSaveReflection}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
-          >
-            Save Check-in
-          </button>
-        </div>
-      </div>
-
-      {/* Habits Reminder */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Daily Habits</h2>
-
-        <div className="space-y-3">
-          {board.habits.map((habit, idx) => (
-            <div key={idx} className="flex items-center gap-3 p-3 bg-indigo-50 rounded-lg">
-              <span className="text-2xl">
-                {habit.type === 'morning' && '🌅'}
-                {habit.type === 'deepwork' && '💪'}
-                {habit.type === 'evening' && '🌙'}
-              </span>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900 capitalize">
-                  {habit.type === 'deepwork' ? 'Deep Work' : habit.type} - {habit.time}
+            <div className="flex items-center gap-4 mb-4">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
+                style={{ background: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                📅
+              </div>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-1">
+                  {t('todayExecution', language)}
+                </h1>
+                <p className="text-white/90 text-lg">
+                  {today.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
                 </p>
-                <p className="text-sm text-gray-600">{habit.description}</p>
               </div>
             </div>
-          ))}
+
+            {/* Beautiful progress visualization */}
+            <div
+              className="p-6 rounded-2xl"
+              style={{ background: 'rgba(255, 255, 255, 0.15)' }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-white/90 font-semibold">{t('dailyProgress', language)}</span>
+                <span className="text-3xl font-bold text-white">{completionRate}%</span>
+              </div>
+              <div
+                className="w-full rounded-full h-4 overflow-hidden"
+                style={{ background: 'rgba(0, 0, 0, 0.2)' }}
+              >
+                <div
+                  className="h-4 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${completionRate}%`,
+                    background: completionRate === 100
+                      ? 'linear-gradient(90deg, #10B981, #34D399)'
+                      : 'linear-gradient(90deg, var(--accent-400), var(--accent-500))',
+                    boxShadow: completionRate > 0 ? '0 0 20px rgba(16, 185, 129, 0.5)' : 'none',
+                  }}
+                />
+              </div>
+              {completionRate === 100 && (
+                <p className="text-center text-white font-bold mt-3 text-lg animate-pulse">
+                  🎉 {language === 'en' ? 'All tasks completed! Amazing work!' : '¡Todas las tareas completadas! ¡Increíble trabajo!'}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Vision Reminder - Inspiring card */}
+        <div
+          className="rounded-3xl shadow-xl mb-8 p-8 overflow-hidden relative"
+          style={{
+            background: 'linear-gradient(135deg, var(--accent-500) 0%, var(--primary-600) 100%)',
+          }}
+        >
+          <div className="relative z-10">
+            <div className="text-4xl mb-4">✨</div>
+            <p className="text-2xl md:text-3xl font-bold text-white mb-3 leading-tight">
+              {board.vision.mantra}
+            </p>
+            <p className="text-lg text-white/90 italic">
+              {board.vision.identity}
+            </p>
+          </div>
+          <div
+            className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10"
+            style={{
+              background: 'radial-gradient(circle, white, transparent)',
+              transform: 'translate(30%, -30%)',
+            }}
+          />
+        </div>
+
+        {/* ONE Thing Action - Celebratory design */}
+        {oneThingAction && (
+          <div
+            className="rounded-3xl shadow-2xl mb-8 overflow-hidden transform transition-all duration-300 hover:scale-[1.01]"
+            style={{
+              background: oneThingCompleted
+                ? 'linear-gradient(135deg, #10B981, #34D399)'
+                : 'linear-gradient(135deg, #FCD34D, #FBBF24)',
+              border: '3px solid',
+              borderColor: oneThingCompleted ? '#059669' : '#F59E0B',
+            }}
+          >
+            <div className="p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="text-4xl animate-bounce"
+                  style={{ animationDuration: '2s' }}
+                >
+                  {oneThingCompleted ? '🎯✓' : '⭐'}
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold" style={{ color: oneThingCompleted ? 'white' : '#78350F' }}>
+                  {t('oneThingToday', language)}
+                </h2>
+              </div>
+
+              <label className="flex items-start gap-5 cursor-pointer group">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={oneThingCompleted}
+                    onChange={() => toggleAction(oneThingAction.id)}
+                    className="w-8 h-8 rounded-lg appearance-none cursor-pointer transition-all duration-200"
+                    style={{
+                      border: '3px solid',
+                      borderColor: oneThingCompleted ? 'white' : '#78350F',
+                      background: oneThingCompleted ? 'white' : 'transparent',
+                    }}
+                  />
+                  {oneThingCompleted && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="text-2xl" style={{ color: '#059669' }}>✓</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p
+                    className={`text-xl md:text-2xl font-semibold leading-relaxed transition-all ${
+                      oneThingCompleted ? 'text-white line-through' : 'group-hover:scale-[1.02]'
+                    }`}
+                    style={{ color: oneThingCompleted ? 'white' : '#78350F' }}
+                  >
+                    {oneThingAction.description}
+                  </p>
+                  <p className="text-lg mt-2 flex items-center gap-2" style={{ color: oneThingCompleted ? 'white' : '#92400E' }}>
+                    ⏱️ {oneThingAction.duration}
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* Today's Actions - Clean checklist */}
+        <div
+          className="rounded-3xl shadow-xl mb-8 overflow-hidden"
+          style={{ background: 'var(--background)' }}
+        >
+          <div
+            className="p-6"
+            style={{
+              background: 'linear-gradient(135deg, var(--primary-600), var(--primary-700))',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                style={{ background: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                ✅
+              </div>
+              <h2 className="text-3xl font-bold text-white">
+                {t('todayActions', language)}
+              </h2>
+            </div>
+          </div>
+
+          <div className="p-8">
+            {todayActions.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🌴</div>
+                <p className="text-xl" style={{ color: 'var(--gray-600)' }}>
+                  {t('noActions', language)}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {todayActions.filter(a => !a.isOneThingAction).map((action) => {
+                  const isCompleted = completedActions.has(action.id);
+                  return (
+                    <label
+                      key={action.id}
+                      className="flex items-start gap-4 p-5 rounded-2xl cursor-pointer transition-all duration-200"
+                      style={{
+                        background: isCompleted
+                          ? 'linear-gradient(135deg, var(--accent-50), var(--primary-50))'
+                          : 'var(--gray-50)',
+                        border: '2px solid',
+                        borderColor: isCompleted ? 'var(--accent-300)' : 'var(--gray-200)',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isCompleted) {
+                          e.currentTarget.style.borderColor = 'var(--primary-300)';
+                          e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isCompleted) {
+                          e.currentTarget.style.borderColor = 'var(--gray-200)';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }
+                      }}
+                    >
+                      <div className="relative mt-1">
+                        <input
+                          type="checkbox"
+                          checked={isCompleted}
+                          onChange={() => toggleAction(action.id)}
+                          className="w-6 h-6 rounded-lg appearance-none cursor-pointer transition-all duration-200"
+                          style={{
+                            border: '2px solid',
+                            borderColor: isCompleted ? 'var(--accent-600)' : 'var(--gray-400)',
+                            background: isCompleted ? 'var(--accent-600)' : 'white',
+                          }}
+                        />
+                        {isCompleted && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <span className="text-white font-bold">✓</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p
+                          className={`text-lg font-medium leading-relaxed transition-all ${
+                            isCompleted ? 'line-through' : ''
+                          }`}
+                          style={{
+                            color: isCompleted ? 'var(--gray-500)' : 'var(--gray-900)',
+                          }}
+                        >
+                          {action.description}
+                        </p>
+                        <p className="text-sm mt-1 flex items-center gap-1" style={{ color: 'var(--gray-500)' }}>
+                          ⏱️ {action.duration}
+                        </p>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Evening Check-in - Meaningful reflection */}
+        <div
+          className="rounded-3xl shadow-xl mb-8 overflow-hidden"
+          style={{ background: 'var(--background)' }}
+        >
+          <div
+            className="p-6"
+            style={{
+              background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                style={{ background: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                🌙
+              </div>
+              <h2 className="text-3xl font-bold text-white">
+                {t('eveningCheckin', language)}
+              </h2>
+            </div>
+          </div>
+
+          <div className="p-8 space-y-6">
+            <div>
+              <label className="block text-lg font-bold mb-4" style={{ color: 'var(--gray-800)' }}>
+                {t('howWasDay', language)}
+              </label>
+              <div className="grid grid-cols-5 gap-3">
+                {([
+                  { value: 1, emoji: '😔', label: t('struggled', language), color: '#EF4444' },
+                  { value: 2, emoji: '😕', label: t('ok', language), color: '#F59E0B' },
+                  { value: 3, emoji: '😐', label: t('good', language), color: '#3B82F6' },
+                  { value: 4, emoji: '😊', label: t('great', language), color: '#10B981' },
+                  { value: 5, emoji: '🎉', label: t('amazing', language), color: '#8B5CF6' },
+                ] as const).map(({ value, emoji, label, color }) => (
+                  <button
+                    key={value}
+                    onClick={() => handleMoodChange(value)}
+                    className="py-4 px-3 rounded-2xl transition-all duration-300 transform hover:scale-105"
+                    style={{
+                      background: mood === value
+                        ? `linear-gradient(135deg, ${color}, ${color}dd)`
+                        : 'var(--gray-100)',
+                      border: '3px solid',
+                      borderColor: mood === value ? color : 'transparent',
+                      color: mood === value ? 'white' : 'var(--gray-700)',
+                      boxShadow: mood === value ? 'var(--shadow-lg)' : 'none',
+                    }}
+                  >
+                    <div className="text-4xl mb-2">{emoji}</div>
+                    <div className="text-xs font-bold">{label}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="reflection" className="block text-lg font-bold mb-3" style={{ color: 'var(--gray-800)' }}>
+                {t('dailyReflection', language)}
+              </label>
+              <textarea
+                id="reflection"
+                value={reflection}
+                onChange={(e) => setReflection(e.target.value)}
+                placeholder={t('reflectionPlaceholder', language)}
+                className="w-full px-5 py-4 rounded-2xl resize-none transition-all duration-200"
+                style={{
+                  border: '2px solid var(--gray-200)',
+                  color: 'var(--gray-900)',
+                  background: 'var(--gray-50)',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--primary-500)';
+                  e.currentTarget.style.background = 'white';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--gray-200)';
+                  e.currentTarget.style.background = 'var(--gray-50)';
+                }}
+                rows={5}
+              />
+            </div>
+
+            <button
+              onClick={handleSaveReflection}
+              className="w-full py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-[1.02]"
+              style={{
+                background: 'linear-gradient(135deg, var(--primary-600), var(--accent-600))',
+                color: 'white',
+                boxShadow: 'var(--shadow-lg)',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-2xl)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-lg)'}
+            >
+              💾 {t('saveCheckin', language)}
+            </button>
+          </div>
+        </div>
+
+        {/* Habits Reminder - Beautiful daily routine */}
+        <div
+          className="rounded-3xl shadow-xl mb-8 overflow-hidden"
+          style={{ background: 'var(--background)' }}
+        >
+          <div
+            className="p-6"
+            style={{
+              background: 'linear-gradient(135deg, var(--accent-600), var(--accent-700))',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                style={{ background: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                🔄
+              </div>
+              <h2 className="text-3xl font-bold text-white">
+                {t('dailyHabits', language)}
+              </h2>
+            </div>
+          </div>
+
+          <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {board.habits.map((habit, idx) => {
+              const habitConfig: Record<string, { icon: string; bg: string; border: string; text: string }> = {
+                morning: {
+                  icon: '🌅',
+                  bg: 'linear-gradient(135deg, #FEF3C7, #FDE68A)',
+                  border: '#FCD34D',
+                  text: '#78350F',
+                },
+                deepwork: {
+                  icon: '💪',
+                  bg: 'linear-gradient(135deg, var(--primary-100), var(--primary-200))',
+                  border: 'var(--primary-300)',
+                  text: 'var(--primary-900)',
+                },
+                evening: {
+                  icon: '🌙',
+                  bg: 'linear-gradient(135deg, #DBEAFE, #BFDBFE)',
+                  border: '#93C5FD',
+                  text: '#1E3A8A',
+                },
+              };
+
+              const config = habitConfig[habit.type] || habitConfig.deepwork;
+
+              return (
+                <div
+                  key={idx}
+                  className="p-6 rounded-2xl transition-all duration-300 transform hover:scale-105"
+                  style={{
+                    background: config.bg,
+                    border: `3px solid ${config.border}`,
+                    boxShadow: 'var(--shadow-md)',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-xl)'}
+                  onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
+                >
+                  <div className="text-5xl mb-4">{config.icon}</div>
+                  <h3 className="font-bold text-xl mb-2 capitalize" style={{ color: config.text }}>
+                    {habit.type === 'deepwork'
+                      ? t('deepwork', language)
+                      : t(habit.type, language)}
+                  </h3>
+                  <p className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: config.text, opacity: 0.8 }}>
+                    ⏰ {habit.time}
+                  </p>
+                  <p className="leading-relaxed" style={{ color: config.text, opacity: 0.9 }}>
+                    {habit.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
