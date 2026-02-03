@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRoutineStore } from "@/lib/store/routine-store"
 import { RoutineCard } from "@/components/routines/RoutineCard"
 import { RoutinePlayer } from "@/components/routines/RoutinePlayer"
+import { RoutineWizardDialog } from "@/components/routines/RoutineWizardDialog"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 
@@ -20,9 +21,11 @@ export default function RoutinesPage() {
                     <h1 className="text-3xl font-bold tracking-tight">Routines</h1>
                     <p className="text-muted-foreground">Design your days for success.</p>
                 </div>
-                <Button>
-                    <Plus className="h-4 w-4 mr-2" /> New Routine
-                </Button>
+                <RoutineWizardDialog>
+                    <Button>
+                        <Plus className="h-4 w-4 mr-2" /> New Routine
+                    </Button>
+                </RoutineWizardDialog>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
