@@ -1,33 +1,30 @@
 "use client"
 
-import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useUIStore } from "@/lib/store/ui-store"
 import { cn } from "@/lib/utils"
+import {
+    LayoutDashboard,
+    Calendar,
+    CheckSquare,
+    FileText,
+    BookOpen,
+    Zap,
+    BarChart,
+    Settings,
+    ChevronLeft,
+    ChevronRight,
+    Target,
+    Bot,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useUIStore } from "@/lib/store/ui-store"
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-    LayoutDashboard,
-    Target, // Board
-    Calendar,
-    CheckSquare, // Tasks
-    FileText, // Notes
-    BookOpen, // Journal
-    Repeat, // Routines
-    BarChart2, // Analytics
-    Settings,
-    Bot, // AI Coach
-    Menu,
-    ChevronLeft,
-    ChevronRight
-} from "lucide-react"
 
 interface SidebarItemProps {
     icon: React.ElementType
@@ -62,69 +59,76 @@ function SidebarItem({ icon: Icon, label, href, active, collapsed }: SidebarItem
     )
 }
 
+function SidebarSection({ title, collapsed, children }: { title: string, collapsed: boolean, children: React.ReactNode }) {
+    if (collapsed) return <div className="space-y-1 py-2 border-t first:border-t-0">{children}</div>;
+
+    return (
+        <div className="py-2">
+            <h4 className="mb-1 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground/50">
+                {title}
+            </h4>
+            <div className="space-y-1">{children}</div>
+        </div>
+    )
+}
+
 export function Sidebar() {
     const pathname = usePathname()
     const { sidebarOpen, toggleSidebar } = useUIStore()
-
-    // This might need adjustment based on real routes, using hash or query params for now if single page
-    // But Roadmap suggests routing. For MVP refactor, assuming we might move to routes later.
-    // For now, I'll link to hash or stay on page with query params if the user hasn't set up routes yet.
-    // Actually, let's assume standard routes for the Future.
-
-    const items = [
-        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "Execution Board", icon: Target, href: "/board" },
-        { label: "Calendar", icon: Calendar, href: "/calendar" },
-        { label: "Tasks", icon: CheckSquare, href: "/tasks" },
-        { label: "Notes", icon: FileText, href: "/notes" },
-        { label: "Journal", icon: BookOpen, href: "/journal" },
-        { label: "Routines", icon: Repeat, href: "/routines" },
-        { label: "Analytics", icon: BarChart2, href: "/analytics" },
-        { label: "Settings", icon: Settings, href: "/settings" },
-    ]
+    const collapsed = !sidebarOpen
 
     return (
-        <div
+        <aside
             className={cn(
-                "relative hidden flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300 md:flex",
-                sidebarOpen ? "w-64" : "w-16"
+                "relative flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300",
+                collapsed ? "w-[60px]" : "w-64"
             )}
         >
-            <div className="flex h-14 items-center border-b px-3 justify-between">
-                {sidebarOpen ? (
-                    <span className="font-bold text-lg tracking-tight pl-2">GlowAppLify</span>
-                ) : (
-                    <span className="font-bold text-xl pl-2">G</span>
-                )}
-                <Button variant="ghost" size="icon" onClick={toggleSidebar} className="ml-auto h-8 w-8">
-                    {sidebarOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            <div className="flex h-14 items-center border-b px-3.5">
+                <div className="flex items-center gap-2 font-bold text-xl tracking-tight text-primary">
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground">
+                        G
+                    </div>
+                    {!collapsed && <span>Glow<span className="text-foreground">AppLify</span></span>}
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto py-2">
+                <nav className="grid gap-1 px-2">
+                    <SidebarSection title="Core" collapsed={collapsed}>
+                        <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
+                        <SidebarItem icon={Target} label="Execution Board" href="/board" active={pathname === "/board"} collapsed={collapsed} />
+                    </SidebarSection>
+
+                    <SidebarSection title="Execution" collapsed={collapsed}>
+                        <SidebarItem icon={Calendar} label="Calendar" href="/calendar" active={pathname === "/calendar"} collapsed={collapsed} />
+                        <SidebarItem icon={CheckSquare} label="Tasks" href="/tasks" active={pathname === "/tasks"} collapsed={collapsed} />
+                    </SidebarSection>
+
+                    <SidebarSection title="Growth" collapsed={collapsed}>
+                        <SidebarItem icon={BookOpen} label="Journal" href="/journal" active={pathname === "/journal"} collapsed={collapsed} />
+                        <SidebarItem icon={Zap} label="Routines" href="/routines" active={pathname === "/routines"} collapsed={collapsed} />
+                        <SidebarItem icon={Bot} label="AI Coach" href="/coach" active={pathname === "/coach"} collapsed={collapsed} />
+                    </SidebarSection>
+
+                    <SidebarSection title="Review" collapsed={collapsed}>
+                        <SidebarItem icon={FileText} label="Notes" href="/notes" active={pathname === "/notes"} collapsed={collapsed} />
+                        <SidebarItem icon={BarChart} label="Analytics" href="/analytics" active={pathname === "/analytics"} collapsed={collapsed} />
+                    </SidebarSection>
+                </nav>
+            </div>
+
+            <div className="mt-auto border-t p-2">
+                <SidebarItem icon={Settings} label="Settings" href="/settings" active={pathname === "/settings"} collapsed={collapsed} />
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="mt-2 w-full"
+                    onClick={toggleSidebar}
+                >
+                    {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
                 </Button>
             </div>
-
-            <ScrollArea className="flex-1 py-4">
-                <nav className="grid gap-1 px-2">
-                    {items.map((item, index) => (
-                        <SidebarItem
-                            key={index}
-                            icon={item.icon}
-                            label={item.label}
-                            href={item.href}
-                            active={pathname === item.href || (item.href === '/board' && pathname === '/')} // Temporary logic
-                            collapsed={!sidebarOpen}
-                        />
-                    ))}
-                </nav>
-            </ScrollArea>
-
-            <div className="border-t p-2">
-                <SidebarItem
-                    icon={Bot}
-                    label="AI Coach"
-                    href="/coach"
-                    active={pathname === "/coach"}
-                    collapsed={!sidebarOpen}
-                />
-            </div>
-        </div>
+        </aside>
     )
 }
