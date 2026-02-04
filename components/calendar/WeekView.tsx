@@ -17,6 +17,7 @@ import { CalendarEvent, EVENT_COLORS } from '@/lib/calendar/types'
 import { cn } from '@/lib/utils'
 import { useCalendarStore } from '@/lib/store/calendar-store'
 import { useEnergyStore } from '@/lib/store/energy-store'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface WeekViewProps {
     currentDate: Date
@@ -28,6 +29,7 @@ export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekVie
     const containerRef = useRef<HTMLDivElement>(null)
     const { events, updateEvent } = useCalendarStore()
     const { profile } = useEnergyStore()
+    const { t } = useLanguage()
 
     const start = startOfWeek(currentDate, { weekStartsOn: 1 }) // Monday start
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
@@ -119,12 +121,16 @@ export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekVie
                                 {isPeak && (
                                     <div className="absolute left-[3.5rem] md:left-16 top-0 bottom-0 w-1 bg-amber-400/30 z-0 pointer-events-none">
                                         <div className="absolute top-1 left-2 text-[10px] font-bold text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            PEAK
+                                            {t('energy.peak')}
                                         </div>
                                     </div>
                                 )}
                                 {isDip && (
-                                    <div className="absolute left-[3.5rem] md:left-16 top-0 bottom-0 w-1 bg-slate-400/30 z-0 pointer-events-none" />
+                                    <div className="absolute left-[3.5rem] md:left-16 top-0 bottom-0 w-1 bg-slate-400/30 z-0 pointer-events-none">
+                                        <div className="absolute top-1 left-2 text-[10px] font-bold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            {t('energy.dip')}
+                                        </div>
+                                    </div>
                                 )}
 
                                 <div className="w-16 flex-shrink-0 -mt-2.5 text-xs text-muted-foreground text-right pr-4 pointer-events-none select-none z-10">

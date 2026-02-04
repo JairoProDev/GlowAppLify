@@ -35,6 +35,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 interface SidebarItemProps {
     icon: React.ElementType
@@ -85,6 +86,7 @@ function SidebarSection({ title, collapsed, children }: { title: string, collaps
 export function Sidebar() {
     const pathname = usePathname()
     const { sidebarOpen, toggleSidebar } = useUIStore()
+    const { t } = useLanguage()
     const collapsed = !sidebarOpen
 
     return (
@@ -136,31 +138,31 @@ export function Sidebar() {
                 )}
 
                 <nav className="grid gap-1 px-2">
-                    <SidebarSection title="Core" collapsed={collapsed}>
-                        <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
+                    <SidebarSection title={t('sidebar.core') as string} collapsed={collapsed}>
+                        <SidebarItem icon={LayoutDashboard} label={t('common.dashboard') as string} href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
                         <SidebarItem icon={Target} label="Execution Board" href="/board" active={pathname === "/board"} collapsed={collapsed} />
                     </SidebarSection>
 
-                    <SidebarSection title="Execution" collapsed={collapsed}>
-                        <SidebarItem icon={Calendar} label="Calendar" href="/calendar" active={pathname === "/calendar"} collapsed={collapsed} />
-                        <SidebarItem icon={CheckSquare} label="Tasks" href="/tasks" active={pathname === "/tasks"} collapsed={collapsed} />
+                    <SidebarSection title={t('sidebar.execution') as string} collapsed={collapsed}>
+                        <SidebarItem icon={Calendar} label={t('common.calendar') as string} href="/calendar" active={pathname === "/calendar"} collapsed={collapsed} />
+                        <SidebarItem icon={CheckSquare} label={t('common.tasks') as string} href="/tasks" active={pathname === "/tasks"} collapsed={collapsed} />
                     </SidebarSection>
 
-                    <SidebarSection title="Growth" collapsed={collapsed}>
-                        <SidebarItem icon={BookOpen} label="Journal" href="/journal" active={pathname === "/journal"} collapsed={collapsed} />
-                        <SidebarItem icon={Zap} label="Routines" href="/routines" active={pathname === "/routines"} collapsed={collapsed} />
-                        <SidebarItem icon={Bot} label="AI Coach" href="/coach" active={pathname === "/coach"} collapsed={collapsed} />
+                    <SidebarSection title={t('sidebar.growth') as string} collapsed={collapsed}>
+                        <SidebarItem icon={BookOpen} label={t('common.journal') as string} href="/journal" active={pathname === "/journal"} collapsed={collapsed} />
+                        <SidebarItem icon={Zap} label={t('common.routines') as string} href="/routines" active={pathname === "/routines"} collapsed={collapsed} />
+                        <SidebarItem icon={Bot} label={t('common.aiCoach') as string} href="/coach" active={pathname === "/coach"} collapsed={collapsed} />
                     </SidebarSection>
 
-                    <SidebarSection title="Review" collapsed={collapsed}>
-                        <SidebarItem icon={FileText} label="Notes" href="/notes" active={pathname === "/notes"} collapsed={collapsed} />
-                        <SidebarItem icon={BarChart} label="Analytics" href="/analytics" active={pathname === "/analytics"} collapsed={collapsed} />
+                    <SidebarSection title={t('sidebar.review') as string} collapsed={collapsed}>
+                        <SidebarItem icon={FileText} label={t('common.notes') as string} href="/notes" active={pathname === "/notes"} collapsed={collapsed} />
+                        <SidebarItem icon={BarChart} label={t('common.analytics') as string} href="/analytics" active={pathname === "/analytics"} collapsed={collapsed} />
                     </SidebarSection>
                 </nav>
             </div>
 
             <div className="mt-auto border-t p-2">
-                <SidebarItem icon={Settings} label="Settings" href="/settings" active={pathname === "/settings"} collapsed={collapsed} />
+                <SidebarItem icon={Settings} label={t('common.settings') as string} href="/settings" active={pathname === "/settings"} collapsed={collapsed} />
 
                 <div className={cn("flex items-center gap-2 mt-2", collapsed ? "justify-center" : "px-2")}>
                     <DropdownMenu>

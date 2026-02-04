@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useUIStore } from "@/lib/store/ui-store"
 
+import { ThemeLanguageToggle } from "@/components/ThemeLanguageToggle"
+
 interface CalendarHeaderProps {
     currentDate: Date
     onDateChange: (date: Date) => void
@@ -76,9 +78,8 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
                     <Button variant="ghost" size="icon" className="h-9 w-9">
                         <Search className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-9 w-9">
-                        <Settings2 className="h-4 w-4" />
-                    </Button>
+
+                    <ThemeLanguageToggle />
 
                     <Button
                         variant="ghost"
