@@ -17,6 +17,7 @@ import {
     Target,
     Bot,
     Sun,
+    TrendingUp,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useUIStore } from "@/lib/store/ui-store"
@@ -143,6 +144,7 @@ export function Sidebar() {
                         <SidebarItem icon={LayoutDashboard} label={t('common.dashboard') as string} href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
                         <SidebarItem icon={Sun} label="Daily View" href="/daily" active={pathname === "/daily"} collapsed={collapsed} />
                         <SidebarItem icon={Target} label="Execution Board" href="/board" active={pathname === "/board"} collapsed={collapsed} />
+                        <SidebarItem icon={TrendingUp} label="Progress" href="/progress" active={pathname === "/progress"} collapsed={collapsed} />
                     </SidebarSection>
 
                     <SidebarSection title={t('sidebar.execution') as string} collapsed={collapsed}>
