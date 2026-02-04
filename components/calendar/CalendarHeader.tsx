@@ -5,6 +5,7 @@ import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, Settings2, L
 import { format, addWeeks, subWeeks, startOfWeek, endOfWeek, addDays, subDays } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useUIStore } from "@/lib/store/ui-store"
 
 interface CalendarHeaderProps {
     currentDate: Date
@@ -15,6 +16,7 @@ interface CalendarHeaderProps {
 }
 
 export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, onNewEvent }: CalendarHeaderProps) {
+    const { toggleAICoach } = useUIStore()
 
     const handlePrev = () => {
         if (view === 'day') onDateChange(subDays(currentDate, 1))
@@ -78,7 +80,13 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
                         <Settings2 className="h-4 w-4" />
                     </Button>
 
-                    <Button variant="ghost" size="icon" className="h-9 w-9 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-100/50" title="AI Assistant">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-100/50"
+                        title="AI Assistant"
+                        onClick={toggleAICoach}
+                    >
                         <Zap className="h-4 w-4" />
                     </Button>
 

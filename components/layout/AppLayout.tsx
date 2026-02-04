@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { Sidebar } from "./Sidebar"
 import { BottomNav } from "./BottomNav"
 import { cn } from "@/lib/utils"
+import { AICoach } from "../ai/AICoach"
 
 interface AppLayoutProps {
     children: React.ReactNode
@@ -31,6 +32,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                 </main>
                 <BottomNav />
             </div>
+            <AICoach />
         </div>
     )
 }
