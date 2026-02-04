@@ -30,25 +30,25 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
     const handleToday = () => onDateChange(new Date())
 
     return (
-        <div className="flex flex-col gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sticky top-0 z-50">
+        <div className="flex flex-col gap-4 bg-background p-2 px-4 sticky top-0 z-50">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
                         <span className="text-primary">Glow</span>Calendar
                     </h1>
                     <div className="h-6 w-px bg-border mx-2" />
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Button variant="ghost" size="icon" onClick={handlePrev} className="h-8 w-8 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-2 text-sm text-foreground">
+                        <Button variant="ghost" size="icon" onClick={handlePrev} className="h-8 w-8 hover:bg-muted transition-colors">
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <span className="font-medium text-foreground min-w-[140px] text-center">
+                        <span className="font-semibold text-lg min-w-[140px] text-center">
                             {format(currentDate, "MMMM yyyy")}
                         </span>
-                        <Button variant="ghost" size="icon" onClick={handleNext} className="h-8 w-8 hover:bg-muted/50 transition-colors">
+                        <Button variant="ghost" size="icon" onClick={handleNext} className="h-8 w-8 hover:bg-muted transition-colors">
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>
-                    <Button variant="outline" size="sm" onClick={handleToday} className="ml-2 h-8 text-xs font-medium">
+                    <Button variant="outline" size="sm" onClick={handleToday} className="ml-2 h-7 text-xs font-medium">
                         Today
                     </Button>
                 </div>

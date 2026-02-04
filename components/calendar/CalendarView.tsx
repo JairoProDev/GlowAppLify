@@ -34,8 +34,8 @@ export default function CalendarView() {
     }
 
     return (
-        <div className="flex flex-col h-full bg-background/50 backdrop-blur-sm pt-4">
-            <div className="flex-1 flex flex-col rounded-2xl border bg-card shadow-2xl overflow-hidden mx-4 mb-4">
+        <div className="flex flex-col h-full bg-background">
+            <div className="flex-1 flex flex-col overflow-hidden">
                 <CalendarHeader
                     currentDate={currentDate}
                     onDateChange={setCurrentDate}
@@ -44,7 +44,7 @@ export default function CalendarView() {
                     onNewEvent={handleNewEvent}
                 />
 
-                <div className="flex-1 relative">
+                <div className="flex-1 relative border-t">
                     {view === 'week' && (
                         <WeekView
                             currentDate={currentDate}
