@@ -20,6 +20,16 @@ import {
 import { Button } from "@/components/ui/button"
 import { useUIStore } from "@/lib/store/ui-store"
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { GlobalSearch } from "../GlobalSearch"
+import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
@@ -84,16 +94,32 @@ export function Sidebar() {
                 collapsed ? "w-[60px]" : "w-64"
             )}
         >
-            <div className="flex h-14 items-center border-b px-3.5">
+            <div className="flex h-14 items-center justify-between border-b px-3.5">
                 <div className="flex items-center gap-2 font-bold text-xl tracking-tight text-primary">
                     <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground">
                         G
                     </div>
                     {!collapsed && <span>Glow<span className="text-foreground">AppLify</span></span>}
                 </div>
+                {!collapsed && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 text-muted-foreground"
+                        onClick={toggleSidebar}
+                    >
+                        <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                )}
             </div>
 
-            <div className="flex-1 overflow-y-auto py-2">
+            <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
+                {!collapsed && (
+                    <div className="px-4 mb-4">
+                        <GlobalSearch />
+                    </div>
+                )}
+
                 <nav className="grid gap-1 px-2">
                     <SidebarSection title="Core" collapsed={collapsed}>
                         <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
@@ -120,14 +146,45 @@ export function Sidebar() {
 
             <div className="mt-auto border-t p-2">
                 <SidebarItem icon={Settings} label="Settings" href="/settings" active={pathname === "/settings"} collapsed={collapsed} />
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="mt-2 w-full"
-                    onClick={toggleSidebar}
-                >
-                    {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-                </Button>
+
+                <div className={cn("flex items-center gap-2 mt-2", collapsed ? "justify-center" : "px-2")}>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className={cn("w-full justify-start gap-2 px-1 hover:bg-sidebar-accent", collapsed && "justify-center px-0")}>
+                                <Avatar className="h-6 w-6">
+                                    <AvatarImage src="/placeholder-user.jpg" alt="@user" />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                                {!collapsed && (
+                                    <div className="flex flex-col items-start text-xs">
+                                        <span className="font-semibold">Jairo Pro</span>
+                                        <span className="text-muted-foreground">Pro Plan</span>
+                                    </div>
+                                )}
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56" side="right">
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>Profile</DropdownMenuItem>
+                            <DropdownMenuItem>Billing</DropdownMenuItem>
+                            <DropdownMenuItem>Team</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>Log out</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
+                {collapsed && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="mt-2 w-full"
+                        onClick={toggleSidebar}
+                    >
+                        <ChevronRight className="h-4 w-4" />
+                    </Button>
+                )}
             </div>
         </aside>
     )

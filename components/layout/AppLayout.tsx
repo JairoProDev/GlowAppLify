@@ -3,7 +3,6 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import { Sidebar } from "./Sidebar"
-import { TopBar } from "./TopBar"
 import { BottomNav } from "./BottomNav"
 import { cn } from "@/lib/utils"
 
@@ -19,7 +18,6 @@ export function AppLayout({ children }: AppLayoutProps) {
         <div className="flex h-screen w-full overflow-hidden bg-background">
             <Sidebar />
             <div className="flex flex-1 flex-col overflow-hidden">
-                <TopBar />
                 <main className={cn(
                     "flex-1 bg-background-alt/50",
                     isCalendar ? "overflow-hidden p-0" : "overflow-y-auto p-4 pb-24 md:pb-6 md:p-8"
