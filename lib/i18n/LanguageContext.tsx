@@ -43,12 +43,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         return current as string
     }
 
-    if (!mounted) {
-        return <>{children}</>
-    }
+    // Always render the provider. 
+    // If specific components need to wait for client-side storage sync to avoid flash,
+    // they can check a 'isLoaded' flag in context strings or handle it locally, 
+    // but the Provider must exist to prevent crashes.
 
     return (
         <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
+            {/* 
+              Optional: To prevent hydration mismatch on text content if language differs, 
+              we could render nothing until mounted, but that hurts SEO/LCP. 
+              Since default is 'en', we render 'en'. Use effectively.
+              To avoid "Text content does not match" errors, we can use 'mounted' 
+              to delay rendering conditional text if needed, but for now we prioritize not crashing.
+            */}
             {children}
         </LanguageContext.Provider>
     )
