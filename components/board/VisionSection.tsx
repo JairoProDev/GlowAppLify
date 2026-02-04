@@ -10,6 +10,9 @@ interface VisionSectionProps {
 }
 
 export function VisionSection({ vision, isEditing }: VisionSectionProps) {
+    // Defensive check
+    const safeVision = vision || { futureVision: "Vision loading...", mantra: "Loading..." };
+
     return (
         <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 backdrop-blur-sm">
             <div className="bg-gradient-to-r from-primary/10 to-transparent p-1">
@@ -29,7 +32,7 @@ export function VisionSection({ vision, isEditing }: VisionSectionProps) {
                     <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50" />
                     <label className="text-xs font-bold uppercase tracking-widest text-primary/70 mb-2 block">Fixed Future Vision (90 Days)</label>
                     <p className="text-xl md:text-2xl font-medium leading-relaxed text-foreground/90 italic">
-                        "{vision.futureVision}"
+                        "{safeVision.futureVision}"
                     </p>
                 </div>
 
@@ -39,7 +42,7 @@ export function VisionSection({ vision, isEditing }: VisionSectionProps) {
                     </div>
                     <label className="text-xs font-bold uppercase tracking-widest text-white/70 mb-3 block">Your Mantra</label>
                     <p className="text-3xl md:text-4xl font-black tracking-tight relative z-10 drop-shadow-md">
-                        {vision.mantra}
+                        {safeVision.mantra}
                     </p>
                 </div>
             </CardContent>

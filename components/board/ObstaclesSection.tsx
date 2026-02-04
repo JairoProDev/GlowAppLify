@@ -10,6 +10,9 @@ interface ObstaclesSectionProps {
 }
 
 export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps) {
+    // Defensive check for missing data
+    const plans = obstacles?.plans || [];
+
     return (
         <Card className="overflow-hidden border-none shadow-xl bg-card relative">
             <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-yellow-500 to-amber-500" />
@@ -25,9 +28,36 @@ export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps
                 </div>
             </div>
 
-                    ))}
-        </div>
-            </CardContent >
-        </Card >
+            <CardContent className="p-6 grid gap-4">
+                {plans.length === 0 ? (
+                    <div className="text-center p-8 text-muted-foreground italic">
+                        No obstacles anticipated yet. Good luck!
+                    </div>
+                ) : (
+                    plans.map((plan, idx) => (
+                        <div key={idx} className="rounded-xl border bg-background/50 p-5 space-y-4 hover:shadow-md transition-all">
+                            <div className="flex items-start gap-3">
+                                <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
+                                <div>
+                                    <h4 className="font-bold text-foreground">IF {plan.if}</h4>
+                                </div>
+                            </div>
+
+                            <div className="pl-8 space-y-2">
+                                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-green-600 dark:text-green-400">
+                                    <ArrowRight className="h-4 w-4" />
+                                    THEN I WILL...
+                                </div>
+                                <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2 bg-secondary/30 p-3 rounded-lg">
+                                    {plan.then.map((action, i) => (
+                                        <li key={i}>{action}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </CardContent>
+        </Card>
     )
 }

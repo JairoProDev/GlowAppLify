@@ -10,6 +10,8 @@ interface HabitsSectionProps {
 }
 
 export function HabitsSection({ habits, isEditing }: HabitsSectionProps) {
+    const safeHabits = habits || { morning: null, deepWork: null, evening: null };
+
     return (
         <Card className="overflow-hidden border-none shadow-xl bg-card relative">
             <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-emerald-500 to-teal-500" />
@@ -29,19 +31,19 @@ export function HabitsSection({ habits, isEditing }: HabitsSectionProps) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <HabitCard
                         title="Morning Ritual"
-                        routine={habits.morning}
+                        routine={safeHabits.morning}
                         icon={<Sun className="h-5 w-5 text-amber-500" />}
                         gradient="from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-amber-200/50"
                     />
                     <HabitCard
                         title="Deep Work"
-                        routine={habits.deepWork}
+                        routine={safeHabits.deepWork}
                         icon={<Zap className="h-5 w-5 text-blue-500" />}
                         gradient="from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-blue-200/50"
                     />
                     <HabitCard
                         title="Evening Wind-down"
-                        routine={habits.evening}
+                        routine={safeHabits.evening}
                         icon={<Moon className="h-5 w-5 text-indigo-500" />}
                         gradient="from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border-indigo-200/50"
                     />

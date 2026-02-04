@@ -13,7 +13,8 @@ interface ExecutionSectionProps {
 
 export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps) {
     // Determine current week (fallback to 1)
-    const currentWeekInfo = execution.weeks.find(w => !w.isCompleted) || execution.weeks[0];
+    const weeks = execution?.weeks || [];
+    const currentWeekInfo = weeks.find(w => !w.isCompleted) || weeks[0];
     const defaultWeek = currentWeekInfo ? `week-${currentWeekInfo.weekNumber}` : "week-1";
 
     return (
@@ -35,7 +36,7 @@ export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps
                 <Tabs defaultValue={defaultWeek} className="w-full">
                     <div className="mb-6 overflow-x-auto pb-2">
                         <TabsList className="bg-secondary/20 h-auto p-1 inline-flex w-max min-w-full justify-start">
-                            {execution.weeks.map((week) => (
+                            {weeks.map((week) => (
                                 <TabsTrigger
                                     key={week.weekNumber}
                                     value={`week-${week.weekNumber}`}
@@ -47,7 +48,7 @@ export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps
                         </TabsList>
                     </div>
 
-                    {execution.weeks.map((week) => (
+                    {weeks.map((week) => (
                         <TabsContent key={week.weekNumber} value={`week-${week.weekNumber}`} className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
 
                             <div className="bg-secondary/20 rounded-xl p-5 border border-border/50">
