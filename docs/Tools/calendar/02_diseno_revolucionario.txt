@@ -1,0 +1,1314 @@
+
+
+## PARTE 2: 🚀 EL CALENDARIO DE GLOWAPPLIFY - DISEÑO REVOLUCIONARIO
+
+### FILOSOFÍA CENTRAL
+
+```
+"El único calendario que no solo organiza tu tiempo,
+sino que te ayuda a convertirte en quien quieres ser."
+```
+
+**Principios de diseño:**
+
+1. **"Life-First, Not Work-First"**: Los calendarios tradicionales asumen que tu vida = trabajo. Falso. GlowApplify entiende que tienes 6 Life Areas y las balancea.
+
+2. **"Energy-Aware, Not Time-Aware"**: No se trata de CUÁNDO tienes tiempo, sino CUÁNDO tienes la energía correcta para cada tipo de tarea.
+
+3. **"AI Thinks, You Execute"**: El calendario te dice QUÉ hacer y CUÁNDO. Tú solo ejecutas.
+
+4. **"Progress Over Productivity"**: No mides "cuántas cosas hiciste" sino "qué tanto avanzaste hacia tus metas".
+
+5. **"Proactive, Not Reactive"**: El calendario te avisa de problemas ANTES de que pasen, no después.
+
+---
+
+### 🎯 CARACTERÍSTICAS ÚNICAS (OCÉANO AZUL)
+
+#### 1. **ONBOARDING MÁGICO (2 MINUTOS)**
+
+```
+Step 1: "¿Cuáles son tus 3 metas más importantes de los próximos 90 días?"
+User: "Lanzar mi MVP, perder 5kg, mejorar mi relación"
+
+Step 2: AI analyzes your life areas and asks:
+"¿Cuántas horas al día tienes disponibles?"
+"¿En qué horarios tienes más energía?" (Morning person? Night owl?)
+"¿Cuánto tiempo quieres dedicar a cada área?"
+
+Step 3: AI generates:
+- Tu calendario BASE con bloques de deep work
+- Tus rutinas automáticas (morning/evening)
+- Tus buffers entre meetings
+- Tus "sacred times" (no-meeting zones)
+```
+
+**DIFERENCIADOR vs Motion:**
+- Motion: Tú defines projects → tasks → durations
+- GlowApplify: AI genera TODO basándose en tus 3 metas
+
+**DIFERENCIADOR vs Google Calendar:**
+- Google: Calendario vacío, tú lo llenas
+- GlowApplify: Calendario pre-poblado con tu sistema ideal
+
+---
+
+#### 2. **VISTAS REVOLUCIONARIAS**
+
+##### **A) VISTA "LIFE BALANCE" (ÚNICA EN EL MERCADO)**
+
+```
+┌─────────────────────────────────────────┐
+│        SEMANA DEL 3 - 9 FEBRERO         │
+├─────────────────────────────────────────┤
+│                                         │
+│ 🎯 CAREER      ████████░░  80%  ✅      │
+│ 💪 HEALTH      ██████░░░░  60%  ⚠️      │
+│ ❤️  RELATIONSHIPS ███░░░░░░░  30%  🚨   │
+│ 🧠 LEARNING    ████░░░░░░  40%  ⚠️      │
+│ 💰 FINANCES    ██░░░░░░░░  20%  🚨       │
+│ 🎨 HOBBIES     █░░░░░░░░░  10%  🚨       │
+│                                         │
+│ ⚠️  WARNING: Over-indexing on Career   │
+│ Suggestion: Block 3h this week for     │
+│ relationship time (dinner dates)       │
+└─────────────────────────────────────────┘
+```
+
+**Qué hace:**
+- Muestra % de tiempo dedicado a cada Life Area
+- Compara vs tu target balance
+- **Sugiere ajustes automáticamente**
+- Previene burnout por over-focus
+
+**Por qué nadie lo tiene:**
+- Requiere entender Life Areas (no solo "work")
+- Requiere tracking automático de categorías
+- Requiere IA para sugerir balances
+
+---
+
+##### **B) VISTA "ENERGY FLOW" (CIENCIA + DISEÑO)**
+
+```
+┌─────────────────────────────────────────┐
+│         MIÉRCOLES 5 DE FEBRERO          │
+├─────────────────────────────────────────┤
+│  6am  🌅 Morning Routine (30min)        │
+│       Energy: ████████░░ 80%            │
+│                                         │
+│  7am  🔥 DEEP WORK: MVP Design          │
+│       Energy: ██████████ 100% PEAK      │
+│       Type: Creative                    │
+│       Location: Home office             │
+│                                         │
+│  10am ☕ Buffer (15min)                  │
+│                                         │
+│  10:15 📞 Team Standup                  │
+│       Energy: ████████░░ 80%            │
+│                                         │
+│  11am 🔥 DEEP WORK: Coding              │
+│       Energy: ████████░░ 75%            │
+│       Type: Analytical                  │
+│                                         │
+│  1pm  🍽️ Lunch + Walk                   │
+│       Energy: ████░░░░░░ 40%            │
+│                                         │
+│  2pm  📧 Email + Admin (Shallow Work)   │
+│       Energy: ██████░░░░ 60%            │
+│                                         │
+│  4pm  💪 Gym Session                     │
+│       Energy: ████████░░ 75%            │
+│                                         │
+│  6pm  🌙 Evening Routine                │
+│       Energy: ████░░░░░░ 40%            │
+│                                         │
+│  ⚡ INSIGHT: You have 5h of peak        │
+│  energy today. Used 3h so far. Don't   │
+│  waste remaining 2h on shallow tasks.  │
+└─────────────────────────────────────────┘
+```
+
+**Qué hace:**
+- **Energy tracking en tiempo real** (based on tu input histórico)
+- **Sugiere qué tipo de trabajo hacer cuándo**:
+  - Creative work → Peak energy hours
+  - Analytical work → High energy hours  
+  - Shallow work (email, admin) → Low energy hours
+- **Visual energy curve** del día
+- **Warnings si agendas deep work en low energy**
+
+**Cómo funciona:**
+1. Durante onboarding, le preguntas al usuario: "¿Cuándo te sientes más productivo?"
+2. AI genera un "Energy Profile" (morning person, night owl, consistent, variable)
+3. Cada día, el usuario puede adjust su energía actual (slider 1-10)
+4. AI aprende patrones: "Lunes post-weekend = low energy", "Jueves = peak"
+
+---
+
+##### **C) VISTA "EXECUTION MODE" (MINIMALISTA)**
+
+```
+┌─────────────────────────────────────────┐
+│            🎯 AHORA (10:45am)           │
+├─────────────────────────────────────────┤
+│                                         │
+│     Deep Work: MVP Design               │
+│     Quedan 45 minutos                   │
+│                                         │
+│     🎧 Focus mode ON                    │
+│     📵 Notifications OFF                │
+│                                         │
+│                                         │
+│            SIGUIENTE (12pm):            │
+│            📞 Team Standup              │
+│                                         │
+│                                         │
+│  [Finish Early]  [Take a Break]        │
+└─────────────────────────────────────────┘
+```
+
+**Qué hace:**
+- **Full-screen single task focus**
+- **Timer integrado con Pomodoro opcional**
+- **DND mode automático** (silencia notificaciones)
+- **Música/ambiente sugerido** (Spotify integration)
+- Botón "Finish Early" → auto-reschedule resto del día
+
+---
+
+##### **D) VISTA "WEEKLY PLANNING" (AI-ASSISTED)**
+
+```
+┌─────────────────────────────────────────┐
+│      PLAN DE LA SEMANA (3-9 FEB)        │
+├─────────────────────────────────────────┤
+│                                         │
+│ 🎯 TOP 3 PRIORITIES:                    │
+│ 1. Ship MVP onboarding flow             │
+│ 2. Write investor update email          │
+│ 3. Complete 4 gym sessions              │
+│                                         │
+│ 📊 TIME ALLOCATION:                     │
+│ Deep Work:      15h (38%)               │
+│ Meetings:       8h  (20%)               │
+│ Health/Fitness: 4h  (10%)               │
+│ Admin/Email:    3h  (8%)                │
+│ Free Time:      10h (24%)               │
+│                                         │
+│ ⚠️  AI INSIGHTS:                         │
+│ • You have 3 meetings on Monday -       │
+│   that's your lowest energy day.        │
+│   Recommendation: Move 1 meeting to     │
+│   Tuesday or Wednesday.                 │
+│                                         │
+│ • You blocked 0h for relationships      │
+│   this week. Add 1 dinner with partner? │
+│                                         │
+│ [Accept AI Suggestions] [Manual Edit]  │
+└─────────────────────────────────────────┘
+```
+
+---
+
+#### 3. **FUNCIONALIDADES ASESINAS (AI-POWERED)**
+
+##### **A) AUTO-SCHEDULING INTELIGENTE**
+
+**Caso de uso:**
+```
+User agrega tarea: "Finish MVP onboarding flow"
+Estimated time: 4 horas
+Deadline: Viernes
+Priority: High
+Energy required: High (creative work)
+
+AI analiza:
+1. Tu calendario (qué tienes libre)
+2. Tu energy profile (cuándo eres creativo)
+3. Tus deadlines (qué es más urgente)
+4. Tus bloques de deep work existentes
+
+AI propone:
+"Mejor horario: Martes 7-9am + Miércoles 7-9am"
+Razón: Peak creative energy, no conflicts, 2 días antes de deadline
+
+[Accept] [Suggest Alternative]
+```
+
+**DIFERENCIA vs Motion:**
+- Motion: Schedule basado en disponibilidad de tiempo
+- GlowApplify: Schedule basado en disponibilidad de ENERGÍA
+
+---
+
+##### **B) SMART RESCHEDULE (CUANDO TODO SE VA AL CARAJO)**
+
+**Escenario:**
+```
+User tenía:
+9am: Deep Work (2h)
+11am: Meeting (1h)
+12pm: Lunch
+1pm: Deep Work (2h)
+
+A las 10:30am, llega emergencia:
+"Urgent meeting now, 90 minutes"
+
+Traditional calendar: Se jodió todo el día
+
+GlowApplify AI:
+1. Detecta el conflict
+2. Analiza qué se puede mover
+3. Propone:
+
+OPCIÓN A (Recommended):
+- Cancel 1pm Deep Work
+- Move it to tomorrow 7-9am (peak energy)
+- Keep lunch at 12pm
+
+OPCIÓN B:
+- Compress 1pm Deep Work to 1 hour
+- Work 6-7pm tonight (low energy warning)
+
+OPCIÓN C:
+- Move urgent meeting to 3pm (if possible)
+- Keep original plan
+
+[Select Option]
+```
+
+**Por qué es mágico:**
+- **Proactivo**: No espera a que tú te des cuenta del caos
+- **Inteligente**: Considera energía, no solo tiempo
+- **Flexible**: Te da opciones, no imposiciones
+
+---
+
+##### **C) DEEP WORK PROTECTOR (EL BODYGUARD)**
+
+```
+AI detecta patrones:
+- Tienes bloques de "Deep Work" 7-10am
+- Personas te piden meetings en esos horarios
+- Tú aceptas (por educación/presión)
+- Resultado: Zero deep work time
+
+AI interviene:
+"⚠️  ALERT: Someone requested meeting at 8am.
+This is your most productive time (98% focus rate).
+
+Suggestion: Propose 2pm instead.
+Auto-draft email:
+
+'Thanks for reaching out! I have a hard block 
+7-10am for deep work. Would 2pm work for you? 
+I have 2-3pm or 4-5pm available.'
+
+[Send] [Edit] [Ignore AI]"
+```
+
+**Otros protections:**
+- **Meeting-free Wednesdays** (si lo configuras)
+- **No back-to-back meetings** (auto 15min buffer)
+- **Lunch sacrosanto** (bloquea 12-1pm siempre)
+
+---
+
+##### **D) HABIT STACKING AUTOMÁTICO**
+
+**Basado en BJ Fogg Behavior Model:**
+
+```
+AI detecta:
+- Tienes rutina matutina: "Meditar 10min"
+- Tienes meta: "Leer 30min al día"
+
+AI sugiere Habit Stack:
+"AFTER you meditate (existing habit),
+THEN read for 10 minutes (new habit)"
+
+Calendario auto-crea:
+6:30am - 6:40am: Meditación
+6:40am - 6:50am: Lectura
+
+Después de 21 días, AI sugiere:
+"You've done this 20/21 days. 
+Want to increase reading to 20min?"
+```
+
+**Por qué funciona:**
+- Implementation Intentions (Gollwitzer research)
+- Cue-based habits stick 3x más
+- Progressive overload (start small)
+
+---
+
+##### **E) PROACTIVE COACHING**
+
+```
+Lunes 9am:
+AI: "🔥 This week you have 3 important deadlines.
+I've front-loaded your deep work time to Tue/Wed.
+Thursday/Friday will be lighter for final polish.
+Ready to crush it?"
+
+Miércoles 2pm:
+AI: "⚠️  You've been in meetings 4 hours today.
+Energy at 40%. I see you have 'Coding' at 3pm.
+Suggestion: Take a 20min walk first or move
+coding to tomorrow 7am (peak energy)."
+
+Viernes 5pm:
+AI: "🎉 Week complete! You hit 2/3 priorities.
+MVP shipped ✅, Investor email sent ✅.
+Gym 3/4 sessions (one short). Overall: 87% win.
+
+Insight: You skipped Thursday gym because of 
+last-minute meeting. Next week, I'll protect 
+your gym time more aggressively. Deal?"
+```
+
+**Esto NO existe en ningún calendario.**
+
+---
+
+#### 4. **INTEGRACIÓN CON EL ECOSISTEMA GLOWAPPLIFY**
+
+##### **A) EXECUTION BOARD ↔ CALENDAR**
+
+```
+Execution Board dice:
+"Semana 3: Diseñar onboarding flow (Estimado: 8h)"
+
+Calendar automáticamente:
+1. Bloquea 2h Lunes 7-9am
+2. Bloquea 2h Martes 7-9am  
+3. Bloquea 2h Miércoles 7-9am
+4. Bloquea 2h Jueves 7-9am
+
+User solo ve:
+"🎯 Design onboarding" en su calendario
+Ya agendado. Zero fricción.
+```
+
+##### **B) DAILY ACTIONS ↔ CALENDAR**
+
+```
+Daily view muestra:
+"Tu ONE Thing hoy: Write investor email"
+
+Click en la acción:
+→ "Schedule now"
+→ AI propone: "2-3pm today (good writing energy)"
+→ Un click y está en calendario con:
+   - Timer automático
+   - DND mode
+   - Notion doc linked (si aplica)
+```
+
+##### **C) HABITS ↔ CALENDAR**
+
+```
+Habit layer dice:
+"Morning routine: Meditate, exercise, journal"
+
+Calendar crea:
+- Recurring daily blocks 6:30-7:30am
+- Auto-check-in después de cada bloque
+- Streak counter visible
+- Si fallas, AI sugiere recovery:
+  "Missed meditation this morning? 
+   I found 10min at 8pm tonight."
+```
+
+---
+
+### 📱 MOBILE VS DESKTOP: DOS EXPERIENCIAS NATIVAS
+
+#### **DESKTOP (POWER USER MODE)**
+
+**Layout:**
+```
+┌────────────────────────────────────────────────────┐
+│  [GlowApplify] [@jairo] [Goals] [Insights]         │
+├─────────┬──────────────────────────────────────────┤
+│         │                                          │
+│ SIDEBAR │           MAIN CALENDAR                  │
+│         │                                          │
+│ 📊 Dash │  ┌────────────────────────────────────┐  │
+│ 🎯 Board│  │  Week View: Feb 3-9, 2025          │  │
+│ 📅 Cal  │  │                                    │  │
+│ ✅ Tasks│  │  [Mon] [Tue] [Wed] [Thu] [Fri]     │  │
+│ 📝 Notes│  │  Energy: 🔥   ⚡   🔥   💪   ⚡     │  │
+│ 📖 Journ│  │                                    │  │
+│ ⚙️  Sett│  │  7am  [Deep Work MVP]              │  │
+│         │  │  10am [Team Standup]               │  │
+│         │  │  2pm  [Email/Admin]                │  │
+│         │  │  4pm  [Gym]                        │  │
+│         │  │                                    │  │
+│         │  └────────────────────────────────────┘  │
+│         │                                          │
+│  MINI   │           QUICK ACTIONS:                 │
+│ WIDGETS │  • Schedule task now                     │
+│         │  • Log energy level                      │
+│ Energy: │  • Complete habit                        │
+│ ██████  │  • Quick note                            │
+│ 75%     │                                          │
+│         │           AI INSIGHTS:                   │
+│ Today:  │  ⚠️  3 meetings today. High load.        │
+│ 4/5 ✅  │  💡 Consider moving Friday deep work     │
+│         │     to Thursday afternoon.               │
+└─────────┴──────────────────────────────────────────┘
+```
+
+**Características desktop:**
+- **Múltiples vistas simultáneas**: Calendar + Energy + Insights
+- **Drag & drop avanzado**: Mover bloques entre días
+- **Keyboard shortcuts everywhere**: `N` new event, `T` new task, etc.
+- **Detailed hover previews**: Hover en evento → full details
+- **Side-by-side planning**: Split view Execution Board + Calendar
+
+---
+
+#### **MOBILE (FOCUS MODE)**
+
+**NO ES RESPONSIVE, ES REDISEÑADO:**
+
+##### **Vista principal (Home):**
+```
+┌───────────────────────────┐
+│   🌅 Buenos días, Jairo   │
+│                           │
+│   Miércoles 5 de Febrero  │
+│   Energy: ⚡⚡⚡⚡⚡ 85%     │
+├───────────────────────────┤
+│                           │
+│  🎯 TU PRIORIDAD HOY:     │
+│                           │
+│  ┌─────────────────────┐  │
+│  │                     │  │
+│  │  Finish MVP         │  │
+│  │  Onboarding         │  │
+│  │                     │  │
+│  │  ⏰ 7:00 - 9:00am   │  │
+│  │  🔥 Peak Energy     │  │
+│  │                     │  │
+│  │  [Start Now]        │  │
+│  │                     │  │
+│  └─────────────────────┘  │
+│                           │
+│  SIGUIENTE:               │
+│  📞 Team Standup (10am)   │
+│                           │
+│  [Ver día completo ▼]     │
+│                           │
+├───────────────────────────┤
+│                           │
+│  QUICK ACTIONS:           │
+│  • ✅ Check off task      │
+│  • 📊 Log energy          │
+│  • 📝 Quick note          │
+│  • ⏰ Reschedule          │
+│                           │
+└───────────────────────────┘
+```
+
+**Interacciones mobile:**
+
+1. **Swipe gestures:**
+   - Swipe right on event → Complete/Check-in
+   - Swipe left → Reschedule
+   - Swipe down → Add note
+   - Long press → Quick actions menu
+
+2. **Bottom navigation:**
+   ```
+   [Home] [Calendar] [Tasks] [More]
+   ```
+
+3. **Focus mode:**
+   - Tap "Start Now" → Full-screen timer
+   - Breathe animation durante deep work
+   - Notificación sutil cuando queda 10min
+   - Auto-check-in al terminar
+
+4. **Quick capture:**
+   - Floating "+" button siempre visible
+   - Tap → Voice or text input
+   - AI auto-schedules
+
+##### **Vista Calendar (Mobile):**
+```
+┌───────────────────────────┐
+│   📅 Semana 3-9 Feb       │
+├───────────────────────────┤
+│                           │
+│  [Day] [3 Day] [Week]     │
+│                           │
+│  ══ Lunes 3 ══            │
+│  🔥 Energy: 90%           │
+│                           │
+│  7:00  Deep Work          │
+│        ████████░░ 2h      │
+│                           │
+│  10:00 Meeting            │
+│        ████░░░░░░ 1h      │
+│                           │
+│  ══ Martes 4 ══           │
+│  ⚡ Energy: 85%           │
+│                           │
+│  7:00  Deep Work          │
+│        ████████░░ 2h      │
+│                           │
+│  [Swipe para más días →]  │
+│                           │
+├───────────────────────────┤
+│  Life Balance:            │
+│  🎯 Career     ████████   │
+│  💪 Health     ██████     │
+│  ❤️  Relations ███        │
+│                           │
+└───────────────────────────┘
+```
+
+**Mobile-specific features:**
+- **One-handed operation**: Todo accesible con pulgar
+- **Large touch targets**: Mínimo 44x44px
+- **Haptic feedback**: Vibra al completar, mover, crear
+- **Voice input perfecto**: "Add gym session tomorrow 4pm"
+- **Widgets iOS**: "Next 3 events" widget
+- **Live Activities**: Muestra current deep work block en Dynamic Island
+
+---
+
+### 🎨 UI/UX REVOLUCIONARIO
+
+#### **SISTEMA DE DISEÑO ÚNICO**
+
+##### **A) COLOR CODING INTELIGENTE**
+
+**No por calendar, sino por TIPO DE ACTIVIDAD:**
+
+```
+🔥 DEEP WORK (Creative)     → Warm gradient (Orange-Red)
+🧠 DEEP WORK (Analytical)   → Cool gradient (Blue-Purple)
+💬 MEETINGS (1:1)           → Green
+💬 MEETINGS (Group)         → Yellow  
+🏃 HEALTH/FITNESS           → Vibrant Red
+❤️  RELATIONSHIPS           → Pink
+📧 SHALLOW WORK             → Gray (low priority visual)
+🌙 ROUTINES                 → Soft gradients
+🎨 HOBBIES/LEARNING         → Teal
+```
+
+**Smart auto-tagging:**
+- AI detecta keywords en título del evento
+- "Design sprint" → Creative Deep Work (Orange)
+- "Code review" → Analytical Deep Work (Blue)
+- "Lunch with Sarah" → Relationships (Pink)
+- "Investor meeting" → Important Meeting (Starred + Green)
+
+---
+
+##### **B) TIPOGRAFÍA Y ESPACIADO**
+
+**Font system:**
+- **Headings**: Inter (modern, clean)
+- **Body**: System font (performance, nativo)
+- **Monospace** (para times): SF Mono / Roboto Mono
+
+**Spacing:**
+- Generoso whitespace (no apretado como Google Calendar)
+- Breathing room entre eventos
+- Clear visual hierarchy
+
+**Sizes:**
+- Event title: 16px (legible de un vistazo)
+- Time: 14px (subtle)
+- Details: 12px (contextual)
+
+---
+
+##### **C) MICRO-INTERACCIONES DELICIOSAS**
+
+1. **Crear evento:**
+   - Click en timeslot → Smooth expand animation
+   - Form slides up from bottom (mobile)
+   - Auto-complete con IA: "Me" → "Meeting" sugerido
+   - Save → Satisfying "plop" animation + haptic
+
+2. **Completar deep work block:**
+   - Check mark → Particle explosion (subtle)
+   - Progress bar fills with gradient
+   - Streak counter increments with bounce
+   - Sound effect (opcional, off by default)
+
+3. **Energy slider:**
+   - Drag slider → Color changes dynamically
+   - 0-30% = 🔴 Red (warning)
+   - 31-70% = 🟡 Yellow (okay)
+   - 71-100% = 🟢 Green (peak)
+
+4. **Reschedule drag:**
+   - Grab event → Rest of calendar highlights valid slots
+   - Drop → Smooth morph animation
+   - Invalid drop → Bounce back with shake
+
+---
+
+##### **D) DARK MODE (PERO BIEN HECHO)**
+
+**No es solo invertir colores:**
+
+```
+LIGHT MODE:
+- Background: #FFFFFF
+- Deep Work: Orange gradient (vibrant)
+- Meetings: Green (#10B981)
+
+DARK MODE:
+- Background: #0A0A0A (true black, OLED-friendly)
+- Deep Work: Orange gradient (DESATURADO, no quema ojos)
+- Meetings: Green (#059669, más oscuro)
+- Text: #E5E5E5 (no pure white, less strain)
+```
+
+**Smart auto-switching:**
+- 6am-8pm: Light mode
+- 8pm-6am: Dark mode
+- Override manual siempre disponible
+
+---
+
+### 🧠 LA CIENCIA DETRÁS DEL CALENDARIO
+
+#### **1. CHRONOBIOLOGY (RITMOS CIRCADIANOS)**
+
+**Principio:**
+- Humanos tenemos ciclos naturales de energía
+- **Morning people**: Peak 7-10am
+- **Night owls**: Peak 8-11pm
+- **Cognitive performance** varía hasta 30% según hora
+
+**Aplicación en GlowApplify:**
+- Onboarding detecta tu chronotype
+- AI schedule basado en TU ritmo, no en "best practices generales"
+- No más "early bird gets the worm" bullshit para night owls
+
+**Research:**
+- Till Roenneberg - "Internal Time"
+- Michael Breus - "The Power of When"
+
+---
+
+#### **2. ULTRADIAN RHYTHMS (90-MIN CYCLES)**
+
+**Principio:**
+- Cerebro opera en ciclos de 90 minutos
+- 90min focus → 20min rest
+- Violar esto → Fatigue + poor decisions
+
+**Aplicación:**
+- Deep work blocks default a 90min (not 2h arbitrary)
+- Auto-reminder para break después de 90min
+- Pomodoro option (25/5) para tasks más cortas
+
+**Research:**
+- Peretz Lavie - "BRAC" (Basic Rest-Activity Cycle)
+- K. Anders Ericsson - "Deliberate Practice" research
+
+---
+
+#### **3. DECISION FATIGUE (BAUMEISTER)**
+
+**Principio:**
+- Willpower es recurso finito
+- Cada decisión depleta glucosa
+- Al final del día, malas decisiones
+
+**Aplicación:**
+- **AI hace el thinking**: "Qué hacer a qué hora"
+- **Execution mode**: Solo muestra NEXT thing (zero decisions)
+- **Batch decisions**: Planning 1x por semana, no daily
+
+---
+
+#### **4. CONTEXT SWITCHING COST**
+
+**Principio:**
+- Cambiar de tarea cuesta ~23min recovery (Gloria Mark, UCI)
+- Back-to-back meetings = zero deep work
+
+**Aplicación:**
+- **Auto 15min buffer** entre eventos diferentes
+- **Batch similar work**: All meetings on same day cuando posible
+- **Theme days**: "Monday = Meetings, Tuesday = Deep Work"
+
+---
+
+#### **5. PEAK-END RULE (KAHNEMAN)**
+
+**Principio:**
+- Recordamos experiencias por:
+  1. Peak moment (best/worst)
+  2. End moment
+- No por average
+
+**Aplicación:**
+- **End day on high note**: Último bloque = algo satisfactorio
+- **Weekly review en Viernes 4pm**: Celebrar wins, no stress
+- **Never schedule hard calls at 5pm**: Arruina percepción del día
+
+---
+
+### ⚡ ESTRATEGIAS PARA CREAR OBSESIÓN
+
+#### **1. INSTANT GRATIFICATION (DÍA 1)**
+
+```
+Nueva user completa onboarding (2min)
+→ Ve su calendario ya poblado con:
+  - Morning routine configurada
+  - Deep work blocks optimizados
+  - Buffers automáticos
+  - First week planned
+
+"HOLY SHIT, esto me hubiera tomado 2 horas en Notion"
+```
+
+**Por qué funciona:**
+- Time-to-value < 5 minutos
+- Dopamine hit inmediato
+- "Wow" moment creates virality
+
+---
+
+#### **2. DAILY WINS (CONSISTENCY LOOP)**
+
+```
+Cada mañana:
+"Buenos días Jairo! 🌅
+Ayer completaste tu #1 priority.
+Streak: 5 días consecutivos.
+Hoy tu prioridad es: [X]"
+```
+
+**Por qué funciona:**
+- Variable rewards (Nir Eyal - Hooked model)
+- Streaks create loss aversion (don't break chain)
+- Daily reminder → Daily engagement
+
+---
+
+#### **3. PROACTIVE VALUE (NO ESPERAN QUE TÚ PREGUNTES)**
+
+```
+Martes 3pm:
+"⚠️  Jairo, noté que tienes 4 meetings mañana.
+Eso es 30% más que tu promedio.
+Moví tu 'Deep Work' de mañana a jueves 7am.
+Cool?"
+```
+
+**Por qué funciona:**
+- AI actúa como personal assistant (status symbol)
+- Saves mental load (you don't have to think)
+- Creates "magic" moments
+
+---
+
+#### **4. CELEBRATION PSYCHOLOGY**
+
+```
+Viernes 5pm:
+"🎉 SEMANA COMPLETADA!
+
+Esta semana:
+✅ 4/5 deep work sessions
+✅ 12/15 daily actions
+✅ 3/4 gym sessions
+
+Total: 84% win rate
+
+You're in top 10% of GlowApplify users!
+
+Mini insight: Tu mejor día fue Miércoles 
+(95% completion). Qué hiciste diferente?"
+```
+
+**Por qué funciona:**
+- Gamification sin ser childish
+- Social proof (top 10%)
+- Self-reflection prompt (metacognition)
+
+---
+
+#### **5. SOCIAL PROOF INTEGRADO**
+
+```
+"12,847 usuarios cumplieron su #1 priority ayer.
+Tú eres uno de ellos. 💪
+
+Sarah (otro founder) también está trabajando 
+en su MVP. Want to connect para accountability?"
+```
+
+**Por qué funciona:**
+- Tribe mentality (no estás solo)
+- Opt-in social features (no forced)
+- Progress graph potential
+
+---
+
+#### **6. PROGRESSIVE DISCLOSURE (NO OVERWHELM)**
+
+**Semana 1:**
+- Solo muestra: Calendar + Daily execution
+- Todo lo demás hidden
+
+**Semana 2:**
+- Unlock: Energy tracking
+- Tooltip: "Tu energía varía. Let's track it."
+
+**Semana 3:**
+- Unlock: Life Balance view
+- "Veo que estás over-indexing en Career. Let's balance."
+
+**Semana 4:**
+- Unlock: AI Insights dashboard
+- "Ahora tengo suficiente data para darte insights reales."
+
+**Por qué funciona:**
+- Prevents feature overload
+- Each week = new discovery
+- Creates "leveling up" feeling
+
+---
+
+### 🚫 QUÉ NO HACER (ANTI-PATTERNS)
+
+#### **1. NO SER NOTION**
+
+❌ Infinite flexibility
+❌ "You can customize everything!"
+❌ Blank canvas syndrome
+
+✅ Opinionated system
+✅ AI decides for you
+✅ Pre-configured perfection
+
+---
+
+#### **2. NO SER MOTION (ENTERPRISE BLOAT)**
+
+❌ Projects, tasks, subtasks, dependencies...
+❌ Requires training
+❌ $34/mes
+
+✅ Simple: Goals → Actions → Calendar
+✅ Works in 2 minutes
+✅ <$10/mes
+
+---
+
+#### **3. NO SER ADDICTIVE (DOPAMINE TRAP)**
+
+❌ Infinite scroll
+❌ Likes, hearts, reactions
+❌ FOMO notifications
+
+✅ Finite sessions (check calendar, done)
+✅ Celebrate execution, not vanity metrics
+✅ Helpful notifications only
+
+---
+
+#### **4. NO SER "PROFESSIONAL ONLY"**
+
+❌ Work-centric
+❌ Ignora life outside work
+❌ Burnout enabler
+
+✅ Life-first (6 areas)
+✅ Work-life balance enforcer
+✅ Burnout preventer
+
+---
+
+#### **5. NO USAR DARK PATTERNS**
+
+❌ Ocultar unsubscribe
+❌ "Are you sure you want to leave?" popups
+❌ Fake urgency ("Only 2 spots left!")
+
+✅ Transparent pricing
+✅ Easy export/leave
+✅ Honest value prop
+
+---
+
+### 💻 TECNOLOGÍAS Y STACK
+
+#### **FRONTEND**
+
+**Framework:**
+```
+Next.js 14 (App Router)
+- SSR para SEO
+- Server Components para performance
+- API Routes para backend
+
+React 18
+- Concurrent rendering
+- Suspense for data fetching
+- Transitions for smooth UX
+
+TypeScript (strict mode)
+- Type safety end-to-end
+- Better DX
+- Fewer runtime errors
+```
+
+**UI Library:**
+```
+Shadcn/UI (Radix + Tailwind)
+- Beautiful components out of box
+- Accessible by default
+- Customizable
+- No bloat (tree-shakeable)
+
+Tailwind CSS
+- Utility-first
+- Fast iteration
+- Consistent design system
+- Dark mode support built-in
+
+Framer Motion
+- Buttery smooth animations
+- Gesture support
+- Layout animations
+- Shared element transitions
+```
+
+**Calendar Specific:**
+```
+@fullcalendar/react
+- Industry standard
+- Drag & drop
+- Multiple views
+- Customizable
+
+react-big-calendar (alternative)
+- Lighter weight
+- More flexible
+- Better for custom designs
+
+date-fns (NOT moment.js)
+- Modern
+- Tree-shakeable
+- Better types
+- Smaller bundle
+```
+
+**State Management:**
+```
+Zustand (NOT Redux)
+- Minimal boilerplate
+- TypeScript native
+- Dev tools
+- Fast
+
+TanStack Query (React Query)
+- Server state management
+- Auto caching
+- Optimistic updates
+- Background refetch
+```
+
+---
+
+#### **BACKEND**
+
+**Database:**
+```
+Supabase (PostgreSQL)
+- Realtime subscriptions
+- Row-level security
+- PostgREST API auto-generated
+- pgvector for AI embeddings
+
+Prisma (ORM)
+- Type-safe queries
+- Migrations
+- Schema as code
+- Better DX than raw SQL
+```
+
+**Schema critical:**
+```sql
+-- Events table
+CREATE TABLE events (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES users(id),
+  title TEXT NOT NULL,
+  start_time TIMESTAMPTZ NOT NULL,
+  end_time TIMESTAMPTZ NOT NULL,
+  event_type TEXT, -- 'deep_work', 'meeting', 'routine', etc.
+  life_area TEXT, -- 'career', 'health', 'relationships', etc.
+  energy_required INT, -- 1-10
+  auto_scheduled BOOLEAN, -- AI created vs user created
+  linked_goal_id UUID, -- Connection to Execution Board
+  linked_task_id UUID,
+  recurrence_rule TEXT, -- iCal RRULE format
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Energy logs (para aprender patrones)
+CREATE TABLE energy_logs (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES users(id),
+  logged_at TIMESTAMPTZ NOT NULL,
+  energy_level INT, -- 1-10
+  context TEXT -- 'morning', 'post_lunch', 'evening'
+);
+
+-- AI insights (cache)
+CREATE TABLE ai_insights (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES users(id),
+  insight_type TEXT, -- 'energy_pattern', 'overload_warning', etc.
+  insight_data JSONB,
+  generated_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+---
+
+#### **AI/ML**
+
+**Primary LLM:**
+```
+Claude 3.5 Sonnet (Anthropic)
+- Best for complex reasoning
+- Longer context window
+- Better instruction following
+- Calendar scheduling is reasoning-heavy
+```
+
+**Use cases:**
+```typescript
+// 1. Smart scheduling
+const scheduleTask = async (task: Task, calendar: Event[]) => {
+  const prompt = `
+    User needs to complete: "${task.title}"
+    Estimated time: ${task.duration} hours
+    Deadline: ${task.deadline}
+    Priority: ${task.priority}
+    Energy required: ${task.energyRequired}
+    
+    Current calendar:
+    ${JSON.stringify(calendar)}
+    
+    User's energy profile:
+    Peak hours: 7-10am (energy: 9/10)
+    Good hours: 2-5pm (energy: 7/10)
+    Low hours: 12-2pm, 8-10pm (energy: 4/10)
+    
+    Suggest optimal time slots (return JSON):
+    {
+      "recommended": { "start": "...", "reason": "..." },
+      "alternatives": [...]
+    }
+  `;
+  
+  return await claude.complete(prompt);
+};
+
+// 2. Proactive insights
+const generateWeeklyInsights = async (userData: UserWeekData) => {
+  const prompt = `
+    Analyze user's week:
+    ${JSON.stringify(userData)}
+    
+    Provide insights:
+    1. Patterns detected
+    2. Risks (overload, imbalance)
+    3. Suggestions (specific, actionable)
+    
+    Return as JSON.
+  `;
+  
+  return await claude.complete(prompt);
+};
+```
+
+**Embeddings (for semantic search):**
+```
+OpenAI text-embedding-3-small
+- Search similar past events
+- "Find all my 1:1s with Sarah"
+- "Show all creative work sessions"
+```
+
+**Vector DB:**
+```
+Supabase pgvector
+- Store event embeddings
+- Semantic search
+- No separate service needed
+```
+
+---
+
+#### **INFRASTRUCTURE**
+
+**Hosting:**
+```
+Vercel
+- Next.js optimized
+- Edge functions
+- Global CDN
+- Auto-scaling
+- $0 for hobby, $20/month pro
+
+Supabase
+- Free tier: 500MB DB, 1GB transfer
+- Pro tier: $25/month
+```
+
+**Monitoring:**
+```
+Sentry
+- Error tracking
+- Performance monitoring
+- Release tracking
+
+PostHog
+- Product analytics
+- Feature flags
+- Session replay
+- Self-hosted option (GDPR compliance)
+```
+
+**CI/CD:**
+```
+GitHub Actions
+- Auto-deploy to Vercel on push
+- Run tests
+- Type checking
+- Lint
+
+Playwright (E2E tests)
+- Critical flows:
+  - Onboarding
+  - Create event
+  - Auto-schedule
+  - Reschedule
+```
+
+---
+
+#### **PERFORMANCE OPTIMIZATIONS**
+
+**1. Code Splitting:**
+```typescript
+// Calendar view only loads when needed
+const Calendar = lazy(() => import('./components/Calendar'));
+
+// AI insights load in background
+const AIInsights = lazy(() => import('./components/AIInsights'));
+```
+
+**2. Data Fetching:**
+```typescript
+// Prefetch next week's calendar on mount
+const { data: thisWeek } = useQuery(['calendar', 'thisWeek']);
+useQuery(['calendar', 'nextWeek'], { enabled: !!thisWeek });
+
+// Optimistic updates for instant UX
+const { mutate } = useMutation(updateEvent, {
+  onMutate: (newEvent) => {
+    // Update UI immediately
+    queryClient.setQueryData(['calendar'], (old) => [...old, newEvent]);
+  },
+  onError: (err, newEvent, context) => {
+    // Rollback on error
+    queryClient.setQueryData(['calendar'], context.previousData);
+  }
+});
+```
+
+**3. Image Optimization:**
+```typescript
+// Next.js Image component
+<Image
+  src="/avatar.jpg"
+  width={40}
+  height={40}
+  loading="lazy"
+  placeholder="blur"
+/>
+```
+
+**4. Bundle Size:**
+```
+Target: <100KB initial JS
+- Code splitting
+- Tree shaking
+- Dynamic imports
+- Remove unused Tailwind classes
+```
+
+---
+
+### 📊 MÉTRICAS DE ÉXITO
+
+#### **ENGAGEMENT (Primeras 2 semanas)**
+
+```
+North Star: Daily Active Users (DAU)
+- Target: 70% D1, 40% D7, 25% D14
+
+Key Actions:
+✅ Completed onboarding
+✅ Auto-scheduled first task
+✅ Logged energy at least once
+✅ Completed one deep work block
+✅ Used reschedule feature
+```
+
+#### **PRODUCT (Primeras 4 semanas)**
+
+```
+Feature Adoption:
+- Energy tracking: 60% of users
+- Auto-schedule: 80% of users
+- Life Balance view: 40% of users
+- Weekly planning: 50% of users
+
+Quality:
+- Auto-schedule acceptance rate: >70%
+- Reschedule AI accuracy: >80%
+- App crash rate: <0.1%
+- API response time: <500ms p95
+```
+
+#### **BUSINESS (Meses 2-6)**
+
+```
+Conversion:
+- Free to Pro: >5% within 30 days
+- Churn: <5% monthly
+
+Virality:
+- Referral rate: >0.3 (30% of users refer)
+- Social shares: >1,000/month
+
+Retention:
+- M1: >60%
+- M3: >40%
+- M6: >30%
+```
+
+---

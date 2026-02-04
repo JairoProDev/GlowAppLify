@@ -1,0 +1,265 @@
+## PARTE 3: 🗺️ ROADMAP DE CONSTRUCCIÓN
+
+### **FASE 0: PREPARACIÓN (Semana 0)**
+
+**Diseño:**
+- [ ] Figma mockups de todas las vistas
+- [ ] Sistema de diseño (colors, typography, components)
+- [ ] Flujos de usuario completos
+- [ ] Responsive breakpoints definidos
+
+**Arquitectura:**
+- [ ] Database schema final
+- [ ] API endpoints specification
+- [ ] AI prompts templates
+- [ ] Error handling strategy
+
+**Setup:**
+- [ ] Next.js project initialized
+- [ ] Supabase project + tables
+- [ ] Claude API account
+- [ ] Vercel project linked
+- [ ] GitHub repo + CI/CD
+
+---
+
+### **FASE 1: CALENDAR CORE (Semanas 1-2)**
+
+**Week 1: Basic Calendar**
+- [ ] Calendar grid layout (day/week/month views)
+- [ ] Event rendering (title, time, duration)
+- [ ] Create event modal
+- [ ] Edit event inline
+- [ ] Delete event
+- [ ] Color coding by event type
+- [ ] Responsive mobile view
+
+**Week 2: Core Interactions**
+- [ ] Drag & drop to reschedule
+- [ ] Resize events (change duration)
+- [ ] Recurring events support
+- [ ] Time zone handling
+- [ ] Calendar sync (Google Calendar import)
+- [ ] Export to .ics
+
+**Deliverable:** Functional calendar (parity con Google Calendar básico)
+
+---
+
+### **FASE 2: AI AUTO-SCHEDULING (Semanas 3-4)**
+
+**Week 3: Energy System**
+- [ ] User energy profile onboarding
+- [ ] Energy logging UI
+- [ ] Energy visualization en calendar
+- [ ] Energy-based time slot highlighting
+- [ ] Historical energy patterns analysis
+
+**Week 4: Smart Scheduling**
+- [ ] Claude API integration
+- [ ] Auto-schedule algorithm
+  - Input: Task details + calendar + energy profile
+  - Output: Optimal time slots
+- [ ] Schedule proposal UI
+  - Show recommended slot
+  - Show alternatives
+  - Show reasoning
+- [ ] One-click accept
+- [ ] Manual override option
+
+**Deliverable:** AI sugiere cuándo hacer tareas
+
+---
+
+### **FASE 3: PROACTIVE FEATURES (Semanas 5-6)**
+
+**Week 5: Intelligent Rescheduling**
+- [ ] Conflict detection
+- [ ] Auto-reschedule on conflict
+- [ ] Cascading updates (move dependents)
+- [ ] Notification system
+  - "Meeting moved, adjusted your day"
+- [ ] Undo functionality
+
+**Week 6: Protective Features**
+- [ ] Deep Work Protector
+  - Detect booking requests in deep work time
+  - Auto-suggest alternative times
+  - Draft email responses
+- [ ] Buffer time management
+  - Auto 15min between different types
+- [ ] Meeting-free day enforcement
+- [ ] Lunch block protection
+
+**Deliverable:** Calendar que te protege proactivamente
+
+---
+
+### **FASE 4: LIFE INTEGRATION (Semanas 7-8)**
+
+**Week 7: Execution Board ↔ Calendar**
+- [ ] Link goals to calendar blocks
+- [ ] Auto-schedule weekly actions
+- [ ] Progress tracking
+  - Did you complete scheduled blocks?
+- [ ] Sync bi-directional
+  - Complete in calendar → Check in Board
+  - Check in Board → Mark in calendar
+
+**Week 8: Habit Integration**
+- [ ] Morning/evening routines auto-schedule
+- [ ] Recurring daily blocks
+- [ ] Habit check-ins post-block
+- [ ] Streak visualization
+- [ ] Recovery suggestions on miss
+
+**Deliverable:** Calendar integrado con Execution Board + Habits
+
+---
+
+### **FASE 5: ADVANCED VIEWS (Semanas 9-10)**
+
+**Week 9: Life Balance View**
+- [ ] Calculate time by Life Area
+- [ ] Visual balance chart
+- [ ] Target vs actual comparison
+- [ ] Imbalance warnings
+- [ ] Auto-suggestions to rebalance
+
+**Week 10: Analytics Dashboard**
+- [ ] Weekly summary
+  - Hours by activity type
+  - Completion rate
+  - Energy patterns
+- [ ] Monthly trends
+- [ ] Insights generation (Claude)
+  - Patterns detected
+  - Recommendations
+
+**Deliverable:** Vistas analíticas únicas
+
+---
+
+### **FASE 6: MOBILE OPTIMIZATION (Semanas 11-12)**
+
+**Week 11: Mobile Redesign**
+- [ ] Home view (Today focus)
+- [ ] Execution mode (full-screen task)
+- [ ] Quick actions bottom sheet
+- [ ] Swipe gestures
+- [ ] Voice input
+- [ ] Haptic feedback
+
+**Week 12: Mobile-Specific Features**
+- [ ] iOS/Android widgets
+- [ ] Push notifications
+  - "Your #1 thing starts in 10min"
+  - "Energy check-in time"
+- [ ] Live Activities (iOS)
+- [ ] Shortcuts integration
+- [ ] Apple Watch complications (future)
+
+**Deliverable:** Mobile experience 10x
+
+---
+
+### **FASE 7: POLISH & LAUNCH PREP (Semanas 13-14)**
+
+**Week 13: UX Polish**
+- [ ] Micro-animations everywhere
+- [ ] Loading states (skeletons)
+- [ ] Empty states
+- [ ] Error states
+- [ ] Success confirmations
+- [ ] Onboarding tooltips
+- [ ] Dark mode perfection
+
+**Week 14: Performance & Testing**
+- [ ] Lighthouse score >90
+- [ ] Bundle size optimization
+- [ ] Database query optimization
+- [ ] E2E tests (Playwright)
+  - Critical flows
+  - Edge cases
+- [ ] Beta user testing (10-20 users)
+- [ ] Bug fixing sprint
+
+**Deliverable:** Production-ready product
+
+---
+
+### **FASE 8: BETA LAUNCH (Semana 15)**
+
+**Go Live:**
+- [ ] Deploy to production
+- [ ] Beta waitlist email (500 people)
+- [ ] ProductHunt soft launch
+- [ ] Twitter announcement
+- [ ] Demo video (Loom)
+- [ ] Landing page with signup
+
+**Metrics Setup:**
+- [ ] PostHog events tracking
+- [ ] Sentry error monitoring
+- [ ] User feedback form
+- [ ] NPS survey (D7, D30)
+
+---
+
+### **POST-BETA: ITERATION (Semanas 16+)**
+
+**Based on feedback:**
+- [ ] Feature requests prioritization
+- [ ] UI/UX improvements
+- [ ] Performance optimizations
+- [ ] AI prompt tuning
+- [ ] Edge cases handling
+
+**Future Features (V2):**
+- [ ] Team calendars (shared boards)
+- [ ] Accountability circles integration
+- [ ] Wearable sync (Oura, Whoop)
+- [ ] Calendar overlays (show partner's calendar)
+- [ ] Smart meeting notes (auto-generated)
+- [ ] Time blocking templates library
+- [ ] AI-powered goal decomposition
+  - "Launch MVP" → auto-generate 40 subtasks
+- [ ] Integration marketplace
+  - Notion, Linear, GitHub, etc.
+
+---
+
+## 🎯 RESUMEN EJECUTIVO
+
+**GlowApplify Calendar será:**
+
+1. **El único calendario que entiende tus METAS**, no solo tus eventos
+2. **El único que programa basado en tu ENERGÍA**, no solo disponibilidad
+3. **El único que te PROTEGE proactivamente** del burnout y sobrecarga
+4. **El único que BALANCEA automáticamente** tus 6 Life Areas
+5. **El único con IA que PIENSA POR TI** (scheduling, rescheduling, insights)
+6. **El único diseñado MOBILE-FIRST** para la vida real
+7. **El único que se INTEGRA** con tu sistema completo de vida (Board, Habits, Journal)
+8. **El único <$10/mes** con features que valen $100/mes
+
+**Esto NO es un calendario.**
+**Es tu Life Operating System.**
+
+**El resultado:**
+- Usuarios que AMAN abrirlo cada mañana
+- NPS >50 (vs industry avg ~30)
+- Viral growth orgánico (product so good, people can't shut up)
+- Premium willingness (pay even though Motion/Reclaim are "free")
+- Retention >60% M1 (vs industry avg ~25%)
+
+**El océano azul:**
+Mientras todos compiten en "más features" (Motion) o "más bonito" (Fantastical), nosotros ganamos en **"realmente me ayuda a lograr mis metas y vivir mejor"**.
+
+No es un 10% better.
+**Es 10x mejor.**
+
+De 0 → 1. 🚀
+
+---
+
+¿Listo para construir el mejor calendario del mundo?
