@@ -9,7 +9,12 @@ interface GoalWidgetProps {
 export function GoalsWidget({ board }: GoalWidgetProps) {
     // Determine progress - for now static or 0 since we don't have progress calculation integrated yet
     const progress = 0;
-    const goal = board.goal_layer;
+    // Fallback to empty object or mock if goal_layer is missing (e.g. old data structure)
+    const goal = board.goal_layer || {
+        smartGoal: "Goal not found (Data update required)",
+        deadline: new Date().toISOString(),
+        kpis: []
+    };
 
     return (
         <Card className="col-span-1 md:col-span-2 shadow-sm hover:shadow-md transition-shadow">

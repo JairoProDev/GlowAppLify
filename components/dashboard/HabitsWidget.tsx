@@ -7,7 +7,8 @@ interface HabitsWidgetProps {
 }
 
 export function HabitsWidget({ board }: HabitsWidgetProps) {
-    const habits = board.habits_layer;
+    const habits = board.habits_layer || { morning: {}, deepWork: {}, evening: {} };
+    // @ts-ignore - Handle partial data gracefully
     const routines = [
         { ...habits.morning, label: 'Morning', icon: <Sun className="h-3 w-3" /> },
         { ...habits.deepWork, label: 'Deep Work', icon: <Zap className="h-3 w-3" /> },

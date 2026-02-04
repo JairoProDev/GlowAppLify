@@ -7,13 +7,14 @@ interface QuickActionsWidgetProps {
 
 export function QuickActionsWidget({ board }: QuickActionsWidgetProps) {
     // Find current week and today's actions
-    const currentWeek = board.execution_layer.weeks[0]; // Assuming first week for now
+    const executionLayer = board.execution_layer || { weeks: [] };
+    const currentWeek = executionLayer.weeks?.[0]; // Assuming first week for now
 
     // Map current day to 1-7 (Monday=1, Sunday=7)
     const todayIndex = new Date().getDay() || 7;
 
     // Find actions for today
-    const todaysActions = currentWeek?.actions.filter(a => a.day === todayIndex) || [];
+    const todaysActions = currentWeek?.actions?.filter(a => a.day === todayIndex) || [];
 
     // Assume the first action is the primary focus if no explicit flag
     const oneThing = todaysActions[0];
