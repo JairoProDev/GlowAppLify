@@ -15,6 +15,13 @@ export interface DailyAction {
     priority: 'one-thing' | 'secondary';
 }
 
+export interface EveningData {
+    mood: number | null; // 1 | 2 | 3
+    reflection: string;
+    insights?: any;
+    burnoutRisk?: number;
+}
+
 export interface DailyState {
     currentView: 'morning' | 'deep-work' | 'celebration' | 'evening';
     user: {
@@ -25,6 +32,10 @@ export interface DailyState {
     oneThing: DailyAction;
     otherActions: DailyAction[];
 
+    // Evening Check-in State
+    eveningStep: number;
+    eveningData: EveningData;
+
     // Actions
     setUserId: (name: string) => void;
     startDeepWork: () => void;
@@ -32,7 +43,12 @@ export interface DailyState {
     completeAction: (id: string) => void;
     skipAction: (id: string) => void;
     scheduleAction: (id: string, time: string) => void;
-    submitEveningCheckIn: (data: any) => void;
+
+    // Evening Actions
+    setEveningStep: (step: number) => void;
+    updateEveningData: (data: Partial<EveningData>) => void;
+    submitEveningCheckIn: () => void;
+
     setView: (view: DailyState['currentView']) => void;
 }
 
@@ -81,7 +97,7 @@ const MOCK_OTHER_ACTIONS: DailyAction[] = [
     },
 ];
 
-export const useDailyStore = create<DailyState>((set) => ({
+export const useDailyStore = create<DailyState>((set, get) => ({
     currentView: 'morning',
     user: {
         name: 'Jairo',
@@ -91,19 +107,23 @@ export const useDailyStore = create<DailyState>((set) => ({
     oneThing: MOCK_ONE_THING,
     otherActions: MOCK_OTHER_ACTIONS,
 
+    eveningStep: 0,
+    eveningData: {
+        mood: null,
+        reflection: '',
+    },
+
     setUserId: (name) => set((state) => ({ user: { ...state.user, name } })),
 
     startDeepWork: () => set({ currentView: 'deep-work' }),
 
     completeOneThing: () => set((state) => {
-        // Determine if we should show celebration
-        // Yes, always for ONE Thing
         return {
             oneThing: { ...state.oneThing, completed: true },
             currentView: 'celebration',
             user: {
                 ...state.user,
-                weeklyProgress: Math.min(state.user.weeklyProgress + 20, 100), // Mock progress
+                weeklyProgress: Math.min(state.user.weeklyProgress + 20, 100),
             }
         };
     }),
@@ -114,13 +134,27 @@ export const useDailyStore = create<DailyState>((set) => ({
         )
     })),
 
-    skipAction: (id) => console.log('Skipped', id), // Placeholder
+    skipAction: (id) => console.log('Skipped', id),
 
-    scheduleAction: (id, time) => console.log('Scheduled', id, time), // Placeholder
+    scheduleAction: (id, time) => console.log('Scheduled', id, time),
 
-    submitEveningCheckIn: (data) => {
-        console.log('Evening Check In', data);
-        set({ currentView: 'morning' }); // Reset for demo loop
+    setEveningStep: (step) => set({ eveningStep: step }),
+
+    updateEveningData: (data) => set((state) => ({
+        eveningData: { ...state.eveningData, ...data }
+    })),
+
+    submitEveningCheckIn: () => {
+        const { eveningData } = get();
+        console.log('Completing Evening Check In', eveningData);
+        // Here we would sync with DB
+
+        // Reset and go to morning (conceptually "tomorrow", but loop for demo)
+        set({
+            currentView: 'morning',
+            eveningStep: 0,
+            eveningData: { mood: null, reflection: '' }
+        });
     },
 
     setView: (view) => set({ currentView: view }),
