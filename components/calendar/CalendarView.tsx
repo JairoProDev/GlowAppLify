@@ -6,6 +6,8 @@ import { WeekView } from "./WeekView"
 import { EventDialog } from "./EventDialog"
 import { CalendarEvent } from "@/lib/calendar/types"
 
+import { EnergyProfileDialog } from "../energy/EnergyProfileDialog"
+
 export default function CalendarView() {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [view, setView] = useState<'day' | 'week' | 'month'>('week')
@@ -71,6 +73,8 @@ export default function CalendarView() {
                 initialDate={selectedDate}
                 eventToEdit={selectedEvent}
             />
+
+            <EnergyProfileDialog />
         </div>
     )
 }

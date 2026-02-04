@@ -16,6 +16,7 @@ import {
 import { CalendarEvent, EVENT_COLORS } from '@/lib/calendar/types'
 import { cn } from '@/lib/utils'
 import { useCalendarStore } from '@/lib/store/calendar-store'
+import { useEnergyStore } from '@/lib/store/energy-store'
 
 interface WeekViewProps {
     currentDate: Date
@@ -26,6 +27,7 @@ interface WeekViewProps {
 export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekViewProps) {
     const containerRef = useRef<HTMLDivElement>(null)
     const { events, updateEvent } = useCalendarStore()
+    const { profile } = useEnergyStore()
 
     const start = startOfWeek(currentDate, { weekStartsOn: 1 }) // Monday start
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
@@ -103,24 +105,45 @@ export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekVie
             <div ref={containerRef} className="flex-1 overflow-y-auto relative custom-scrollbar">
                 {/* Time Grid Background & Click Targets */}
                 <div className="absolute inset-0 w-full">
-                    {hours.map((hour) => (
-                        <div key={hour} className="flex h-16 border-b border-dashed border-border/50 relative group">
-                            <div className="w-16 flex-shrink-0 -mt-2.5 text-xs text-muted-foreground text-right pr-4 pointer-events-none select-none">
-                                {format(new Date().setHours(hour, 0), 'h a')}
+                    {hours.map((hour) => {
+                        const isPeak = profile.isSetup && profile.peakHours.includes(hour)
+                        const isDip = profile.isSetup && profile.dipHours.includes(hour)
+
+                        return (
+                            <div key={hour} className={cn(
+                                "flex h-16 border-b border-dashed border-border/50 relative group",
+                                isPeak && "bg-amber-500/5",
+                                isDip && "bg-slate-500/5"
+                            )}>
+                                {/* Energy Label (Left Side) */}
+                                {isPeak && (
+                                    <div className="absolute left-[3.5rem] md:left-16 top-0 bottom-0 w-1 bg-amber-400/30 z-0 pointer-events-none">
+                                        <div className="absolute top-1 left-2 text-[10px] font-bold text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            PEAK
+                                        </div>
+                                    </div>
+                                )}
+                                {isDip && (
+                                    <div className="absolute left-[3.5rem] md:left-16 top-0 bottom-0 w-1 bg-slate-400/30 z-0 pointer-events-none" />
+                                )}
+
+                                <div className="w-16 flex-shrink-0 -mt-2.5 text-xs text-muted-foreground text-right pr-4 pointer-events-none select-none z-10">
+                                    {format(new Date().setHours(hour, 0), 'h a')}
+                                </div>
+                                <div className="flex-1 flex relative">
+                                    {days.map((day, i) => (
+                                        <div
+                                            key={i}
+                                            className="flex-1 border-r border-dashed border-border/50 last:border-r-0 hover:bg-accent/30 transition-colors cursor-pointer z-10"
+                                            onClick={() => handleSlotClick(day, hour)}
+                                            onDragOver={handleDragOver}
+                                            onDrop={(e) => handleDrop(e, day, hour)}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                            <div className="flex-1 flex">
-                                {days.map((day, i) => (
-                                    <div
-                                        key={i}
-                                        className="flex-1 border-r border-dashed border-border/50 last:border-r-0 hover:bg-accent/30 transition-colors cursor-pointer"
-                                        onClick={() => handleSlotClick(day, hour)}
-                                        onDragOver={handleDragOver}
-                                        onDrop={(e) => handleDrop(e, day, hour)}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
 
                 {/* Current Time Indicator */}
