@@ -5,21 +5,6 @@ import { useOnboardingStore } from '@/lib/onboarding/store';
 import { ContinueButton } from '../ContinueButton';
 import { useRouter } from 'next/navigation';
 import { CheckCircle2 } from 'lucide-react';
-// import { ExecutionBoard } from '@/lib/types'; remove to avoid conflict if not needed or rely on local
-
-// Mock interface since we are in a sub-module
-interface RevealExecutionBoard {
-    id: string;
-    goal: string;
-    visionLayer: {
-        futureVision: string;
-        mantra: string;
-    };
-    goalLayer: {
-        smartGoal: string;
-        deadline: string;
-    };
-}
 
 export const Step5Reveal: React.FC = () => {
     const { answers } = useOnboardingStore();
@@ -84,7 +69,7 @@ export const Step5Reveal: React.FC = () => {
                     <div className="text-left space-y-6">
                         <div>
                             <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Vision Layer</h3>
-                            <p className="text-lg font-medium italic">"{answers.futureSelfVision.length > 80 ? answers.futureSelfVision.substring(0, 80) + '...' : answers.futureSelfVision}"</p>
+                            <p className="text-lg font-medium italic">"{answers.futureSelf?.vision?.length > 80 ? answers.futureSelf.vision.substring(0, 80) + '...' : answers.futureSelf?.vision}"</p>
                         </div>
 
                         <div className="h-px bg-border" />

@@ -7,12 +7,16 @@ interface QuickActionsWidgetProps {
 
 export function QuickActionsWidget({ board }: QuickActionsWidgetProps) {
     // Find current week and today's actions
-    // This is simplified logic
-    const currentWeek = board.execution[0]; // Assuming first week for now
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-    const todaysActions = currentWeek?.days[today] || [];
+    const currentWeek = board.execution_layer.weeks[0]; // Assuming first week for now
 
-    const oneThing = todaysActions.find(a => a.isOneThingAction);
+    // Map current day to 1-7 (Monday=1, Sunday=7)
+    const todayIndex = new Date().getDay() || 7;
+
+    // Find actions for today
+    const todaysActions = currentWeek?.actions.filter(a => a.day === todayIndex) || [];
+
+    // Assume the first action is the primary focus if no explicit flag
+    const oneThing = todaysActions[0];
 
     return (
         <Card className="col-span-1 md:col-span-2 lg:col-span-1 shadow-sm border-l-4 border-l-primary hover:shadow-md transition-shadow">
@@ -22,21 +26,21 @@ export function QuickActionsWidget({ board }: QuickActionsWidgetProps) {
             <CardContent>
                 {oneThing ? (
                     <div className="space-y-3">
-                        <div className="text-xl font-bold leading-none">
-                            {oneThing.description}
+                        <div className="text-xl font-bold leading-none line-clamp-2">
+                            {oneThing.action}
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
-                                {oneThing.duration}
+                                {oneThing.time}
                             </span>
-                            <span>High Impact</span>
+                            <span className="capitalize">{oneThing.timeOfDay}</span>
                         </div>
                     </div>
                 ) : (
                     <div className="text-sm text-muted-foreground">
-                        No "One Thing" defined for today ({today}).
+                        No specific actions for today (Day {todayIndex}).
                         <br />
-                        <span className="text-xs">Check your execution plan.</span>
+                        <span className="text-xs">Check your execution plan or enjoy the rest!</span>
                     </div>
                 )}
             </CardContent>

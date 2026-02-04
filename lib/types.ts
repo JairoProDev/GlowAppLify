@@ -1,48 +1,66 @@
-// Execution Board Types based on the 5-layer framework
+// Execution Board Types - Revolutionary GlowApplify Spec
 
-export interface Vision {
-  identity: string; // "I am a..."
-  mantra: string; // 3-5 words
-  futureImage: string; // Description of future self
+export interface VisionLayer {
+  futureVision: string; // "Expand their exact words into 2-3 vivid sentences, present tense"
+  mantra: string; // "Create 5-7 word mantra that captures essence"
 }
 
-export interface Goal {
-  statement: string; // SMART goal
-  type: 'Biology' | 'Capital' | 'Intellect' | 'Legacy' | 'Social' | 'Spirit';
-  kpis: {
-    metric: string;
-    target: number;
-    unit: string;
-  }[];
-  deadline: string; // ISO date string (90 days from creation)
+export interface KPI {
+  metric: string; // "Input metric (what they control)"
+  target: string | number; // "Specific number"
+  deadline: string; // "30 days from now"
 }
 
-export interface DailyAction {
-  id: string;
-  description: string;
-  duration: string; // "5-15 min"
-  isOneThingAction: boolean; // Highest impact action
+export interface GoalLayer {
+  smartGoal: string; // "Make their goal SMART"
+  deadline: string; // "90 days from today"
+  kpis: KPI[];
+}
+
+export interface Action {
+  day: number; // 1-7
+  action: string; // "[Verb] [specific deliverable]"
+  time: string; // "[realistic hours]"
+  timeOfDay: 'morning' | 'afternoon' | 'evening';
   completed?: boolean;
 }
 
-export interface WeeklyExecution {
-  weekNumber: number; // 1-13 for 90 days
-  focus: string; // Weekly theme
-  days: {
-    [key: string]: DailyAction[]; // Monday-Sunday
-  };
+export interface Week {
+  weekNumber: number;
+  theme: string; // "Specific theme (not generic)"
+  milestone: string; // "Concrete deliverable by end of week"
+  actions: Action[]; // 5 actions per week
+  isCompleted?: boolean;
 }
 
-export interface Obstacle {
-  description: string;
-  ifThenPlan: string; // "IF X happens, THEN I will Y"
+export interface ExecutionLayer {
+  weeks: Week[];
 }
 
-export interface Habit {
-  type: 'morning' | 'deepwork' | 'evening';
-  time: string; // "7:00 AM"
-  description: string;
-  streak?: number;
+export interface IfThenPlan {
+  if: string; // "Specific obstacle"
+  then: string[]; // ["Concrete action 1", "Concrete action 2"]
+}
+
+export interface ObstacleLayer {
+  plans: IfThenPlan[];
+}
+
+export interface HabitStep {
+  name: string;
+}
+
+export interface HabitRoutine {
+  time: string; // "08:00"
+  duration: string; // "15 min"
+  steps: string[]; // ["Step 1", "Step 2"]
+  rules?: string[]; // Optional rules like "No phone"
+}
+
+export interface HabitsLayer {
+  morning: HabitRoutine;
+  deepWork: HabitRoutine;
+  evening: HabitRoutine;
 }
 
 export interface ExecutionBoard {
@@ -51,30 +69,26 @@ export interface ExecutionBoard {
   createdAt?: string;
 
   // 5 Layers
-  vision: Vision;
-  goal: Goal;
-  execution: WeeklyExecution[];
-  obstacles: Obstacle[];
-  habits: Habit[];
+  vision_layer: VisionLayer;
+  goal_layer: GoalLayer;
+  execution_layer: ExecutionLayer;
+  obstacle_layer: ObstacleLayer;
+  habits_layer: HabitsLayer;
 
-  // Status
-  status: 'active' | 'completed' | 'archived';
-  currentWeek?: number;
+  // Meta
+  settings?: any;
 }
 
-export interface DailyLog {
-  id?: string;
-  boardId: string;
-  date: string; // ISO date
-  completedActions: string[]; // Array of action IDs
-  mood?: 1 | 2 | 3 | 4 | 5;
-  reflection?: string;
-  createdAt?: string;
-}
-
-export interface OnboardingInput {
+export interface OnboardingData {
   goal: string;
-  context?: string;
-  timeAvailable?: string;
-  obstacles?: string[];
+  context: {
+    timePerDay: string;
+    energyLevel?: string;
+  };
+  pastAttempts: {
+    obstacles: string[];
+  };
+  futureSelf: {
+    vision: string;
+  };
 }

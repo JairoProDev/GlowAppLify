@@ -6,7 +6,7 @@ import { detectLanguage, t, Language } from '@/lib/i18n';
 import toast from 'react-hot-toast';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, Save, X, Globe, Download, PlayCircle, Target, Layers, ShieldAlert, Repeat, LayoutDashboard } from "lucide-react";
+import { Sparkles, Save, X, Globe, Target, Layers, ShieldAlert, Repeat } from "lucide-react";
 import { VisionSection } from '@/components/board/VisionSection';
 import { GoalSection } from '@/components/board/GoalSection';
 import { ExecutionSection } from '@/components/board/ExecutionSection';
@@ -71,6 +71,7 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Language toggle or other actions */}
           <Button variant="outline" size="sm" onClick={toggleLanguage}>
             <Globe className="h-4 w-4 mr-2" />
             {language === 'en' ? 'ES' : 'EN'}
@@ -93,7 +94,7 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
         </div>
       </div>
 
-      {/* Tabs for Navigation - Solves vertical scrolling issue */}
+      {/* Tabs for Navigation */}
       <Tabs defaultValue="vision" className="flex-1 flex flex-col overflow-hidden">
         <div className="overflow-x-auto pb-2 shrink-0">
           <TabsList className="w-full justify-start h-auto p-1 bg-secondary/30 gap-1 rounded-xl">
@@ -101,54 +102,52 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
               <Sparkles className="h-4 w-4" /> Vision
             </TabsTrigger>
             <TabsTrigger value="goal" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Target className="h-4 w-4" /> 90-Day Goal
+              <Target className="h-4 w-4" /> Goal
             </TabsTrigger>
             <TabsTrigger value="execution" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Layers className="h-4 w-4" /> Weekly Plan
+              <Layers className="h-4 w-4" /> Execution
             </TabsTrigger>
             <TabsTrigger value="obstacles" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <ShieldAlert className="h-4 w-4" /> Obstacles
             </TabsTrigger>
             <TabsTrigger value="habits" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Repeat className="h-4 w-4" /> Daily Habits
+              <Repeat className="h-4 w-4" /> Habits
             </TabsTrigger>
           </TabsList>
         </div>
 
-        <div className="flex-1 overflow-y-auto mt-2 pr-2 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto mt-2 pr-2 scrollbar-thin pb-10">
           <TabsContent value="vision" className="mt-0 h-full">
             <VisionSection
-              vision={currentBoard.vision}
+              vision={currentBoard.vision_layer}
               isEditing={isEditing}
-              onChange={(v) => setEditedBoard({ ...editedBoard, vision: v })}
             />
           </TabsContent>
 
           <TabsContent value="goal" className="mt-0 h-full">
             <GoalSection
-              goal={currentBoard.goal}
+              goal={currentBoard.goal_layer}
               isEditing={isEditing}
-              onChange={(g) => setEditedBoard({ ...editedBoard, goal: g })}
             />
           </TabsContent>
 
           <TabsContent value="execution" className="mt-0 h-full">
             <ExecutionSection
-              execution={currentBoard.execution}
+              execution={currentBoard.execution_layer}
               isEditing={isEditing}
             />
           </TabsContent>
 
           <TabsContent value="obstacles" className="mt-0 h-full">
             <ObstaclesSection
-              obstacles={currentBoard.obstacles}
+              obstacles={currentBoard.obstacle_layer}
               isEditing={isEditing}
             />
           </TabsContent>
 
           <TabsContent value="habits" className="mt-0 h-full">
             <HabitsSection
-              habits={currentBoard.habits}
+              habits={currentBoard.habits_layer}
               isEditing={isEditing}
             />
           </TabsContent>

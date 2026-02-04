@@ -34,7 +34,7 @@ export default function OnboardingFlow() {
 
                     // Ensure minimum duration of 15s (was 30s but 15s is safer for UX balance) 
                     // to let the loading animation play out a bit
-                    const minimumDurationPromise = new Promise(resolve => setTimeout(resolve, 15000));
+                    const minimumDurationPromise = new Promise(resolve => setTimeout(resolve, 8000)); // Reducing to 8s for snappier feel while keeping "AI thinking" vibe
 
                     const [response] = await Promise.all([responsePromise, minimumDurationPromise]);
 
@@ -43,6 +43,12 @@ export default function OnboardingFlow() {
                     }
 
                     const data = await response.json();
+
+                    if (data.board) {
+                        // Dynamically import to avoid server-side issues if any, though this is client comp
+                        const { saveBoard } = await import('@/lib/storage');
+                        saveBoard(data.board);
+                    }
 
                     setLoading(false);
                     setStep(6); // Move to Reveal Step
