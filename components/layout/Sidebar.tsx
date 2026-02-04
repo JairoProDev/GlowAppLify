@@ -16,6 +16,7 @@ import {
     ChevronRight,
     Target,
     Bot,
+    Sun,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useUIStore } from "@/lib/store/ui-store"
@@ -140,6 +141,7 @@ export function Sidebar() {
                 <nav className="grid gap-1 px-2">
                     <SidebarSection title={t('sidebar.core') as string} collapsed={collapsed}>
                         <SidebarItem icon={LayoutDashboard} label={t('common.dashboard') as string} href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
+                        <SidebarItem icon={Sun} label="Daily View" href="/daily" active={pathname === "/daily"} collapsed={collapsed} />
                         <SidebarItem icon={Target} label="Execution Board" href="/board" active={pathname === "/board"} collapsed={collapsed} />
                     </SidebarSection>
 
