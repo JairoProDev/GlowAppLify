@@ -89,28 +89,43 @@ export function Sidebar() {
 
     return (
         <aside
+            onClick={(e) => {
+                // If collapsed and clicking main container, toggle
+                if (collapsed) {
+                    toggleSidebar()
+                }
+            }}
             className={cn(
                 "relative flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300",
-                collapsed ? "w-[60px]" : "w-64"
+                collapsed ? "w-[60px] cursor-pointer hover:bg-sidebar/50" : "w-64"
             )}
         >
-            <div className="flex h-14 items-center justify-between border-b px-3.5">
+            <div className="flex h-14 items-center justify-between border-b px-3.5 group">
                 <div className="flex items-center gap-2 font-bold text-xl tracking-tight text-primary">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground">
-                        G
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground relative transition-transform group-hover:scale-105">
+                        {collapsed ? (
+                            <>
+                                <span className="group-hover:hidden">G</span>
+                                <ChevronRight className="h-5 w-5 hidden group-hover:block" />
+                            </>
+                        ) : (
+                            <span>G</span>
+                        )}
                     </div>
                     {!collapsed && <span>Glow<span className="text-foreground">AppLify</span></span>}
                 </div>
-                {!collapsed && (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 text-muted-foreground"
-                        onClick={toggleSidebar}
-                    >
-                        <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                )}
+
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 text-muted-foreground hover:bg-background/80"
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        toggleSidebar()
+                    }}
+                >
+                    {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
@@ -175,16 +190,6 @@ export function Sidebar() {
                     </DropdownMenu>
                 </div>
 
-                {collapsed && (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="mt-2 w-full"
-                        onClick={toggleSidebar}
-                    >
-                        <ChevronRight className="h-4 w-4" />
-                    </Button>
-                )}
             </div>
         </aside>
     )

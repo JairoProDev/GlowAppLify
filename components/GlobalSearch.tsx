@@ -61,7 +61,7 @@ export function GlobalSearch() {
             <Button
                 variant="outline"
                 className={
-                    "relative h-9 w-full justify-start rounded-[0.5rem] bg-background text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64"
+                    "relative h-9 w-full justify-start rounded-[0.5rem] bg-background text-sm font-normal text-muted-foreground shadow-none px-3"
                 }
                 onClick={() => setOpen(true)}
             >
