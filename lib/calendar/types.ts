@@ -34,8 +34,8 @@ export interface CalendarEvent {
     goalId?: string;
     title: string;
     description?: string;
-    startTime: Date;
-    endTime: Date;
+    startTime: Date | string;
+    endTime: Date | string;
     timeZone: string;
     type: EventType;
     energyRequired: 'low' | 'medium' | 'high';

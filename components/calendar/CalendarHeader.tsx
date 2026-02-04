@@ -11,9 +11,10 @@ interface CalendarHeaderProps {
     onDateChange: (date: Date) => void
     view: 'day' | 'week' | 'month'
     onViewChange: (view: 'day' | 'week' | 'month') => void
+    onNewEvent?: () => void
 }
 
-export function CalendarHeader({ currentDate, onDateChange, view, onViewChange }: CalendarHeaderProps) {
+export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, onNewEvent }: CalendarHeaderProps) {
 
     const handlePrev = () => {
         if (view === 'day') onDateChange(subDays(currentDate, 1))
@@ -76,7 +77,15 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange }
                     <Button variant="ghost" size="icon" className="h-9 w-9">
                         <Settings2 className="h-4 w-4" />
                     </Button>
-                    <Button className="ml-2 gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-100/50" title="AI Assistant">
+                        <Zap className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        className="ml-2 gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+                        onClick={onNewEvent}
+                    >
                         <Plus className="h-4 w-4" />
                         <span className="hidden sm:inline">New Event</span>
                     </Button>

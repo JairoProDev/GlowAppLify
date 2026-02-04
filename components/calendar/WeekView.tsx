@@ -7,9 +7,11 @@ import {
     endOfWeek,
     eachDayOfInterval,
     isSameDay,
-    addMinutes,
     startOfDay,
-    differenceInMinutes
+    differenceInMinutes,
+    addMinutes,
+    setHours,
+    setMinutes
 } from 'date-fns'
 import { CalendarEvent, EVENT_COLORS } from '@/lib/calendar/types'
 import { cn } from '@/lib/utils'
@@ -17,11 +19,13 @@ import { useCalendarStore } from '@/lib/store/calendar-store'
 
 interface WeekViewProps {
     currentDate: Date
+    onEventClick: (event: CalendarEvent) => void
+    onTimeSlotClick: (date: Date) => void
 }
 
-export function WeekView({ currentDate }: WeekViewProps) {
+export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekViewProps) {
     const containerRef = useRef<HTMLDivElement>(null)
-    const { events } = useCalendarStore()
+    const { events, updateEvent } = useCalendarStore()
 
     const start = startOfWeek(currentDate, { weekStartsOn: 1 }) // Monday start
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
@@ -39,10 +43,44 @@ export function WeekView({ currentDate }: WeekViewProps) {
     // Time slots (every hour)
     const hours = Array.from({ length: 24 }, (_, i) => i)
 
+    const handleSlotClick = (day: Date, hour: number) => {
+        const clickedDate = setMinutes(setHours(day, hour), 0)
+        onTimeSlotClick(clickedDate)
+    }
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault()
+        e.dataTransfer.dropEffect = 'move'
+    }
+
+    const handleDrop = (e: React.DragEvent, day: Date, hour: number) => {
+        e.preventDefault()
+        const eventId = e.dataTransfer.getData('eventId')
+        const durationStr = e.dataTransfer.getData('duration')
+
+        if (eventId && durationStr) {
+            const durationMin = parseInt(durationStr, 10)
+            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+            const offsetY = e.clientY - rect.top
+
+            // 64px height = 60 minutes
+            const minutesInSlot = Math.floor((offsetY / 64) * 60)
+            const snappedMinutes = Math.round(minutesInSlot / 15) * 15 // Snap to 15 min
+
+            const newStart = setMinutes(setHours(day, hour), snappedMinutes)
+            const newEnd = addMinutes(newStart, durationMin)
+
+            updateEvent(eventId, {
+                startTime: newStart,
+                endTime: newEnd
+            })
+        }
+    }
+
     return (
         <div className="flex flex-col h-full overflow-hidden bg-background">
             {/* Week Header */}
-            <div className="flex border-b pl-16 pr-4 py-2 bg-background z-10 sticky top-0">
+            <div className="flex border-b pl-16 pr-4 py-2 bg-background z-10 sticky top-0 shadow-sm">
                 {days.map((day) => {
                     const isToday = isSameDay(day, new Date())
                     return (
@@ -63,16 +101,22 @@ export function WeekView({ currentDate }: WeekViewProps) {
 
             {/* Grid */}
             <div ref={containerRef} className="flex-1 overflow-y-auto relative custom-scrollbar">
-                {/* Time Grid Background */}
-                <div className="absolute inset-0 w-full pointer-events-none">
+                {/* Time Grid Background & Click Targets */}
+                <div className="absolute inset-0 w-full">
                     {hours.map((hour) => (
-                        <div key={hour} className="flex h-16 border-b border-dashed border-border/50">
-                            <div className="w-16 flex-shrink-0 -mt-2.5 text-xs text-muted-foreground text-right pr-4">
+                        <div key={hour} className="flex h-16 border-b border-dashed border-border/50 relative group">
+                            <div className="w-16 flex-shrink-0 -mt-2.5 text-xs text-muted-foreground text-right pr-4 pointer-events-none select-none">
                                 {format(new Date().setHours(hour, 0), 'h a')}
                             </div>
                             <div className="flex-1 flex">
-                                {days.map((_, i) => (
-                                    <div key={i} className="flex-1 border-r border-dashed border-border/50 last:border-r-0" />
+                                {days.map((day, i) => (
+                                    <div
+                                        key={i}
+                                        className="flex-1 border-r border-dashed border-border/50 last:border-r-0 hover:bg-accent/30 transition-colors cursor-pointer"
+                                        onClick={() => handleSlotClick(day, hour)}
+                                        onDragOver={handleDragOver}
+                                        onDrop={(e) => handleDrop(e, day, hour)}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -86,13 +130,13 @@ export function WeekView({ currentDate }: WeekViewProps) {
 
                 {/* Events Layer */}
                 <div className="absolute inset-0 pl-16 w-full flex pointer-events-none">
-                    {days.map((day, dayIndex) => {
+                    {days.map((day) => {
                         const dayEvents = events.filter(e => isSameDay(new Date(e.startTime), day))
 
                         return (
                             <div key={day.toISOString()} className="flex-1 relative h-[1536px] pointer-events-auto">
                                 {dayEvents.map(event => (
-                                    <EventItem key={event.id} event={event} />
+                                    <EventItem key={event.id} event={event} onClick={() => onEventClick(event)} />
                                 ))}
                             </div>
                         )
@@ -111,22 +155,12 @@ function CurrentTimeIndicator({ startOfWeek }: { startOfWeek: Date }) {
         return () => clearInterval(interval)
     }, [])
 
-    // Need to figure out which column (day)
-    // and vertical position
-    // For simplicity, let's just draw a line across the whole week at the right Y position?
-    // A more precise one would be only in the current day's column.
-
-    // Y position calculation:
-    // 24 hours * 64px = 1536px total height
     const minutesSinceMidnight = differenceInMinutes(now, startOfDay(now))
     const topPosition = (minutesSinceMidnight / 60) * 64
 
-    // If today is in the week view
-    // (Assuming startOfWeek is correct)
-
     return (
         <div
-            className="absolute left-16 right-0 z-20 border-t-2 border-red-500 pointer-events-none flex items-center"
+            className="absolute left-16 right-0 z-20 border-t-2 border-red-500 pointer-events-none flex items-center shadow-[0_0_10px_rgba(239,68,68,0.5)]"
             style={{ top: `${topPosition}px` }}
         >
             <div className="w-2 h-2 rounded-full bg-red-500 -ml-1 -mt-[1px]" />
@@ -134,23 +168,34 @@ function CurrentTimeIndicator({ startOfWeek }: { startOfWeek: Date }) {
     )
 }
 
-function EventItem({ event }: { event: CalendarEvent }) {
+function EventItem({ event, onClick }: { event: CalendarEvent, onClick: () => void }) {
     const start = new Date(event.startTime)
     const end = new Date(event.endTime)
     const startMin = differenceInMinutes(start, startOfDay(start))
     const durationMin = differenceInMinutes(end, start)
 
-    // 64px per hour = 64/60 px per minute
+    const handleDragStart = (e: React.DragEvent) => {
+        e.dataTransfer.setData('eventId', event.id)
+        e.dataTransfer.setData('duration', durationMin.toString())
+        e.dataTransfer.effectAllowed = 'move'
+    }
+
     const top = (startMin / 60) * 64
-    const height = (durationMin / 60) * 64
+    const height = Math.max((durationMin / 60) * 64, 28) // Minimum height for readability
 
     const styles = EVENT_COLORS[event.type] || EVENT_COLORS.BLOCKER
 
     return (
         <div
+            draggable
+            onDragStart={handleDragStart}
+            onClick={(e) => {
+                e.stopPropagation()
+                onClick()
+            }}
             className={cn(
-                "absolute inset-x-1 rounded-md border p-2 text-xs transition-all hover:z-20 cursor-pointer overflow-hidden",
-                "group shadow-sm hover:shadow-md",
+                "absolute inset-x-1 rounded-md border p-2 text-xs transition-all hover:z-30 cursor-pointer overflow-hidden",
+                "group shadow-sm hover:shadow-lg hover:scale-[1.02] duration-200",
                 styles.bg,
                 styles.border,
                 styles.text,
@@ -159,7 +204,6 @@ function EventItem({ event }: { event: CalendarEvent }) {
             style={{
                 top: `${top}px`,
                 height: `${height}px`,
-                minHeight: '28px'
             }}
         >
             <div className="flex flex-col h-full">
@@ -168,14 +212,16 @@ function EventItem({ event }: { event: CalendarEvent }) {
                     {event.title}
                 </div>
                 {height > 40 && (
-                    <div className="opacity-80 truncate mt-0.5 text-[10px]">
-                        {format(start, 'h:mm a')} - {format(end, 'h:mm a')}
+                    <div className="opacity-80 truncate mt-0.5 text-[10px] items-center flex gap-1">
+                        <span>{format(start, 'h:mm a')}</span>
+                        <span>-</span>
+                        <span>{format(end, 'h:mm a')}</span>
                     </div>
                 )}
             </div>
 
             {/* Resize handle (Visual only for now) */}
-            <div className="absolute bottom-0 inset-x-0 h-1 cursor-ns-resize group-hover:bg-foreground/10" />
+            <div className="absolute bottom-0 inset-x-0 h-1 cursor-ns-resize group-hover:bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
     )
 }
