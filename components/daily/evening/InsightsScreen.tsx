@@ -1,55 +1,82 @@
 
 import { useState, useEffect } from "react";
 import { useDailyStore } from "@/lib/store/useDailyStore";
-import { ArrowRight, BrainCircuit, Sparkles, TrendingDown, Clock, Lightbulb } from "lucide-react";
+import { ArrowRight, BrainCircuit, Sparkles, Clock, Lightbulb, AlertTriangle } from "lucide-react";
 
 interface InsightsScreenProps {
     onContinue: () => void;
 }
 
+interface AIInsightResponse {
+    title: string;
+    pattern: string;
+    reason: string;
+    suggestion: string;
+    actionLabel: string;
+}
+
 export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
     const [loading, setLoading] = useState(true);
+    const [insightContent, setInsightContent] = useState<AIInsightResponse | null>(null);
+    const [error, setError] = useState(false);
+
     const { eveningData, oneThing, otherActions } = useDailyStore();
 
-    // Mock AI Logic based on mood
-    const mood = eveningData.mood;
-    let insightContent;
-
-    const incompleteCount = [oneThing, ...otherActions].filter(a => !a.completed).length;
-
-    if (mood === 3) {
-        insightContent = { // Great
-            title: "GREAT DAY! 🎉",
-            pattern: "You hit your flow state perfectly today.",
-            reason: "Did creative work during peak hours (7-9pm) and maintained high energy.",
-            suggestion: "Keep this momentum! Your schedule for tomorrow looks balanced.",
-            actionLabel: "Keep Current Schedule"
-        };
-    } else if (mood === 2) { // OK
-        insightContent = {
-            title: "SOLID DAY 👍",
-            pattern: "You hit your ONE Thing, which is what matters most.",
-            reason: `You left ${incompleteCount} secondary tasks undone, but that's a smart tradeoff.`,
-            suggestion: "Tomorrow is lighter. You'll easily catch up on the admin work.",
-            actionLabel: "Keep It Rolling"
-        };
-    } else { // Struggled
-        insightContent = {
-            title: "TOUGH DAY, I SEE YOU 💙",
-            pattern: "Creative work is taking 1.5x longer than estimated.",
-            reason: "This is the 2nd time this week. It's not failure, it's just data.",
-            suggestion: "I suggest adding a 1.5x buffer to tomorrow's tasks to reduce pressure.",
-            actionLabel: "Apply Light Day Tomorrow"
-        };
-    }
-
-
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 2500);
-        return () => clearTimeout(timer);
-    }, []);
+        let mounted = true;
+
+        const fetchInsights = async () => {
+            try {
+                const allActions = [oneThing, ...otherActions];
+                const completedCount = allActions.filter(a => a.completed).length;
+                const totalCount = allActions.length;
+
+                // Call our Next.js API route
+                const res = await fetch('/api/ai/evening-insight', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mood: eveningData.mood,
+                        completedCount,
+                        totalCount,
+                        reflection: eveningData.reflection
+                    })
+                });
+
+                if (!res.ok) throw new Error('API Error');
+
+                const data = await res.json();
+
+                if (mounted) {
+                    setInsightContent(data);
+                    setLoading(false);
+                }
+            } catch (err) {
+                console.error(err);
+                if (mounted) {
+                    setError(true);
+                    setLoading(false);
+                    // Fallback content to ensure flow doesn't break
+                    setInsightContent({
+                        title: "Day Complete",
+                        pattern: "You're consistently showing up.",
+                        reason: "Data analysis unavailable, but your effort is recorded.",
+                        suggestion: "Take some rest and prepare for tomorrow.",
+                        actionLabel: "Continue"
+                    });
+                }
+            }
+        };
+
+        // Minimum loading time for UX (animation)
+        const minLoadTime = new Promise(resolve => setTimeout(resolve, 2000));
+
+        Promise.all([fetchInsights(), minLoadTime]).then(() => {
+            // Both finished
+        });
+
+        return () => { mounted = false; };
+    }, [eveningData.mood, eveningData.reflection, oneThing, otherActions]);
 
     if (loading) {
         return (
@@ -60,11 +87,13 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
                         <BrainCircuit className="h-10 w-10 animate-pulse" />
                     </div>
                 </div>
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Analyzing your day...</h2>
-                <p className="mt-2 text-zinc-500 animate-pulse">Detecting patterns • Generating insights</p>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Connecting to AI Neural Net...</h2>
+                <p className="mt-2 text-zinc-500 animate-pulse">Analyzing mood • Processing reflection • Generating strategy</p>
             </div>
         );
     }
+
+    if (!insightContent) return null;
 
     return (
         <div className="mx-auto w-full max-w-2xl animate-in slide-in-from-bottom-8 fade-in duration-500">
@@ -115,6 +144,13 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
                     </button>
                 </div>
             </div>
+
+            {error && (
+                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-yellow-600 dark:text-yellow-500">
+                    <AlertTriangle size={16} />
+                    <span>AI Service unavailable (Using offline mode)</span>
+                </div>
+            )}
         </div>
     );
 }

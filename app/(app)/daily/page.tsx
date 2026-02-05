@@ -1,22 +1,49 @@
 
 "use client";
 
+
+import { useEffect, useState } from "react";
 import { useDailyStore } from "@/lib/store/useDailyStore";
+import { supabase } from "@/lib/supabase";
 import MorningView from "@/components/daily/MorningView";
 import DeepWorkView from "@/components/daily/DeepWorkView";
 import CelebrationView from "@/components/daily/CelebrationView";
 import EveningView from "@/components/daily/EveningView";
-import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function DailyPage() {
-    const { currentView } = useDailyStore();
+    const { currentView, fetchDailyData, loading } = useDailyStore();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
-    }, []);
 
-    if (!mounted) return null; // Avoid hydration mismatch
+        async function init() {
+            // Get real user from Supabase Auth
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                fetchDailyData(user.id);
+            } else {
+                // Handle guest mode or redirect to login
+                // For now, we allow the store to use its mock fallback if fetch wasn't called with an ID
+            }
+        }
+
+        init();
+    }, [fetchDailyData]);
+
+    if (!mounted) return null;
+
+    if (loading) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-[#F8F9FA] dark:bg-zinc-950">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
+                    <p className="text-sm font-medium text-zinc-500">Syncing your execution board...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-[#F8F9FA] dark:bg-zinc-950 transition-colors duration-500">
