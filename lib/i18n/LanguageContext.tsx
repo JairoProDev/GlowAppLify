@@ -12,14 +12,26 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-    const [language, setLanguage] = useState<Language>('en')
+    const [language, setLanguage] = useState<Language>('es')
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
         setMounted(true)
         const savedLang = localStorage.getItem('language') as Language
+
         if (savedLang && (savedLang === 'en' || savedLang === 'es')) {
             setLanguage(savedLang)
+        } else {
+            // Auto-detect language
+            const browserLang = navigator.language?.split('-')[0]
+
+            // Default to 'es' (Spanish) as requested for Latam focus
+            // Only switch to 'en' if explicitly detected
+            if (browserLang === 'en') {
+                setLanguage('en')
+            } else {
+                setLanguage('es')
+            }
         }
     }, [])
 
