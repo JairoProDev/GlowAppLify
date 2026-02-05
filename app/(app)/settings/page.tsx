@@ -38,6 +38,7 @@ export default function SettingsPage() {
     // Local state for form management
     const [name, setName] = useState(profile.name)
     const [email, setEmail] = useState(profile.email)
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
     const { setTheme: setNextTheme } = useTheme()
 
     // Sync component state with store on mount
@@ -45,6 +46,44 @@ export default function SettingsPage() {
         setName(profile.name)
         setEmail(profile.email)
     }, [profile])
+
+    const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select an image file')
+            return
+        }
+
+        // Validate file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error('Image size should be less than 2MB')
+            return
+        }
+
+        setIsUploadingAvatar(true)
+        try {
+            // Convert to base64
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                const base64String = reader.result as string
+                updateProfile({ avatarUrl: base64String })
+                toast.success('Avatar updated successfully')
+                setIsUploadingAvatar(false)
+            }
+            reader.onerror = () => {
+                toast.error('Failed to read image')
+                setIsUploadingAvatar(false)
+            }
+            reader.readAsDataURL(file)
+        } catch (error) {
+            console.error('Avatar upload error:', error)
+            toast.error('Failed to upload avatar')
+            setIsUploadingAvatar(false)
+        }
+    }
 
     const handleProfileSave = () => {
         updateProfile({ name, email })
@@ -128,7 +167,25 @@ export default function SettingsPage() {
                                     <AvatarImage src={profile.avatarUrl} />
                                     <AvatarFallback className="text-2xl">{profile.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <Button variant="outline">Change Avatar</Button>
+                                <div>
+                                    <input
+                                        type="file"
+                                        id="avatar-upload"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                    />
+                                    <Button
+                                        variant="outline"
+                                        disabled={isUploadingAvatar}
+                                        onClick={() => document.getElementById('avatar-upload')?.click()}
+                                    >
+                                        {isUploadingAvatar ? 'Uploading...' : 'Change Avatar'}
+                                    </Button>
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                        Max size: 2MB
+                                    </p>
+                                </div>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Display Name</Label>
