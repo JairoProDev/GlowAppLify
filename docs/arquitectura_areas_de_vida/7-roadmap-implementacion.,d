@@ -1,0 +1,370 @@
+## 🚀 ROADMAP DE IMPLEMENTACION
+
+### FASE 0: PREPARACION (Semana 1-2)
+
+**Objetivo:** Diseñar la arquitectura completa antes de codear.
+
+#### Tareas:
+- [ ] **Documento de arquitectura** (este doc) ✅
+- [ ] **Wireframes de todas las pantallas**
+  - Dashboard multi-área
+  - Vista individual de área
+  - AI Coach panel
+  - Onboarding multi-área
+- [ ] **Definir esquema de base de datos completo**
+- [ ] **Escribir prompts de IA para cada función**
+  - Weekly review
+  - Conflict detection
+  - Synergy detection
+  - Continuous chat
+
+**Resultado:** Claridad total sobre qué construir.
+
+---
+
+### FASE 1: BACKEND & DATA MODEL (Semana 3-4)
+
+**Objetivo:** Establecer fundaciones de datos.
+
+#### Tareas:
+- [ ] **Crear todas las tablas en Supabase**
+  - users, life_areas, objectives, actions, daily_logs, ai_interactions, area_connections
+- [ ] **Implementar Row Level Security (RLS)**
+- [ ] **Crear API endpoints**
+  - CRUD para life_areas
+  - CRUD para objectives
+  - CRUD para actions
+  - GET analytics por área
+- [ ] **Seed data para testing**
+  - 3 usuarios ejemplo con múltiples áreas
+
+**Resultado:** Backend robusto y escalable.
+
+---
+
+### FASE 2: ONBOARDING MULTI-ÃREA (Semana 5-6)
+
+**Objetivo:** Nueva experiencia de onboarding que entiende TODA la vida del usuario.
+
+#### Nuevo Flujo de Onboarding
+
+**STEP 1: Welcome**
+```
+"¡Hola! Soy Bloom, tu AI Life Copilot.
+
+En los próximos 5-7 minutos, voy a entender tu vida completa
+y construir un sistema personalizado para que logres tus objetivos.
+
+¿Listo? [Empezar]"
+```
+
+**STEP 2: Life Audit**
+```
+"Primero, hablemos de las diferentes áreas de tu vida.
+
+¿En cuáles de estas áreas quieres trabajar?"
+
+[Selección múltiple con descripción al hover]
+☐ 💰 Finanzas (Dinero, inversiones, ahorro)
+☐ 🏋️ Salud Física (Fitness, nutrición, energía)
+☐ 🧠 Desarrollo Intelectual (Aprendizaje, habilidades)
+☐ 🚀 Carrera & Logros (Trabajo, proyectos, legacy)
+☐ ❤️ Relaciones (Pareja, familia, amigos)
+☐ 🧘 Bienestar Mental (Mindfulness, paz, emociones)
+☐ 🎨 Creatividad & Ocio (Hobbies, diversión)
+☐ 🌱 Crecimiento Personal (Espiritualidad, propósito)
+
+[Continuar]
+```
+
+**STEP 3: Priorización**
+```
+[Usuario seleccionó: Finanzas, Salud, Carrera, Aprendizaje]
+
+"Seleccionaste 4 áreas. Genial.
+
+Ahora, ¿cuál es tu PRIORIDAD MÁXIMA en los próximos 90 días?"
+
+[Arrastrar para ordenar]
+1. [Carrera] 🔥 Principal
+2. [Salud] ⚡ Activa
+3. [Finanzas] ⚡ Activa
+4. [Aprendizaje] 🔄 Mantenimiento
+
+[Continuar]
+```
+
+**STEP 4: Objetivos por Área (Dinámico)**
+```
+[Loop por cada área activa/principal]
+
+"Área: 🚀 Carrera (Principal)
+
+¿Qué quieres lograr en Carrera en los próximos 90 días?"
+
+[Textarea libre]
+Ejemplo: "Lanzar mi MVP", "Conseguir ascenso", "Cambiar de trabajo"
+
+[Continuar]
+```
+
+**STEP 5: Contexto de Vida**
+```
+"Último paso: cuéntame sobre tu día a día para personalizar tus acciones.
+
+¿Cuál describe mejor tu situación?"
+
+☐ Estudiante (horarios flexibles)
+☐ Empleado 9-5 (estructura fija)
+☐ Emprendedor (horario variable)
+☐ Padre/Madre (tiempo limitado)
+☐ Freelancer (trabajo desde casa)
+☐ Híbrido (combinación)
+
+¿Cuántas horas libres tienes al día (fuera de trabajo/estudio)?
+[ Slider: 1h - 8h ]
+
+¿Qué te ha impedido lograr objetivos en el pasado?
+☐ Falta de tiempo
+☐ No sé por dónde empezar
+☐ Pierdo motivación
+☐ Perfeccionismo (nunca empiezo)
+☐ Distracciones
+☐ Falta de accountability
+
+[Continuar]
+```
+
+**STEP 6: Generación (30-45 seg)**
+```
+[Animación de loading profesional]
+
+"✨ Creando tu sistema de vida personalizado...
+
+🧠 Analizando tus objetivos...
+🎯 Diseñando acciones diarias...
+🔗 Detectando conexiones entre áreas...
+📊 Configurando analytics...
+
+Esto tomará ~30 segundos."
+
+[Barra de progreso con frases motivacionales rotando]
+```
+
+**STEP 7: Presentación del Sistema**
+```
+"¡Listo! ðŸŽ‰
+
+He creado tu sistema de vida con:
+
+• 4 áreas activas
+• 6 objetivos de 90 días
+• 23 acciones semanales
+• 8 hábitos diarios
+• 3 conexiones detectadas
+
+[Ver mi Dashboard]
+```
+
+#### Tareas de Implementación:
+- [ ] **Construir UI de onboarding multi-paso**
+- [ ] **Integrar Claude API para generar múltiples boards simultáneamente**
+- [ ] **Algoritmo de priorización automática (si usuario no prioriza)**
+- [ ] **Guardar todo en DB (múltiples life_areas, objectives, actions)**
+
+**Resultado:** Onboarding completo que captura TODA la vida del usuario.
+
+---
+
+### FASE 3: DASHBOARD MULTI-ÃREA (Semana 7-8)
+
+**Objetivo:** Vista principal donde el usuario ve todas sus áreas.
+
+#### Tareas:
+- [ ] **Implementar layout con Sidebar + TopBar + MainContent**
+- [ ] **Sidebar navigation**
+  - Items dinámicos basados en life_areas del usuario
+  - Badge counts (acciones pendientes)
+  - Active state highlighting
+- [ ] **Dashboard cards por área**
+  - Progress bars
+  - Actions completadas/pendientes
+  - Quick actions (ver detalles, ajustar)
+- [ ] **Weekly overview widget**
+  - Calendar horizontal con días de la semana
+  - Visual de completion por día
+- [ ] **Today's Priority Actions**
+  - Lista de top 5 acciones del día (priorizadas por IA)
+  - Checkboxes funcionales
+  - Animaciones de completion
+
+**Resultado:** Dashboard funcional y visualmente atractivo.
+
+---
+
+### FASE 4: VISTA INDIVIDUAL DE ÃREA (Semana 9-10)
+
+**Objetivo:** Profundizar en cada área.
+
+#### Tareas:
+- [ ] **Página dinámica `/areas/:areaId`**
+- [ ] **Mostrar objetivo activo con KPIs**
+- [ ] **Lista de acciones semanales con checkboxes**
+- [ ] **Hábitos diarios con streaks**
+- [ ] **Sección de conexiones con otras áreas**
+- [ ] **Mini analytics (progress over time)**
+- [ ] **Botón "Adjust with AI"** → Trigger conversación con coach
+
+**Resultado:** Vista completa y accionable por área.
+
+---
+
+### FASE 5: AI CONTINUOUS ASSISTANCE (Semana 11-13)
+
+**Objetivo:** IA como copilot permanente.
+
+#### 5.1 Weekly Review Automático
+
+**Tareas:**
+- [ ] **Cron job: Domingos 8pm**
+  - Trigger notificación al usuario
+  - Fetch datos de la semana
+  - Calcular completion rates por área
+  - Detectar patrones (días/acciones saltadas)
+- [ ] **Generar análisis con Claude API**
+  - Prompt: "Analiza esta semana del usuario: [datos]. Sugiere ajustes."
+- [ ] **UI de Weekly Review**
+  - Mostrar insights
+  - Mostrar sugerencias de ajustes
+  - Botones: "Aplicar sugerencias" / "Mantener igual" / "Editar manualmente"
+- [ ] **Auto-aplicar cambios aprobados**
+  - Modificar actions en DB
+  - Notificar al usuario de cambios
+
+#### 5.2 Continuous Chat Interface
+
+**Tareas:**
+- [ ] **Botón flotante de AI Coach**
+- [ ] **Panel lateral de chat**
+  - Historial de conversaciones
+  - Input con auto-complete
+  - Typing indicators
+- [ ] **Contexto completo en cada mensaje**
+  - Fetch all life_areas, objectives, actions, daily_logs del usuario
+  - Pasar a Claude API como contexto
+- [ ] **Quick Actions shortcuts**
+  - "Nueva área"
+  - "Ajustar prioridades"
+  - "Pausar área"
+  - "Ver analytics"
+
+#### 5.3 Proactive Interventions
+
+**Tareas:**
+- [ ] **Obstacle Detection Algorithm**
+  ```javascript
+  // Pseudo-código
+  function detectObstacles(userId) {
+    const logs = getDailyLogs(userId, last14Days);
+    const patterns = analyzePatterns(logs);
+    
+    if (patterns.sameActionSkipped >= 3) {
+      triggerAIIntervention(
+        type: 'obstacle_detection',
+        message: "Noto que saltaste [acción] 3 veces. ¿Qué pasa?"
+      );
+    }
+    
+    if (patterns.areaCompletionRate < 40) {
+      triggerAIIntervention(
+        type: 'low_completion',
+        message: "[Área] tiene bajo completion. ¿Demasiado ambicioso?"
+      );
+    }
+  }
+  ```
+- [ ] **Synergy Detection**
+  - Analizar objectives de diferentes áreas
+  - Buscar keywords similares
+  - Sugerir combinaciones
+- [ ] **Conflict Detection**
+  - Calcular time budget total
+  - Comparar con tiempo disponible
+  - Alertar si overcommitment
+
+**Resultado:** IA activa que ayuda proactivamente, no solo cuando el usuario pregunta.
+
+---
+
+### FASE 6: ANALYTICS & VISUALIZATIONS (Semana 14-15)
+
+**Objetivo:** Mostrar progreso de forma visual y motivante.
+
+#### Tareas:
+- [ ] **Página `/analytics`**
+- [ ] **Charts con Recharts**
+  - Completion rate por área (línea temporal)
+  - Weekly performance (barras)
+  - Streak history (heatmap estilo GitHub)
+- [ ] **Insights cards**
+  - "Tu mejor área este mes: [X]"
+  - "Has completado [Y]% más que el mes pasado"
+  - "Racha más larga: [Z] días en [Área]"
+- [ ] **Life Balance Radar Chart**
+  - 8 ejes (1 por área)
+  - Visual de qué áreas están descuidadas
+
+**Resultado:** Datos visuales que motivan y guían decisiones.
+
+---
+
+### FASE 7: MOBILE OPTIMIZATION (Semana 16)
+
+**Objetivo:** Experiencia mobile nativa, no solo responsive.
+
+#### Tareas:
+- [ ] **Bottom navigation bar**
+  - Home, Areas, Stats, Coach, Profile
+- [ ] **Gestos de navegación**
+  - Swipe left/right entre áreas
+  - Pull to refresh
+  - Long press para quick actions
+- [ ] **Mobile-first widgets**
+  - Today's actions → Card format
+  - Quick check-in → Modal bottom sheet
+- [ ] **Optimización de performance**
+  - Lazy loading de componentes
+  - Image optimization
+  - Minimizar API calls
+
+**Resultado:** App móvil competitiva con apps nativas.
+
+---
+
+### FASE 8: POLISH & LAUNCH (Semana 17-18)
+
+**Objetivo:** Preparar para ProductHunt y primeros 100 usuarios.
+
+#### Tareas:
+- [ ] **Landing page actualizada**
+  - Explicar concepto de Life Areas
+  - Demo video (2-3 min)
+  - Testimonials (beta users)
+- [ ] **Onboarding tooltips**
+  - Guiar a nuevos usuarios
+  - Explicar cada sección
+- [ ] **Error handling robusto**
+  - Fallbacks si API falla
+  - Mensajes útiles
+- [ ] **Analytics tracking**
+  - PostHog events
+  - Funnels de conversión
+- [ ] **Beta testing**
+  - 20 usuarios cerrados
+  - Feedback iterativo
+- [ ] **Bug fixes**
+  - Priorizar por severidad
+
+**Resultado:** Producto pulido listo para escalar.
+
+---
