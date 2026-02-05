@@ -14,7 +14,8 @@ export const landingContent = {
             subheadline1: "IA que construye todo tu sistema de",
             subheadline2: "crecimiento personal—en 3 minutos.",
             description: "Sin plantillas. Sin configuración. Sin tonterías. Solo describe tus metas y mira cómo la IA crea tu hoja de ruta personalizada hacia el éxito.",
-            cta: "Inicia Tu Transformación Gratis",
+            inputPlaceholder: "Ej: Quiero correr una maratón en 6 meses...",
+            cta: "Comenzar Transformación",
             microCopy: "Gratis por siempre • Sin tarjeta de crédito • Setup en 3 min",
             trust: {
                 privacy: "Datos 100% privados",
@@ -22,9 +23,9 @@ export const landingContent = {
                 science: "Basado en ciencia del comportamiento"
             },
             mock: {
-                analyzing: "Analizando...",
-                complete: "Análisis Completado",
-                growthPlan: "Plan de Crecimiento Generado"
+                analyzing: "Analizando objetivos...",
+                complete: "Sistema Generado",
+                growthPlan: "Plan de Crecimiento Listo"
             }
         },
         problem: {
@@ -73,17 +74,37 @@ export const landingContent = {
                 { name: "Emma R.", role: "Diseñadora", quote: "Otras apps se sentían como tarea. Esta se siente como tener un coach en mi bolsillo." }
             ]
         },
+
         comparison: {
             headline: "GlowApplify vs El Resto",
-            subtitle: "¿Por qué perder tiempo con herramientas que te hacen hacer todo el trabajo?",
-            headers: ["Lo Que Necesitas", "Apps Genéricas", "Chatbots IA", "GlowApplify"],
-            rows: [
-                { label: "Setup Fácil", generic: "❌ 2-5 horas config", chat: "⚠️ N/A (sin setup)", glow: "✅ 3 min, IA lo hace" },
-                { label: "Personalizado", generic: "❌ Plantillas manuales", chat: "⚠️ Memoria parcial", glow: "✅ IA analiza tu vida" },
-                { label: "Sistema Accionable", generic: "❌ Tú configuras todo", chat: "❌ Solo chat", glow: "✅ Sistema completo" },
-                { label: "Guía Diaria", generic: "❌ Tú decides", chat: "❌ Debes preguntar", glow: "✅ IA te dice qué hacer" }
+            subtitle: "La comparación científica definitiva.",
+            headers: ["", "Notion / Apps", "Chatbots (GPT)", "Coach Humano", "GlowApplify"],
+            categories: [
+                {
+                    name: "🧠 Inteligencia & Contexto",
+                    rows: [
+                        { label: "Memoria de Vida", generic: "❌ Nula", chat: "⚠️ Limitada", coach: "✅ Alta", glow: "✅ Memoria Total" },
+                        { label: "Proactividad", generic: "❌ Pasivo", chat: "❌ Reactivo", coach: "✅ Proactivo", glow: "✅ Radicalmente Proactivo" },
+                        { label: "Adaptación", generic: "❌ Manual", chat: "⚠️ Vía Prompts", coach: "⚠️ Lenta", glow: "✅ Instantánea" }
+                    ]
+                },
+                {
+                    name: "⚡ Fricción & Ejecución",
+                    rows: [
+                        { label: "Setup Inicial", generic: "❌ 5+ Horas", chat: "⚠️ N/A", coach: "❌ 2+ Horas", glow: "✅ 3 Minutos" },
+                        { label: "Carga Mental", generic: "❌ Alta (Tú decides)", chat: "⚠️ Media", coach: "✅ Baja", glow: "✅ Cero (Sistema guía)" },
+                        { label: "Micro-Gestión", generic: "❌ Constante", chat: "❌ Alta", coach: "✅ Baja", glow: "✅ Automatizada" }
+                    ]
+                },
+                {
+                    name: "💰 Accesibilidad",
+                    rows: [
+                        { label: "Disponibilidad", generic: "24/7", chat: "24/7", coach: "⚠️ Con Cita", glow: "✅ 24/7 SIEMPRE" },
+                        { label: "Costo Mensual", generic: "$0 - $15", chat: "$20", coach: "$500+", glow: "GRATIS (Beta)" }
+                    ]
+                }
             ],
-            bottomLine: "La mayoría de apps te hacen trabajar más. GlowApplify te hace trabajar mejor."
+            bottomLine: "Resultados de un Coach Humano. Velocidad de IA. Sin configuración manual."
         },
         faq: {
             headline: "Preguntas Frecuentes",
@@ -117,6 +138,7 @@ export const landingContent = {
             subheadline1: "AI that builds your entire personal",
             subheadline2: "growth system—in 3 minutes.",
             description: "No templates. No setup. No BS. Just describe your goals, and watch AI create your personalized roadmap to success.",
+            inputPlaceholder: "Ex: I want to run a marathon in 6 months...",
             cta: "Start Your Free Transformation",
             microCopy: "Free forever • No credit card • 3-minute setup",
             trust: {
@@ -176,17 +198,37 @@ export const landingContent = {
                 { name: "Emma R.", role: "Designer", quote: "Other apps felt like homework. GlowApplify feels like having a coach in my pocket." }
             ]
         },
+
         comparison: {
             headline: "GlowApplify vs Everything Else",
-            subtitle: "Why waste time with tools that make you do all the work?",
-            headers: ["What You Need", "Generic Apps", "AI Chatbots", "GlowApplify"],
-            rows: [
-                { label: "Easy Setup", generic: "❌ 2-5 hours config", chat: "⚠️ N/A (no setup)", glow: "✅ 3 mins, AI does it" },
-                { label: "Personalized", generic: "❌ Manual templates", chat: "⚠️ Partial memory", glow: "✅ AI analyzes life" },
-                { label: "Actionable System", generic: "❌ Configure it yourself", chat: "❌ Only chat", glow: "✅ Complete system" },
-                { label: "Daily Guidance", generic: "❌ You decide", chat: "❌ You have to ask", glow: "✅ AI guides you" }
+            subtitle: "The definitive scientific comparison.",
+            headers: ["", "Notion / Apps", "AI Chatbots (GPT)", "Human Coach", "GlowApplify"],
+            categories: [
+                {
+                    name: "🧠 Intelligence & Context",
+                    rows: [
+                        { label: "Life Memory", generic: "❌ None", chat: "⚠️ Limited", coach: "✅ High", glow: "✅ Total Memory" },
+                        { label: "Proactivity", generic: "❌ Passive", chat: "❌ Reactive", coach: "✅ Proactive", glow: "✅ Radically Proactive" },
+                        { label: "Adaptation", generic: "❌ Manual", chat: "⚠️ Via Prompts", coach: "⚠️ Slow", glow: "✅ Instant" }
+                    ]
+                },
+                {
+                    name: "⚡ Friction & Execution",
+                    rows: [
+                        { label: "Initial Setup", generic: "❌ 5+ Hours", chat: "⚠️ N/A", coach: "❌ 2+ Hours", glow: "✅ 3 Minutes" },
+                        { label: "Mental Load", generic: "❌ High", chat: "⚠️ Medium", coach: "✅ Low", glow: "✅ Zero (System guides)" },
+                        { label: "Micro-Management", generic: "❌ Constant", chat: "❌ High", coach: "✅ Low", glow: "✅ Automated" }
+                    ]
+                },
+                {
+                    name: "💰 Accessibility",
+                    rows: [
+                        { label: "Availability", generic: "24/7", chat: "24/7", coach: "⚠️ Appt Only", glow: "✅ 24/7 ALWAYS" },
+                        { label: "Monthly Cost", generic: "$0 - $15", chat: "$20", coach: "$500+", glow: "FREE (Beta)" }
+                    ]
+                }
             ],
-            bottomLine: "Most apps make you work harder. GlowApplify makes you work smarter."
+            bottomLine: "Human Coach results. AI speed. Zero manual work."
         },
         faq: {
             headline: "Frequently Asked Questions",

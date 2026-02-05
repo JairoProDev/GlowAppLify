@@ -34,9 +34,21 @@ export function HowItWorks() {
                             </div>
 
                             <div className="lg:w-5/12 text-center lg:text-right">
-                                <div className="inline-flex items-center justify-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl mb-4 text-blue-600">
-                                    <MessageSquare className="w-8 h-8" />
+                                {/* Step 1 Visual: User Typing */}
+                                <div className="inline-block p-4 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm mb-6 w-full max-w-sm mx-auto group hover:border-blue-200 transition-colors">
+                                    <div className="flex items-center gap-2 mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                                        <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                                        <div className="w-2 h-2 rounded-full bg-amber-400"></div>
+                                        <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                                        <div className="text-[10px] text-zinc-400 ml-auto font-mono">Input_Stream</div>
+                                    </div>
+                                    <div className="space-y-2 text-left">
+                                        <div className="h-2 w-3/4 bg-zinc-200 dark:bg-zinc-800 rounded animate-[pulse_2s_infinite]"></div>
+                                        <div className="h-2 w-1/2 bg-zinc-200 dark:bg-zinc-800 rounded animate-[pulse_2s_infinite_100ms]"></div>
+                                        <div className="h-4 w-1 bg-blue-600 animate-[blink_1s_infinite] ml-1 inline-block align-middle"></div>
+                                    </div>
                                 </div>
+
                                 <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">{t.steps[0].title}</h3>
                                 <p className="text-zinc-600 dark:text-zinc-400">
                                     {t.steps[0].desc}
@@ -57,9 +69,20 @@ export function HowItWorks() {
 
                             <div className="lg:w-5/12 order-last lg:order-first"></div>
                             <div className="lg:w-5/12 text-center lg:text-left">
-                                <div className="inline-flex items-center justify-center p-3 bg-cyan-50 dark:bg-cyan-900/20 rounded-2xl mb-4 text-cyan-600">
-                                    <Wand2 className="w-8 h-8" />
+                                {/* Step 2 Visual: Building Blocks / Processing */}
+                                <div className="inline-block p-4 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm mb-6 w-full max-w-sm mx-auto overflow-hidden relative group hover:border-cyan-200 transition-colors">
+                                    <div className="absolute inset-0 bg-blue-500/5 dark:bg-blue-500/10 animate-[pulse_3s_infinite]"></div>
+                                    <div className="flex justify-center items-end gap-1 h-20 mb-2">
+                                        <div className="w-4 bg-cyan-400 rounded-t-sm h-[20%] animate-[grow-up_2s_infinite]"></div>
+                                        <div className="w-4 bg-blue-500 rounded-t-sm h-[40%] animate-[grow-up_2s_infinite_200ms]"></div>
+                                        <div className="w-4 bg-indigo-500 rounded-t-sm h-[60%] animate-[grow-up_2s_infinite_400ms]"></div>
+                                        <div className="w-4 bg-purple-500 rounded-t-sm h-[80%] animate-[grow-up_2s_infinite_600ms]"></div>
+                                    </div>
+                                    <div className="text-center text-xs font-mono text-cyan-600 dark:text-cyan-400">
+                                        Constructing_System...
+                                    </div>
                                 </div>
+
                                 <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">{t.steps[1].title}</h3>
                                 <p className="text-zinc-600 dark:text-zinc-400">
                                     {t.steps[1].desc}
@@ -78,9 +101,20 @@ export function HowItWorks() {
                             </div>
 
                             <div className="lg:w-5/12 text-center lg:text-right">
-                                <div className="inline-flex items-center justify-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-2xl mb-4 text-amber-600">
-                                    <PartyPopper className="w-8 h-8" />
+                                {/* Step 3 Visual: Success/Growth */}
+                                <div className="inline-block p-4 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm mb-6 w-full max-w-sm mx-auto group hover:border-amber-200 transition-colors">
+                                    <div className="relative h-20 w-full flex items-center justify-center">
+                                        <div className="absolute w-16 h-16 rounded-full border-4 border-zinc-200 dark:border-zinc-700"></div>
+                                        <div className="absolute w-16 h-16 rounded-full border-4 border-amber-500 border-t-transparent border-l-transparent -rotate-45 animate-[spin_3s_linear_infinite]"></div>
+                                        <div className="text-2xl font-black text-zinc-900 dark:text-white">
+                                            1%
+                                        </div>
+                                        <div className="absolute -top-1 -right-1 text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-bold shadow-sm animate-bounce">
+                                            +Better
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">{t.steps[2].title}</h3>
                                 <p className="text-zinc-600 dark:text-zinc-400">
                                     {t.steps[2].desc}
