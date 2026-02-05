@@ -146,20 +146,23 @@ const HeroVisualCard = ({ isActive, type, content }: { isActive: boolean, type: 
 
 export function HeroVisualCarousel() {
     const [step, setStep] = useState(0);
+    const [mounted, setMounted] = useState(false);
     const { language } = useLanguage();
-    const t = landingContent[language].hero;
-    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
-    // Cycle through 3 steps: 0=Entropy, 1=Process, 2=Order
     useEffect(() => {
+        setMounted(true);
         const timer = setInterval(() => {
             setStep((prev) => (prev + 1) % 3);
         }, 3500); // Change every 3.5 seconds
         return () => clearInterval(timer);
     }, []);
 
-    // Also support hover interaction to pause or manually select? 
-    // For now, auto-cycle is fine as per request.
+    const t = landingContent[language].hero;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
+
+    if (!mounted) {
+        return <div className="w-full h-[400px] lg:h-[450px] bg-zinc-50 dark:bg-zinc-900/50 rounded-xl animate-pulse"></div>;
+    }
 
     return (
         <InteractiveTrigger diveData={currentDeepDives["hero-visual"]} className="w-full block">

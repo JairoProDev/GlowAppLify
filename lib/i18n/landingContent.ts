@@ -164,9 +164,26 @@ export const landingContent = {
                 science: "Behavioral science backed"
             },
             mock: {
-                analyzing: "Analyzing...",
-                complete: "Analysis Complete",
-                growthPlan: "Growth Plan Generated"
+                analyzing: "ANALYZING GOALS...",
+                complete: "System Generated",
+                entropy: "ENTROPY (CHAOS)",
+                synergy: "SYNERGY (ORDER)",
+                reduction: "Entropy_Reduction",
+                visuals: {
+                    overthinking: "Overthinking...",
+                    noPlan: "No_Plan_Found",
+                    systemOverload: "System Overload",
+                    analyzingIntent: "analyzing_intent...",
+                    vectorizing: "vectorizing_goals [==========] 100%",
+                    constraints: "detecting_constraints...",
+                    optimizing: "optimizing_path...",
+                    scheduleSuccess: "schedule_generated_successfully",
+                    morningProtocol: "Morning Protocol",
+                    highImpact: "High Impact • 45m",
+                    deepWork: "Deep Work Block",
+                    goalAlignment: "Goal Alignment • 2h",
+                    score: "Score 94%"
+                }
             }
         },
         problem: {
