@@ -4,24 +4,29 @@
 import { BrainCircuit } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 
 export function Footer() {
     const { language } = useLanguage();
     const t = landingContent[language].nav; // Use nav translations for generic links or just hardcode some universals
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     return (
         <footer className="bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
                     <div className="col-span-2 lg:col-span-2">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
-                                <BrainCircuit size={20} />
+                        <InteractiveTrigger diveData={currentDeepDives["mission"]}>
+                            <div className="flex items-center gap-2 mb-4 cursor-pointer group">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white group-hover:scale-110 transition-transform">
+                                    <BrainCircuit size={20} />
+                                </div>
+                                <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                                    GlowApplify
+                                </span>
                             </div>
-                            <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
-                                GlowApplify
-                            </span>
-                        </div>
+                        </InteractiveTrigger>
                         <p className="text-zinc-500 text-sm max-w-sm mb-6">
                             The AI Life Copilot.
                         </p>
@@ -56,7 +61,9 @@ export function Footer() {
                         <ul className="space-y-3 text-sm text-zinc-600 dark:text-zinc-400">
                             <li className="hover:text-blue-600 cursor-pointer">About</li>
                             <li className="hover:text-blue-600 cursor-pointer">Careers</li>
-                            <li className="hover:text-blue-600 cursor-pointer">Privacy</li>
+                            <InteractiveTrigger diveData={currentDeepDives["privacy"]}>
+                                <li className="hover:text-blue-600 cursor-pointer">Privacy</li>
+                            </InteractiveTrigger>
                         </ul>
                     </div>
                 </div>

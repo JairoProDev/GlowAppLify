@@ -6,6 +6,8 @@ import { BrainCircuit, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,18 +18,21 @@ import {
 export function Navbar() {
     const { language, setLanguage } = useLanguage();
     const t = landingContent[language].nav;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-blue-100 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/80">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-500/30">
-                        <BrainCircuit size={20} />
+                <InteractiveTrigger diveData={currentDeepDives["mission"]}>
+                    <div className="flex items-center gap-2 cursor-pointer group">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
+                            <BrainCircuit size={20} />
+                        </div>
+                        <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                            GlowApplify
+                        </span>
                     </div>
-                    <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
-                        GlowApplify
-                    </span>
-                </div>
+                </InteractiveTrigger>
                 <div className="flex items-center gap-4">
 
                     {/* Language Switcher */}

@@ -4,10 +4,13 @@
 import { Sparkles, Target, Calendar, TrendingUp } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 
 export function Solution() {
     const { language } = useLanguage();
     const t = landingContent[language].solution;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     const icons = [Sparkles, Target, Calendar, TrendingUp];
     const colors = [
@@ -41,8 +44,10 @@ export function Solution() {
                     {t.benefits.map((benefit, i) => {
                         const Icon = icons[i];
                         const color = colors[i];
-                        return (
-                            <div key={i} className="bg-white dark:bg-zinc-800 p-8 rounded-3xl shadow-sm border border-zinc-100 dark:border-zinc-700 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+                        const deepDiveIds = ["solution-onboarding", "solution-goals", "solution-execution", "solution-progress"];
+
+                        const content = (
+                            <div className="bg-white dark:bg-zinc-800 p-8 rounded-3xl shadow-sm border border-zinc-100 dark:border-zinc-700 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300 h-full text-left">
                                 <div className={`w-12 h-12 ${color.bg} rounded-xl flex items-center justify-center ${color.text} mb-6`}>
                                     <Icon className="w-6 h-6" />
                                 </div>
@@ -51,6 +56,12 @@ export function Solution() {
                                     {benefit.desc}
                                 </p>
                             </div>
+                        );
+
+                        return (
+                            <InteractiveTrigger key={i} diveData={currentDeepDives[deepDiveIds[i]]} className="h-full">
+                                {content}
+                            </InteractiveTrigger>
                         );
                     })}
                 </div>

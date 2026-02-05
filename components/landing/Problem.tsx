@@ -30,8 +30,9 @@ export function Problem() {
                     <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4">
                         {t.cards.map((card, idx) => {
                             const Icon = iconMap[idx];
+                            const deepDiveIds = ["problem-generic", "problem-habits", "problem-reactive", "problem-stagnation"];
                             const content = (
-                                <div className="group flex flex-col items-start bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl hover:translate-y-[-4px] transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10 hover:bg-white dark:hover:bg-zinc-900 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 h-full">
+                                <div className="group flex flex-col items-start bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl hover:translate-y-[-4px] transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10 hover:bg-white dark:hover:bg-zinc-900 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 h-full text-left">
                                     <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-3 ring-1 ring-red-100 dark:ring-red-900/30 group-hover:scale-110 transition-transform duration-300">
                                         <Icon className="h-6 w-6 text-red-600 dark:text-red-400" aria-hidden="true" />
                                     </div>
@@ -44,15 +45,11 @@ export function Problem() {
                                 </div>
                             );
 
-                            if (idx === 0) {
-                                return (
-                                    <InteractiveTrigger key={idx} diveData={currentDeepDives["problem-generic"]} className="h-full">
-                                        {content}
-                                    </InteractiveTrigger>
-                                );
-                            }
-
-                            return <div key={idx} className="h-full">{content}</div>;
+                            return (
+                                <InteractiveTrigger key={idx} diveData={currentDeepDives[deepDiveIds[idx]]} className="h-full">
+                                    {content}
+                                </InteractiveTrigger>
+                            );
                         })}
                     </dl>
                 </div>

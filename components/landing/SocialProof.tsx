@@ -5,11 +5,13 @@ import { CheckCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 
 // Needs to match the order in the content file
 const avatars = [
     "https://i.pravatar.cc/150?u=sarah",
-    "https://i.pravatar.cc/150?u=marcus",
+    "https://i.pravatar.cc/150?u=Steve",
     "https://i.pravatar.cc/150?u=emma"
 ];
 
@@ -19,24 +21,27 @@ const avatars = [
 export function SocialProof() {
     const { language } = useLanguage();
     const t = landingContent[language].socialProof;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     return (
         <section className="py-24 bg-zinc-50 dark:bg-zinc-900/50">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-                    {t.stats.map((stat, i) => (
-                        <div key={i} className="text-center p-6 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 hover:-translate-y-1 transition-transform">
-                            <div className="text-3xl lg:text-4xl font-black text-blue-600 dark:text-blue-400 mb-2">
-                                {stat.value}
+                <InteractiveTrigger diveData={currentDeepDives["social-proof-users"]} className="w-full">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20 cursor-help">
+                        {t.stats.map((stat, i) => (
+                            <div key={i} className="text-center p-6 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 hover:-translate-y-1 transition-transform">
+                                <div className="text-3xl lg:text-4xl font-black text-blue-600 dark:text-blue-400 mb-2">
+                                    {stat.value}
+                                </div>
+                                <div className="text-sm font-medium text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
+                                    {stat.label}
+                                </div>
                             </div>
-                            <div className="text-sm font-medium text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-                                {stat.label}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                </InteractiveTrigger>
 
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">

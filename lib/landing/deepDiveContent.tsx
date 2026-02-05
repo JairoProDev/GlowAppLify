@@ -160,6 +160,136 @@ export const deepDivesEn: Record<string, DeepDiveData> = {
         ],
         ctaText: "Commit Now"
     },
+    "problem-habits": {
+        id: "problem-habits",
+        type: "methodology",
+        title: "The Haber-Bosch of Habits",
+        subtitle: "Why 'willpower' is a non-renewable resource.",
+        description: "You rely on willpower to start habits. But willpower depletes like a battery (Ego Depletion). We build systems that run on 'automaticity'.",
+        scientificBasis: "Basal Ganglia vs Prefrontal Cortex: Habits live in the Basal Ganglia (low energy). New actions live in the PFC (high energy). We migrate your goals from PFC to Basal Ganglia using 'Micro-Scripts'.",
+        stats: [
+            { label: "Energy Cost", value: "-80%" },
+            { label: "Retention", value: "+300%" }
+        ]
+    },
+    "problem-reactive": {
+        id: "problem-reactive",
+        type: "science",
+        title: "Decision Fatigue Prophylaxis",
+        subtitle: "Saving your brain for the decisions that matter.",
+        description: "The average human makes 35,000 decisions a day. By 2pm, your 'decision quality' plummets. We automate the trivial decisions (what to do next) so you can focus on the vital ones.",
+        scientificBasis: "Decision Fatigue (Baumeister): As you make choices, your ability to make good choices deteriorates. GlowApplify acts as an 'External Executive Function', handling the scheduling logistics for you.",
+        stats: [
+            { label: "Cognitive Load", value: "Minimal" },
+            { label: "Focus Duration", value: "4h+" }
+        ]
+    },
+    "problem-stagnation": {
+        id: "problem-stagnation",
+        type: "technology",
+        title: "The Feedback Loop Vacuum",
+        subtitle: "Why you quit when you don't see results.",
+        description: "Progress is often invisible in the short term. Without 'Feedback', the brain assumes failure. We visualize the invisible micro-wins to keep dopamine flowing.",
+        scientificBasis: "Operant Conditioning: Behavior must be reinforced to persist. We use 'Variable Ratio Schedules' (like slot machines) to reinforce positive habit execution with visual feedback.",
+        stats: [
+            { label: "Dopamine", value: "Optimized" },
+            { label: "Quit Rate", value: "<5%" }
+        ]
+    },
+    "solution-onboarding": {
+        id: "solution-onboarding",
+        type: "science",
+        title: "Socratic Initialization",
+        subtitle: "The AI that asks the right questions.",
+        description: "We don't just take your order. We interrogate your constraints. 'Why do you want this?' 'What stopped you before?' This extracts the 'Latent Variables' of your success.",
+        scientificBasis: "Maieutics (Socratic Method): Truth is born from questioning. By forcing you to articulate constraints, we vector-embed your 'Reality' into the plan, not just your 'Fantasy'.",
+        visualComponent: <div className="p-4 bg-zinc-900 rounded-lg font-mono text-xs text-green-400">
+            &gt; Query: "I want to get fit"<br />
+            &lt; Analysis: Vague Intent detected.<br />
+            &gt; Clarification: "Define 'Fit'. Hypertrophy or Cardiovascular?"<br />
+            &gt; User: "Muscle."<br />
+            &lt; Optimization: Protocol set to Hypertrophy.
+        </div>
+    },
+    "solution-goals": {
+        id: "solution-goals",
+        type: "technology",
+        title: "Hierarchical Goal Vectorization",
+        subtitle: "Connecting the 'Big Picture' to 'Tuesday Morning'.",
+        description: "Most apps treat tasks as isolated lists. We treat them as a Directed Acyclic Graph (DAG) grounded in your Identity.",
+        scientificBasis: "Identity-Based Habits (Clear): You don't 'run'. You 'are a runner'. We link the micro-action (put on shoes) to the macro-identity (Athlete) using semantic edges in our graph DB.",
+        stats: [
+            { label: "Alignment", value: "100%" },
+            { label: "Purpose", value: "High" }
+        ]
+    },
+    "solution-execution": {
+        id: "solution-execution",
+        type: "methodology",
+        title: "Implementation Intentions",
+        subtitle: "The algorithm that guarantees action.",
+        description: "We don't say 'Do X'. We say 'When Y happens, Do X'. This 'If-Then' logic pre-loads the decision into your environment.",
+        scientificBasis: "Gollwitzer's Implementation Intentions: Specifying the 'When' and 'Where' increases success rates by 2x-3x. We auto-generate these triggers for every task.",
+    },
+    "solution-progress": {
+        id: "solution-progress",
+        type: "science",
+        title: "Visual Progress Salience",
+        subtitle: "Making 1% improvement visible.",
+        description: "The 'Compound Effect' is boring because it's slow. We accelerate the perception of progress by visualizing derivative growth, not just absolute values.",
+        scientificBasis: "Salience Bias: We overvalue what we can see. By making micro-progress 'Salient', we hack your bias to work FOR you, not against you.",
+    },
+    "how-step1": {
+        id: "how-step1",
+        type: "technology",
+        title: "Context Injection",
+        subtitle: "Dumping your brain into the vector store.",
+        description: "Forget structured forms. Just talk. We use LLMs to clean, normalize, and structure your messy thoughts into a rigorous data schema.",
+        scientificBasis: "Natural Language Processing (NLP): We use Named Entity Recognition (NER) to extract 'Time', 'Duration', 'Intensity', and 'Constraint' entities from your raw stream of consciousness.",
+    },
+    "how-step2": {
+        id: "how-step2",
+        type: "technology",
+        title: "Generative Planning Engine",
+        subtitle: "A thousand simulations in 3 seconds.",
+        description: "We simulate your week before you live it. We check for conflicts, energy dips, and realistic buffers. It's 'Monte Carlo Simulation' for your calendar.",
+        scientificBasis: "Constraint Satisfaction Problem (CSP): Parenting + Work + Gym is a math problem. We solve it using a CSP solver optimized for human energy levels, not just time slots.",
+    },
+    "how-step3": {
+        id: "how-step3",
+        type: "methodology",
+        title: "Flow State Architecture",
+        subtitle: "Designing for 'The Zone'.",
+        description: "The plan isn't just a list. It's a slope. We sequence tasks to ramp up difficulty, inducing 'Flow' rather than anxiety or boredom.",
+        scientificBasis: "Flow Theory (Csikszentmihalyi): Flow occurs when Challenge matches Skill. We dynamically adjust the difficulty of your daily generated tasks to keep you in the channel.",
+    },
+    "social-proof-users": {
+        id: "social-proof-users",
+        type: "science",
+        title: "Social Validation at Scale",
+        subtitle: "Why 40,000+ people aren't wrong.",
+        description: "Humans use 'Social Proof' as a heuristic for quality. But quantity isn't enough. Look at the *kind* of people here: Builders, Athletes, Founders.",
+        scientificBasis: "Bandwagon Effect: The probability of adoption increases with the number of people who have already adopted. But we optimize for the 'Early Adopter' curve—high agency individuals.",
+    },
+    "mission": {
+        id: "mission",
+        type: "methodology",
+        title: "The GlowApplify Mission",
+        subtitle: "Eliminating the gap between intent and action.",
+        description: "We believe the greatest tragedy is a brilliant mind paralyzed by disorganization. Our mission is to provide the cognitive infrastructure for high-agency living.",
+        stats: [
+            { label: "Founded", value: "2026" },
+            { label: "Vision", value: "Human Potentiation" }
+        ]
+    },
+    "privacy": {
+        id: "privacy",
+        type: "science",
+        title: "Privacy by Design",
+        subtitle: "Your goals are your own. Period.",
+        description: "We use local-first principles and Zero-Knowledge proofs where possible. Your identity-linked goals are never used to train global LLMs without explicit, anonymized consent.",
+        scientificBasis: "Sovereign Identity: In an age of data extraction, privacy is a cognitive prerequisite for honesty. You can't be honest with a tool if you fear it's selling your dreams.",
+    },
     "comparison-headline": {
         id: "comparison-headline",
         type: "science",
@@ -327,6 +457,136 @@ export const deepDivesEs: Record<string, DeepDiveData> = {
             { label: "Tasa de Acción", value: "3.4x" }
         ],
         ctaText: "Comprometerme Ahora"
+    },
+    "problem-habits": {
+        id: "problem-habits",
+        type: "methodology",
+        title: "El Haber-Bosch de los Hábitos",
+        subtitle: "Por qué la 'fuerza de voluntad' es un recurso no renovable.",
+        description: "Confías en la fuerza de voluntad para empezar. Pero se agota como una batería (Agotamiento del Ego). Construimos sistemas que funcionan con 'automaticidad'.",
+        scientificBasis: "Ganglios Basales vs Cortex Prefrontal: Los hábitos viven en los Ganglios (bajo costo). Lo nuevo en el PFC (alto costo). Migramos tus metas del PFC a los Ganglios usando 'Micro-Guiones'.",
+        stats: [
+            { label: "Costo Energía", value: "-80%" },
+            { label: "Retención", value: "+300%" }
+        ]
+    },
+    "problem-reactive": {
+        id: "problem-reactive",
+        type: "science",
+        title: "Profilaxis de Fatiga de Decisión",
+        subtitle: "Guardando tu cerebro para lo que importa.",
+        description: "El humano promedio toma 35,000 decisiones al día. A las 2pm, tu calidad cae. Automatizamos lo trivial para que te enfoques en lo vital.",
+        scientificBasis: "Fatiga de Decisión (Baumeister): Al tomar decisiones, tu capacidad se deteriora. GlowApplify actúa como una 'Función Ejecutiva Externa' manejando la logística por ti.",
+        stats: [
+            { label: "Carga Cognitiva", value: "Mínima" },
+            { label: "Enfoque", value: "4h+" }
+        ]
+    },
+    "problem-stagnation": {
+        id: "problem-stagnation",
+        type: "technology",
+        title: "El Vacío de Feedback",
+        subtitle: "Por qué renuncias cuando no ves resultados.",
+        description: "El progreso es invisible a corto plazo. Sin feedback, el cerebro asume fracaso. Visualizamos las micro-victorias invisibles para mantener el flujo de dopamina.",
+        scientificBasis: "Condicionamiento Operante: La conducta debe ser reforzada para persistir. Usamos 'Programas de Razón Variable' para reforzar la ejecución positiva con feedback visual.",
+        stats: [
+            { label: "Dopamina", value: "Optimizada" },
+            { label: "Tasa Abandono", value: "<5%" }
+        ]
+    },
+    "solution-onboarding": {
+        id: "solution-onboarding",
+        type: "science",
+        title: "Inicialización Socrática",
+        subtitle: "La IA que hace las preguntas correctas.",
+        description: "No solo tomamos tu pedido. Interrogamos tus restricciones. '¿Por qué quieres esto?' Esto extrae las 'Variables Latentes' de tu éxito.",
+        scientificBasis: "Mayéutica (Método Socrático): La verdad nace de cuestionar. Al forzarte a articular restricciones, vectorizamos tu 'Realidad' en el plan, no solo tu 'Fantasía'.",
+        visualComponent: <div className="p-4 bg-zinc-900 rounded-lg font-mono text-xs text-green-400">
+            &gt; Query: "Quiero ponerme en forma"<br />
+            &lt; Analysis: Intención vaga detectada.<br />
+            &gt; Clarification: "¿Definir 'Forma'. Hipertrofia o Cardiovascular?"<br />
+            &gt; User: "Músculo."<br />
+            &lt; Optimization: Protocolo set a Hipertrofia.
+        </div>
+    },
+    "solution-goals": {
+        id: "solution-goals",
+        type: "technology",
+        title: "Vectorización Jerárquica de Metas",
+        subtitle: "Conectando el 'Panorama General' con el 'Martes a las 9am'.",
+        description: "La mayoría de apps tratan tareas como listas aisladas. Nosotros las tratamos como un Grafo Acíclico Dirigido (DAG) basado en tu Identidad.",
+        scientificBasis: "Hábitos Basados en Identidad (Clear): No 'corres'. 'Eres corredor'. Enlazamos la micro-acción (zapatillas) a la macro-identidad (Atleta) semánticamente.",
+        stats: [
+            { label: "Alineación", value: "100%" },
+            { label: "Propósito", value: "Alto" }
+        ]
+    },
+    "solution-execution": {
+        id: "solution-execution",
+        type: "methodology",
+        title: "Intenciones de Implementación",
+        subtitle: "El algoritmo que garantiza la acción.",
+        description: "No decimos 'Haz X'. Decimos 'Cuando pase Y, Haz X'. Esta lógica 'If-Then' pre-carga la decisión en tu entorno.",
+        scientificBasis: "Intenciones de Implementación de Gollwitzer: Especificar el 'Cuándo' y 'Dónde' aumenta las tasas de éxito en 2x-3x. Auto-generamos estos disparadores.",
+    },
+    "solution-progress": {
+        id: "solution-progress",
+        type: "science",
+        title: "Saliencia Visual de Progreso",
+        subtitle: "Haciendo visible el 1% de mejora.",
+        description: "El 'Efecto Compuesto' es aburrido porque es lento. Aceleramos la percepción de progreso visualizando el crecimiento derivativo, no solo valores absolutos.",
+        scientificBasis: "Sesgo de Saliencia: Sobrevaloramos lo que vemos. Al hacer el micro-progreso 'Saliente', hackeamos tu sesgo para trabajar POR ti, no contra ti.",
+    },
+    "how-step1": {
+        id: "how-step1",
+        type: "technology",
+        title: "Inyección de Contexto",
+        subtitle: "Volcando tu cerebro en la tienda vectorial.",
+        description: "Olvida los formularios rígidos. Solo habla. Usamos LLMs para limpiar, normalizar y estructurar tus pensamientos caóticos en un esquema de datos riguroso.",
+        scientificBasis: "Procesamiento de Lenguaje Natural (NLP): Usamos Reconocimiento de Entidades (NER) para extraer 'Tiempo', 'Duración', e 'Intensidad' de tu flujo de conciencia.",
+    },
+    "how-step2": {
+        id: "how-step2",
+        type: "technology",
+        title: "Motor de Planificación Generativa",
+        subtitle: "Mil simulaciones en 3 segundos.",
+        description: "Simulamos tu semana antes de que la vivas. Verificamos conflictos, caídas de energía y buffers realistas. Es 'Simulación Monte Carlo' para tu calendario.",
+        scientificBasis: "Problema de Satisfacción de Restricciones (CSP): Ser padre + Trabajo + Gym es matemáticas. Lo resolvemos con un solver CSP optimizado para energía humana.",
+    },
+    "how-step3": {
+        id: "how-step3",
+        type: "methodology",
+        title: "Arquitectura de Estado de Flujo",
+        subtitle: "Diseñando para 'La Zona'.",
+        description: "El plan no es una lista. Es una pendiente. Secuenciamos tareas para aumentar la dificultad gradualmente, induciendo 'Flow' en lugar de ansiedad.",
+        scientificBasis: "Teoría del Flow (Csikszentmihalyi): El flujo ocurre cuando el Desafío iguala a la Habilidad. Ajustamos dinámicamente la dificultad diaria para mantenerte en el canal.",
+    },
+    "social-proof-users": {
+        id: "social-proof-users",
+        type: "science",
+        title: "Validación Social a Escala",
+        subtitle: "Por qué 40,000+ personas no se equivocan.",
+        description: "Los humanos usan la 'Prueba Social' como heurística de calidad. Pero la cantidad no es suficiente. Mira el *tipo* de personas aquí: Constructores, Atletas, Fundadores.",
+        scientificBasis: "Efecto Arrastre (Bandwagon): La probabilidad de adopción aumenta con el número de adoptantes. Pero optimizamos para la curva de 'Early Adopters'—individuos de alta agencia.",
+    },
+    "mission": {
+        id: "mission",
+        type: "methodology",
+        title: "La Misión GlowApplify",
+        subtitle: "Eliminando la brecha entre la intención y la acción.",
+        description: "Creemos que la mayor tragedia es una mente brillante paralizada por la desorganización. Nuestra misión es proporcionar la infraestructura cognitiva para una vida de alta agencia.",
+        stats: [
+            { label: "Fundado", value: "2026" },
+            { label: "Visión", value: "Potenciación Humana" }
+        ]
+    },
+    "privacy": {
+        id: "privacy",
+        type: "science",
+        title: "Privacidad por Diseño",
+        subtitle: "Tus metas son tuyas. Punto.",
+        description: "Usamos principios local-first y pruebas de Zero-Knowledge donde es posible. Tus metas nunca se usan para entrenar LLMs globales sin consentimiento explícito.",
+        scientificBasis: "Identidad Soberana: En la era de la extracción de datos, la privacidad es un prerrequisito cognitivo para la honestidad.",
     },
     "comparison-headline": {
         id: "comparison-headline",

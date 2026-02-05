@@ -87,7 +87,7 @@ export const landingContent = {
             ],
             testimonials: [
                 { name: "Sarah M.", role: "Product Manager", quote: "GlowApplify es la primera herramienta donde no tuve que construir todo yo misma. Simplemente FUNCIONÓ." },
-                { name: "Marcus L.", role: "Fundador", quote: "La IA entendió mi vida. Cuando le dije que estaba en ronda de inversión, ajustó mi tablero automáticamente." },
+                { name: "Steve L.", role: "Fundador", quote: "La IA entendió mi vida. Cuando le dije que estaba en ronda de inversión, ajustó mi tablero automáticamente." },
                 { name: "Emma R.", role: "Diseñadora", quote: "Otras apps se sentían como tarea. Esta se siente como tener un coach en mi bolsillo." }
             ]
         },
@@ -211,7 +211,7 @@ export const landingContent = {
             ],
             testimonials: [
                 { name: "Sarah M.", role: "Product Manager", quote: "GlowApplify is the first tool where I didn't have to build everything myself. It just WORKED." },
-                { name: "Marcus L.", role: "Founder", quote: "The AI actually understood my life details. It automatically adjusted my board." },
+                { name: "Steve L.", role: "Founder", quote: "The AI actually understood my life details. It automatically adjusted my board." },
                 { name: "Emma R.", role: "Designer", quote: "Other apps felt like homework. GlowApplify feels like having a coach in my pocket." }
             ]
         },
