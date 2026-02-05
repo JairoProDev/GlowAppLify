@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { ExecutionBoard } from '@/lib/types';
-import { detectLanguage, t, Language } from '@/lib/i18n';
 import toast from 'react-hot-toast';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +11,8 @@ import { GoalSection } from '@/components/board/GoalSection';
 import { ExecutionSection } from '@/components/board/ExecutionSection';
 import { ObstaclesSection } from '@/components/board/ObstaclesSection';
 import { HabitsSection } from '@/components/board/HabitsSection';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { dashboardContent } from '@/lib/i18n/dashboardContent';
 
 interface ExecutionBoardViewProps {
   board: ExecutionBoard;
@@ -22,23 +23,17 @@ interface ExecutionBoardViewProps {
 export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily }: ExecutionBoardViewProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedBoard, setEditedBoard] = useState<ExecutionBoard>(board);
-  const [language, setLanguage] = useState<Language>('en');
+  const { language, setLanguage } = useLanguage();
+  const t = dashboardContent[language].executionBoard;
 
   useEffect(() => {
     setEditedBoard(board);
   }, [board]);
 
-  useEffect(() => {
-    const savedLang = typeof window !== 'undefined'
-      ? (localStorage.getItem('language') as Language)
-      : null;
-    setLanguage(savedLang || detectLanguage());
-  }, []);
-
   const handleSave = () => {
     onBoardUpdated(editedBoard);
     setIsEditing(false);
-    toast.success(t('boardUpdated', language));
+    toast.success(language === 'es' ? 'Tablero actualizado' : 'Board updated');
   };
 
   const handleCancel = () => {
@@ -47,12 +42,7 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
   };
 
   const toggleLanguage = () => {
-    const newLang = language === 'en' ? 'es' : 'en';
-    setLanguage(newLang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('language', newLang);
-      window.dispatchEvent(new Event('language-change'));
-    }
+    setLanguage(language === 'en' ? 'es' : 'en');
   };
 
   const currentBoard = isEditing ? editedBoard : board;
@@ -65,13 +55,13 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-primary" />
-            Execution Board
+            {t.title}
           </h1>
-          <p className="text-muted-foreground">Your 90-day transformation tactical plan.</p>
+          <p className="text-muted-foreground">{t.subtitle}</p>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Language toggle or other actions */}
+          {/* Language toggle */}
           <Button variant="outline" size="sm" onClick={toggleLanguage}>
             <Globe className="h-4 w-4 mr-2" />
             {language === 'en' ? 'ES' : 'EN'}
@@ -80,15 +70,15 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
           {isEditing ? (
             <>
               <Button variant="ghost" size="sm" onClick={handleCancel}>
-                <X className="h-4 w-4 mr-2" /> Cancel
+                <X className="h-4 w-4 mr-2" /> {t.cancel}
               </Button>
               <Button size="sm" onClick={handleSave}>
-                <Save className="h-4 w-4 mr-2" /> Save Changes
+                <Save className="h-4 w-4 mr-2" /> {t.save}
               </Button>
             </>
           ) : (
             <Button variant="secondary" size="sm" onClick={() => setIsEditing(true)}>
-              Edit Board
+              {t.edit}
             </Button>
           )}
         </div>
@@ -99,19 +89,19 @@ export default function ExecutionBoardView({ board, onBoardUpdated, onStartDaily
         <div className="overflow-x-auto pb-2 shrink-0">
           <TabsList className="w-full justify-start h-auto p-1 bg-secondary/30 gap-1 rounded-xl">
             <TabsTrigger value="vision" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Sparkles className="h-4 w-4" /> Vision
+              <Sparkles className="h-4 w-4" /> {t.tabs.vision}
             </TabsTrigger>
             <TabsTrigger value="goal" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Target className="h-4 w-4" /> Goal
+              <Target className="h-4 w-4" /> {t.tabs.goal}
             </TabsTrigger>
             <TabsTrigger value="execution" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Layers className="h-4 w-4" /> Execution
+              <Layers className="h-4 w-4" /> {t.tabs.execution}
             </TabsTrigger>
             <TabsTrigger value="obstacles" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <ShieldAlert className="h-4 w-4" /> Obstacles
+              <ShieldAlert className="h-4 w-4" /> {t.tabs.obstacles}
             </TabsTrigger>
             <TabsTrigger value="habits" className="gap-2 px-4 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Repeat className="h-4 w-4" /> Habits
+              <Repeat className="h-4 w-4" /> {t.tabs.habits}
             </TabsTrigger>
           </TabsList>
         </div>

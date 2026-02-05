@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { ExecutionBoard, DailyAction } from '@/lib/types';
 import { getTodayLog, saveDailyLog } from '@/lib/storage';
-import { detectLanguage, t, Language } from '@/lib/i18n';
 import toast from 'react-hot-toast';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { format } from 'date-fns';
+import { es, enUS } from 'date-fns/locale';
 
 interface DailyViewProps {
   board: ExecutionBoard;
@@ -15,23 +17,16 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
   const [completedActions, setCompletedActions] = useState<Set<string>>(new Set());
   const [mood, setMood] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
   const [reflection, setReflection] = useState('');
-  const [language, setLanguage] = useState<Language>('en');
+  const { language, setLanguage, t } = useLanguage();
+  const dateLocale = language === 'es' ? es : enUS;
 
   const today = new Date();
-  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+  const dayNameEn = today.toLocaleDateString('en-US', { weekday: 'long' });
   const dateString = today.toISOString().split('T')[0];
 
   // Get current week actions
-  const currentWeek = board.execution[0]; // For MVP, using first week
-  const todayActions: DailyAction[] = currentWeek?.days[dayName] || [];
-
-  useEffect(() => {
-    // Detect language from localStorage or browser
-    const savedLang = typeof window !== 'undefined'
-      ? (localStorage.getItem('language') as Language)
-      : null;
-    setLanguage(savedLang || detectLanguage());
-  }, []);
+  const currentWeek = board.execution_layer.weeks[0]; // Matching new type structure
+  const todayActions: DailyAction[] = (currentWeek?.actions as any) || []; // Type cast for now
 
   useEffect(() => {
     // Load today's log if exists
@@ -90,7 +85,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
         mood: mood || undefined,
         reflection: reflection || undefined,
       });
-      toast.success(t('checkinSaved', language));
+      toast.success(t('daily.messages.saved'));
     }
   };
 
@@ -102,11 +97,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
   const oneThingCompleted = oneThingAction ? completedActions.has(oneThingAction.id) : false;
 
   const toggleLanguage = () => {
-    const newLang = language === 'en' ? 'es' : 'en';
-    setLanguage(newLang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('language', newLang);
-    }
+    setLanguage(language === 'en' ? 'es' : 'en');
   };
 
   return (
@@ -131,7 +122,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                 onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
               >
-                ← {t('backToBoard', language)}
+                ← {t('daily.backToBoard')}
               </button>
               <button
                 onClick={toggleLanguage}
@@ -156,15 +147,10 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
               </div>
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-1">
-                  {t('todayExecution', language)}
+                  {t('daily.todayExecution')}
                 </h1>
-                <p className="text-white/90 text-lg">
-                  {today.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+                <p className="text-white/90 text-lg capitalize">
+                  {format(today, 'EEEE, d MMMM yyyy', { locale: dateLocale })}
                 </p>
               </div>
             </div>
@@ -175,7 +161,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
               style={{ background: 'rgba(255, 255, 255, 0.15)' }}
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-white/90 font-semibold">{t('dailyProgress', language)}</span>
+                <span className="text-white/90 font-semibold">{t('daily.dailyProgress')}</span>
                 <span className="text-3xl font-bold text-white">{completionRate}%</span>
               </div>
               <div
@@ -248,7 +234,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                   {oneThingCompleted ? '🎯✓' : '⭐'}
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold" style={{ color: oneThingCompleted ? 'white' : '#78350F' }}>
-                  {t('oneThingToday', language)}
+                  {t('daily.oneThingToday')}
                 </h2>
               </div>
 
@@ -273,9 +259,8 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                 </div>
                 <div className="flex-1">
                   <p
-                    className={`text-xl md:text-2xl font-semibold leading-relaxed transition-all ${
-                      oneThingCompleted ? 'text-white line-through' : 'group-hover:scale-[1.02]'
-                    }`}
+                    className={`text-xl md:text-2xl font-semibold leading-relaxed transition-all ${oneThingCompleted ? 'text-white line-through' : 'group-hover:scale-[1.02]'
+                      }`}
                     style={{ color: oneThingCompleted ? 'white' : '#78350F' }}
                   >
                     {oneThingAction.description}
@@ -308,7 +293,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                 ✅
               </div>
               <h2 className="text-3xl font-bold text-white">
-                {t('todayActions', language)}
+                {t('daily.todayActions')}
               </h2>
             </div>
           </div>
@@ -318,7 +303,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">🌴</div>
                 <p className="text-xl" style={{ color: 'var(--gray-600)' }}>
-                  {t('noActions', language)}
+                  {t('daily.noActions')}
                 </p>
               </div>
             ) : (
@@ -369,9 +354,8 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                       </div>
                       <div className="flex-1">
                         <p
-                          className={`text-lg font-medium leading-relaxed transition-all ${
-                            isCompleted ? 'line-through' : ''
-                          }`}
+                          className={`text-lg font-medium leading-relaxed transition-all ${isCompleted ? 'line-through' : ''
+                            }`}
                           style={{
                             color: isCompleted ? 'var(--gray-500)' : 'var(--gray-900)',
                           }}
@@ -409,7 +393,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                 🌙
               </div>
               <h2 className="text-3xl font-bold text-white">
-                {t('eveningCheckin', language)}
+                {t('daily.evening.eveningCheckin')}
               </h2>
             </div>
           </div>
@@ -417,15 +401,15 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
           <div className="p-8 space-y-6">
             <div>
               <label className="block text-lg font-bold mb-4" style={{ color: 'var(--gray-800)' }}>
-                {t('howWasDay', language)}
+                {t('daily.evening.howWasDay')}
               </label>
               <div className="grid grid-cols-5 gap-3">
                 {([
-                  { value: 1, emoji: '😔', label: t('struggled', language), color: '#EF4444' },
-                  { value: 2, emoji: '😕', label: t('ok', language), color: '#F59E0B' },
-                  { value: 3, emoji: '😐', label: t('good', language), color: '#3B82F6' },
-                  { value: 4, emoji: '😊', label: t('great', language), color: '#10B981' },
-                  { value: 5, emoji: '🎉', label: t('amazing', language), color: '#8B5CF6' },
+                  { value: 1, emoji: '😔', label: t('moods.struggled'), color: '#EF4444' },
+                  { value: 2, emoji: '😕', label: t('moods.ok'), color: '#F59E0B' },
+                  { value: 3, emoji: '😐', label: t('moods.good'), color: '#3B82F6' },
+                  { value: 4, emoji: '😊', label: t('moods.great'), color: '#10B981' },
+                  { value: 5, emoji: '🎉', label: t('moods.amazing'), color: '#8B5CF6' },
                 ] as const).map(({ value, emoji, label, color }) => (
                   <button
                     key={value}
@@ -450,13 +434,13 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
 
             <div>
               <label htmlFor="reflection" className="block text-lg font-bold mb-3" style={{ color: 'var(--gray-800)' }}>
-                {t('dailyReflection', language)}
+                {t('daily.evening.dailyReflection')}
               </label>
               <textarea
                 id="reflection"
                 value={reflection}
                 onChange={(e) => setReflection(e.target.value)}
-                placeholder={t('reflectionPlaceholder', language)}
+                placeholder={t('daily.evening.reflectionPlaceholder')}
                 className="w-full px-5 py-4 rounded-2xl resize-none transition-all duration-200"
                 style={{
                   border: '2px solid var(--gray-200)',
@@ -486,7 +470,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-2xl)'}
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-lg)'}
             >
-              💾 {t('saveCheckin', language)}
+              💾 {t('daily.evening.saveCheckin')}
             </button>
           </div>
         </div>
@@ -510,7 +494,7 @@ export default function DailyView({ board, onBackToBoard }: DailyViewProps) {
                 🔄
               </div>
               <h2 className="text-3xl font-bold text-white">
-                {t('dailyHabits', language)}
+                {t('daily.dailyHabits')}
               </h2>
             </div>
           </div>

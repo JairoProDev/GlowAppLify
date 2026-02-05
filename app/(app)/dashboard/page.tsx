@@ -10,7 +10,10 @@ import { useJournalStore } from "@/lib/store/journal-store"
 import { CheckCircle2, Flame, Target, TrendingUp, Plus, Calendar, ListTodo, Book, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { format, formatDistanceToNow } from "date-fns"
+import { es, enUS } from "date-fns/locale"
 import { AreasDashboard } from "@/components/areas/AreasDashboard"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
+import { dashboardContent } from "@/lib/i18n/dashboardContent"
 
 export default function DashboardPage() {
     const { oneThing, otherActions, streak } = useDailyStore()
@@ -18,6 +21,9 @@ export default function DashboardPage() {
     const routines = useRoutineStore(state => state.routines)
     const notes = useNoteStore(state => state.notes)
     const entries = useJournalStore(state => state.entries)
+    const { language } = useLanguage()
+    const t = dashboardContent[language]
+    const dateLocale = language === 'es' ? es : enUS
 
     // Calculate quick stats
     const completedTasks = tasks.filter(t => t.status === 'done').length
@@ -40,11 +46,11 @@ export default function DashboardPage() {
         <div className="space-y-6 animate-in fade-in duration-500">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-                    <p className="text-muted-foreground">Welcome back. Here is your life at a glance.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">{t.welcome.title}</h1>
+                    <p className="text-muted-foreground">{t.welcome.subtitle}</p>
                 </div>
-                <div className="text-sm text-muted-foreground bg-secondary px-3 py-1 rounded-full">
-                    {format(new Date(), 'EEEE, MMMM d')}
+                <div className="text-sm text-muted-foreground bg-secondary px-3 py-1 rounded-full capitalize">
+                    {format(new Date(), 'EEEE, d MMMM', { locale: dateLocale })}
                 </div>
             </div>
 
@@ -52,7 +58,7 @@ export default function DashboardPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Your #1 Focus Today</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.stats.focus.title}</CardTitle>
                         <Target className="h-4 w-4 text-primary" />
                     </CardHeader>
                     <CardContent>
@@ -60,14 +66,14 @@ export default function DashboardPage() {
                             <>
                                 <div className="text-lg font-bold truncate">{oneThing.title}</div>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    {oneThing.completed ? '✓ Completed' : `~${oneThing.duration}`}
+                                    {oneThing.completed ? t.stats.focus.completed : `~${oneThing.duration}`}
                                 </p>
                             </>
                         ) : (
                             <>
-                                <div className="text-lg font-bold text-muted-foreground">Not set</div>
+                                <div className="text-lg font-bold text-muted-foreground">{t.stats.focus.notSet}</div>
                                 <Link href="/daily" className="text-xs text-primary hover:underline">
-                                    Go to Daily View →
+                                    {t.stats.focus.cta}
                                 </Link>
                             </>
                         )}
@@ -76,42 +82,42 @@ export default function DashboardPage() {
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.stats.streak.title}</CardTitle>
                         <Flame className="h-4 w-4 text-orange-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{streak || 0} days</div>
-                        <p className="text-xs text-muted-foreground">Keep the momentum going!</p>
+                        <div className="text-2xl font-bold">{streak || 0} {t.stats.streak.unit}</div>
+                        <p className="text-xs text-muted-foreground">{t.stats.streak.subtitle}</p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Task Progress</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.stats.tasks.title}</CardTitle>
                         <CheckCircle2 className="h-4 w-4 text-green-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{completedTasks}/{tasks.length}</div>
-                        <p className="text-xs text-muted-foreground">{completionRate}% completion rate</p>
+                        <p className="text-xs text-muted-foreground">{completionRate}% {t.stats.tasks.rate}</p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Today's Routines</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.stats.routines.title}</CardTitle>
                         <TrendingUp className="h-4 w-4 text-primary" />
                     </CardHeader>
                     <CardContent>
                         <div className="flex gap-2 items-center">
                             <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold ${morningDone ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}`}>
-                                AM
+                                {t.stats.routines.morning}
                             </div>
                             <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold ${eveningDone ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}`}>
-                                PM
+                                {t.stats.routines.evening}
                             </div>
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
-                            {morningDone && eveningDone ? 'All done! 🎉' : 'In progress...'}
+                            {morningDone && eveningDone ? t.stats.routines.allDone : t.stats.routines.inProgress}
                         </p>
                     </CardContent>
                 </Card>
@@ -125,32 +131,32 @@ export default function DashboardPage() {
             {/* Quick Actions */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
+                    <CardTitle>{t.quickActions.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <Link href="/tasks">
                             <Button variant="outline" className="w-full justify-start">
                                 <ListTodo className="mr-2 h-4 w-4" />
-                                View Tasks
+                                {t.quickActions.viewTasks}
                             </Button>
                         </Link>
                         <Link href="/calendar">
                             <Button variant="outline" className="w-full justify-start">
                                 <Calendar className="mr-2 h-4 w-4" />
-                                Calendar
+                                {t.quickActions.calendar}
                             </Button>
                         </Link>
                         <Link href="/journal">
                             <Button variant="outline" className="w-full justify-start">
                                 <Book className="mr-2 h-4 w-4" />
-                                Journal
+                                {t.quickActions.journal}
                             </Button>
                         </Link>
                         <Link href="/coach">
                             <Button variant="outline" className="w-full justify-start">
                                 <Sparkles className="mr-2 h-4 w-4" />
-                                AI Coach
+                                {t.quickActions.aiCoach}
                             </Button>
                         </Link>
                     </div>
@@ -162,9 +168,9 @@ export default function DashboardPage() {
                 {/* Pending Tasks */}
                 <Card className="col-span-4">
                     <CardHeader>
-                        <CardTitle>Pending Tasks</CardTitle>
+                        <CardTitle>{t.pendingTasks.title}</CardTitle>
                         <p className="text-sm text-muted-foreground">
-                            {pendingTasks} tasks remaining
+                            {pendingTasks} {t.pendingTasks.remaining}
                         </p>
                     </CardHeader>
                     <CardContent>
@@ -200,7 +206,7 @@ export default function DashboardPage() {
                             {pendingTasks === 0 && (
                                 <div className="text-center py-8 text-muted-foreground">
                                     <CheckCircle2 className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                                    <p>All tasks completed! 🎉</p>
+                                    <p>{t.pendingTasks.allDone}</p>
                                 </div>
                             )}
                         </div>
@@ -210,7 +216,7 @@ export default function DashboardPage() {
                 {/* Recent Notes */}
                 <Card className="col-span-3">
                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Recent Notes</CardTitle>
+                        <CardTitle>{t.recentNotes.title}</CardTitle>
                         <Link href="/notes">
                             <Button variant="ghost" size="sm">
                                 <Plus className="h-4 w-4" />
@@ -225,7 +231,7 @@ export default function DashboardPage() {
                                         <div className="flex flex-col gap-1 pb-3 border-b last:border-0 hover:bg-accent/50 p-2 -m-2 rounded-lg transition-colors cursor-pointer">
                                             <span className="text-sm font-medium truncate">{note.title}</span>
                                             <span className="text-xs text-muted-foreground">
-                                                {formatDistanceToNow(new Date(note.updatedAt), { addSuffix: true })}
+                                                {formatDistanceToNow(new Date(note.updatedAt), { addSuffix: true, locale: dateLocale })}
                                             </span>
                                         </div>
                                     </Link>
@@ -233,10 +239,10 @@ export default function DashboardPage() {
                             ) : (
                                 <div className="text-center py-8 text-muted-foreground">
                                     <Book className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                                    <p className="text-sm">No notes yet</p>
+                                    <p className="text-sm">{t.recentNotes.empty}</p>
                                     <Link href="/notes">
                                         <Button variant="link" size="sm" className="mt-2">
-                                            Create your first note
+                                            {t.recentNotes.create}
                                         </Button>
                                     </Link>
                                 </div>

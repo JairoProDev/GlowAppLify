@@ -7,7 +7,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { AreaType } from '@/lib/types/life-areas';
+import { AreaType, AREA_LABELS } from '@/lib/types/life-areas';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { dashboardContent } from '@/lib/i18n/dashboardContent';
 
 // All theoretically available areas to show available options if not created yet
 const ALL_AREA_TYPES: AreaType[] = [
@@ -36,6 +38,8 @@ const DashboardCardWrapper = ({ area }: { area: any }) => {
 
 export const AreasDashboard: React.FC = () => {
     const { areas, isLoading, error, fetchAreas, createArea } = useLifeAreasStore();
+    const { language } = useLanguage();
+    const t = dashboardContent[language].lifeAreas;
 
     useEffect(() => {
         fetchAreas();
@@ -69,8 +73,10 @@ export const AreasDashboard: React.FC = () => {
         <div className="space-y-8 p-4 md:p-8 max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">My Life Areas</h2>
-                    <p className="text-muted-foreground mt-1">Manage and balance your 8 fundamental dimensions.</p>
+                    <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                        {t.title}
+                    </h2>
+                    <p className="text-muted-foreground mt-1">{t.subtitle}</p>
                 </div>
             </div>
 
@@ -86,11 +92,13 @@ export const AreasDashboard: React.FC = () => {
                             <Plus className="h-6 w-6 text-muted-foreground" />
                         </div>
                         <div>
-                            <h3 className="font-semibold capitalize text-foreground/80">{type}</h3>
-                            <p className="text-xs text-muted-foreground mt-1 px-4">Initialize this area to start tracking</p>
+                            <h3 className="font-semibold capitalize text-foreground/80">
+                                {t.labels[type as keyof typeof t.labels] || type}
+                            </h3>
+                            <p className="text-xs text-muted-foreground mt-1 px-4">{t.initialize}</p>
                         </div>
                         <Button variant="outline" size="sm" onClick={() => createArea(type)}>
-                            Enable Area
+                            {t.enable}
                         </Button>
                     </div>
                 ))}

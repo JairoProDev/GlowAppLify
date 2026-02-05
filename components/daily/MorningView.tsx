@@ -1,15 +1,22 @@
 
 "use client";
 
+
+"use client";
+
 import { useDailyStore } from "@/lib/store/useDailyStore";
 import OneThingCard from "./OneThingCard";
 import OtherActions from "./OtherActions";
 import { format } from "date-fns";
+import { es, enUS } from "date-fns/locale";
 import { Sun } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function MorningView() {
     const { user } = useDailyStore();
+    const { t, language } = useLanguage();
     const today = new Date();
+    const dateLocale = language === 'es' ? es : enUS;
 
     return (
         <div className="px-4 py-12 animate-in fade-in zoom-in-95 duration-700">
@@ -17,11 +24,11 @@ export default function MorningView() {
                 <div className="space-y-4">
                     <div className="inline-flex items-center gap-2 rounded-full bg-orange-100/50 px-4 py-1.5 text-sm font-bold text-orange-600 ring-1 ring-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:ring-orange-900/30">
                         <Sun className="h-4 w-4" />
-                        <span>{format(today, "EEEE, MMMM d")}</span>
+                        <span className="capitalize">{format(today, "EEEE, MMMM d", { locale: dateLocale })}</span>
                     </div>
 
                     <h1 className="text-4xl font-black tracking-tight text-zinc-900 dark:text-white md:text-6xl">
-                        Good morning,<br />
+                        {t('daily.morning.greeting') as string},<br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500">
                             {user.name}.
                         </span>
@@ -30,9 +37,9 @@ export default function MorningView() {
 
                 <div className="flex flex-col items-end">
                     <div className="text-right">
-                        <div className="text-sm font-semibold text-zinc-400 uppercase tracking-widest mb-1">Current Streak</div>
+                        <div className="text-sm font-semibold text-zinc-400 uppercase tracking-widest mb-1">{t('daily.morning.streak') as string}</div>
                         <div className="text-3xl font-black text-orange-500 flex items-center gap-2 justify-end">
-                            {user.streak} Days
+                            {user.streak} {t('daily.morning.days') as string}
                             <span className="text-2xl">🔥</span>
                         </div>
                     </div>
@@ -49,7 +56,7 @@ export default function MorningView() {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                     <div className="w-full sm:w-64">
                         <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3">
-                            <span>Weekly Goal</span>
+                            <span>{t('daily.morning.weeklyGoal') as string}</span>
                             <span>{user.weeklyProgress}%</span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
@@ -58,8 +65,8 @@ export default function MorningView() {
                     </div>
 
                     <div className="flex gap-8 text-sm font-medium text-zinc-400">
-                        <span>{3} Tasks Done</span>
-                        <span>{12}h Focus Time</span>
+                        <span>{3} {t('daily.morning.tasksDone') as string}</span>
+                        <span>{12}h {t('daily.morning.focusTime') as string}</span>
                     </div>
                 </div>
             </footer>

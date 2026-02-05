@@ -4,11 +4,13 @@
 import { useDailyStore } from "@/lib/store/useDailyStore";
 import { useEffect, useState } from "react";
 import { Maximize, Pause, Play, CheckCircle2 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function DeepWorkView() {
     const { oneThing, completeOneThing, setView } = useDailyStore();
     const [timeLeft, setTimeLeft] = useState(2 * 60 * 60); // 2 hours in seconds
     const [isActive, setIsActive] = useState(true);
+    const { t } = useLanguage();
 
     // Simple Timer Logic
     useEffect(() => {
@@ -46,7 +48,7 @@ export default function DeepWorkView() {
 
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm font-medium text-emerald-400">
                     <Maximize className="h-4 w-4" />
-                    DEEP WORK MODE
+                    <span className="uppercase tracking-widest">{t('energy.peak') as string} MODE</span>
                 </div>
 
                 <h1 className="mb-8 text-3xl font-bold tracking-tight md:text-5xl leading-tight">
@@ -99,20 +101,20 @@ export default function DeepWorkView() {
                         className="group flex h-16 items-center gap-3 rounded-full bg-emerald-500 px-8 font-bold text-zinc-950 transition-all hover:bg-emerald-400 hover:scale-105 active:scale-95"
                     >
                         <CheckCircle2 className="h-6 w-6" />
-                        <span>I'm Done!</span>
+                        <span>{t('daily.deepWork.done') as string}</span>
                     </button>
                 </div>
 
                 {/* Tips */}
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm text-left">
                     <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-zinc-400">
-                        💡 Focus Tips
+                        💡 {t('daily.deepWork.tips') as string}
                     </h3>
                     <ul className="grid grid-cols-1 gap-4 text-sm text-zinc-300 sm:grid-cols-2 md:text-base">
-                        <li className="flex items-center gap-2">• Put phone in airplane mode ✈️</li>
-                        <li className="flex items-center gap-2">• Close email & Slack 🔕</li>
-                        <li className="flex items-center gap-2">• One task only 🎯</li>
-                        <li className="flex items-center gap-2">• Hydrate 💧</li>
+                        <li className="flex items-center gap-2">• {t('daily.deepWork.tip1') as string}</li>
+                        <li className="flex items-center gap-2">• {t('daily.deepWork.tip2') as string}</li>
+                        <li className="flex items-center gap-2">• {t('daily.deepWork.tip3') as string}</li>
+                        <li className="flex items-center gap-2">• {t('daily.deepWork.tip4') as string}</li>
                     </ul>
                 </div>
 
@@ -120,7 +122,7 @@ export default function DeepWorkView() {
                     onClick={() => setView('morning')}
                     className="mt-8 text-sm text-zinc-500 hover:text-white transition-colors"
                 >
-                    Exit without saving
+                    {t('daily.deepWork.exit') as string}
                 </button>
 
             </div>

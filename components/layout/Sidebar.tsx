@@ -142,9 +142,9 @@ export function Sidebar() {
                 <nav className="grid gap-1 px-2">
                     <SidebarSection title={t('sidebar.core') as string} collapsed={collapsed}>
                         <SidebarItem icon={LayoutDashboard} label={t('common.dashboard') as string} href="/dashboard" active={pathname === "/dashboard"} collapsed={collapsed} />
-                        <SidebarItem icon={Sun} label="Daily View" href="/daily" active={pathname === "/daily"} collapsed={collapsed} />
-                        <SidebarItem icon={Target} label="Execution Board" href="/board" active={pathname === "/board"} collapsed={collapsed} />
-                        <SidebarItem icon={TrendingUp} label="Progress" href="/progress" active={pathname === "/progress"} collapsed={collapsed} />
+                        <SidebarItem icon={Sun} label={t('common.dailyView') as string} href="/daily" active={pathname === "/daily"} collapsed={collapsed} />
+                        <SidebarItem icon={Target} label={t('common.executionBoard') as string} href="/board" active={pathname === "/board"} collapsed={collapsed} />
+                        <SidebarItem icon={TrendingUp} label={t('common.progress') as string} href="/progress" active={pathname === "/progress"} collapsed={collapsed} />
                     </SidebarSection>
 
                     <SidebarSection title={t('sidebar.execution') as string} collapsed={collapsed}>
@@ -178,20 +178,20 @@ export function Sidebar() {
                                 </Avatar>
                                 {!collapsed && (
                                     <div className="flex flex-col items-start text-xs">
-                                        <span className="font-semibold">Jairo Pro</span>
+                                        <span className="font-semibold text-foreground">Jairo Pro</span>
                                         <span className="text-muted-foreground">Pro Plan</span>
                                     </div>
                                 )}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56" side="right">
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t('account.title') as string}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Profile</DropdownMenuItem>
-                            <DropdownMenuItem>Billing</DropdownMenuItem>
-                            <DropdownMenuItem>Team</DropdownMenuItem>
+                            <DropdownMenuItem>{t('account.profile') as string}</DropdownMenuItem>
+                            <DropdownMenuItem>{t('account.billing') as string}</DropdownMenuItem>
+                            <DropdownMenuItem>{t('account.team') as string}</DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Log out</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive focus:text-destructive">{t('account.logout') as string}</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
