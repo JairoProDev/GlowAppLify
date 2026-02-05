@@ -1,24 +1,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ExecutionBoard } from "@/lib/types"
 import { Flame, Sun, Moon, Zap } from "lucide-react"
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { dashboardContent } from '@/lib/i18n/dashboardContent';
 
 interface HabitsWidgetProps {
     board: ExecutionBoard
 }
 
 export function HabitsWidget({ board }: HabitsWidgetProps) {
+    const { language } = useLanguage();
+    const content = dashboardContent[language].habits;
+
     const habits = board.habits_layer || { morning: {}, deepWork: {}, evening: {} };
     // @ts-ignore - Handle partial data gracefully
     const routines = [
-        { ...habits.morning, label: 'Morning', icon: <Sun className="h-3 w-3" /> },
-        { ...habits.deepWork, label: 'Deep Work', icon: <Zap className="h-3 w-3" /> },
-        { ...habits.evening, label: 'Evening', icon: <Moon className="h-3 w-3" /> }
+        { ...habits.morning, label: content.morning, icon: <Sun className="h-3 w-3" /> },
+        { ...habits.deepWork, label: content.deepWork, icon: <Zap className="h-3 w-3" /> },
+        { ...habits.evening, label: content.evening, icon: <Moon className="h-3 w-3" /> }
     ].filter(r => r.time); // Ensure they exist
 
     return (
         <Card className="col-span-1 md:col-span-2 lg:col-span-1 shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Daily Habits</CardTitle>
+                <CardTitle className="text-sm font-medium">{content.title}</CardTitle>
                 <Flame className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>

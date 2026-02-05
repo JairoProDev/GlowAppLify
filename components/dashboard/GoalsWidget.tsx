@@ -1,17 +1,21 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Target, Flag } from "lucide-react"
 import { ExecutionBoard } from "@/lib/types"
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { dashboardContent } from '@/lib/i18n/dashboardContent';
 
 interface GoalWidgetProps {
     board: ExecutionBoard
 }
 
 export function GoalsWidget({ board }: GoalWidgetProps) {
+    const { language } = useLanguage();
+    const content = dashboardContent[language].goals;
     // Determine progress - for now static or 0 since we don't have progress calculation integrated yet
     const progress = 0;
     // Fallback to empty object or mock if goal_layer is missing (e.g. old data structure)
     const goal = board.goal_layer || {
-        smartGoal: "Goal not found (Data update required)",
+        smartGoal: content.notFound,
         deadline: new Date().toISOString(),
         kpis: []
     };
@@ -19,7 +23,7 @@ export function GoalsWidget({ board }: GoalWidgetProps) {
     return (
         <Card className="col-span-1 md:col-span-2 shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">90 Day Goal</CardTitle>
+                <CardTitle className="text-sm font-medium">{content.title}</CardTitle>
                 <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -31,14 +35,14 @@ export function GoalsWidget({ board }: GoalWidgetProps) {
                         <div className="flex items-center gap-2 mt-1">
                             <Flag className="h-3 w-3 text-muted-foreground" />
                             <p className="text-xs text-muted-foreground">
-                                Due {new Date(goal.deadline).toLocaleDateString()}
+                                {content.due} {new Date(goal.deadline).toLocaleDateString()}
                             </p>
                         </div>
                     </div>
 
                     <div className="space-y-2">
                         <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">Progress</span>
+                            <span className="text-muted-foreground">{content.progress}</span>
                             <span className="font-medium text-foreground">{progress}%</span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-secondary overflow-hidden">

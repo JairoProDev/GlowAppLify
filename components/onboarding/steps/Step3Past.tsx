@@ -4,20 +4,17 @@ import { useOnboardingStore } from '@/lib/onboarding/store';
 import { BloomAIBubble } from '../BloomAIBubble';
 import { ContinueButton } from '../ContinueButton';
 import { StepContainer } from '../StepContainer';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { onboardingContent } from '@/lib/i18n/onboardingContent';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 
-const OBSTACLES = [
-    'Lost motivation',
-    'Got too busy',
-    "Didn't see progress",
-    'Felt overwhelmed',
-    'Life got in the way',
-    "Didn't know what to do next"
-];
+
 
 export const Step3Past: React.FC = () => {
     const { answers, setAnswer, nextStep } = useOnboardingStore();
+    const { language } = useLanguage();
+    const content = onboardingContent[language].step3;
     const [hasTriedBefore, setHasTriedBefore] = useState<boolean | null>(
         answers.triedBefore === 'No, first time' ? false : answers.triedBefore ? true : null
     );
@@ -50,21 +47,17 @@ export const Step3Past: React.FC = () => {
         return (
             <StepContainer>
                 <BloomAIBubble
-                    message={`Have you tried achieving this goal before?\n\n(No judgment - I just want to build a system that works THIS time.)`}
+                    message={content.initialBubble}
                 />
 
                 <div className="space-y-4 mt-8">
-                    {[
-                        'Yes, multiple times',
-                        'Yes, once',
-                        'No, first time'
-                    ].map((option) => (
+                    {(Object.keys(content.options) as Array<keyof typeof content.options>).map((key) => (
                         <button
-                            key={option}
-                            onClick={() => handleAttemptSelection(option)}
+                            key={key}
+                            onClick={() => handleAttemptSelection(key)}
                             className="w-full p-4 text-left rounded-xl border border-border bg-card hover:border-primary hover:bg-primary/5 transition-all duration-200 group flex items-center justify-between"
                         >
-                            <span className="font-medium text-lg">{option}</span>
+                            <span className="font-medium text-lg">{content.options[key]}</span>
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
                                 <Check className="w-5 h-5" />
                             </span>
@@ -78,11 +71,11 @@ export const Step3Past: React.FC = () => {
     return (
         <StepContainer key="part2">
             <BloomAIBubble
-                message={`What typically stops you?\n\n(Select all that apply)`}
+                message={content.part2Bubble}
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 mb-8">
-                {OBSTACLES.map((obstacle) => {
+                {content.obstacles.map((obstacle) => {
                     const isSelected = answers.obstacles.includes(obstacle);
                     return (
                         <button
@@ -111,7 +104,7 @@ export const Step3Past: React.FC = () => {
                 onClick={handleContinue}
                 disabled={answers.obstacles.length === 0}
             >
-                Continue
+                {content.continue}
             </ContinueButton>
         </StepContainer>
     );

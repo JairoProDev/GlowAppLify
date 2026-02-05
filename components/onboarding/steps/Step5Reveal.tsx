@@ -5,10 +5,14 @@ import { useOnboardingStore } from '@/lib/onboarding/store';
 import { ContinueButton } from '../ContinueButton';
 import { useRouter } from 'next/navigation';
 import { CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { onboardingContent } from '@/lib/i18n/onboardingContent';
 
 export const Step5Reveal: React.FC = () => {
     const { answers } = useOnboardingStore();
     const router = useRouter();
+    const { language } = useLanguage();
+    const content = onboardingContent[language].step5;
     const [showContent, setShowContent] = useState(false);
 
     useEffect(() => {
@@ -57,33 +61,33 @@ export const Step5Reveal: React.FC = () => {
                 </div>
 
                 <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-emerald-600">
-                    Your Execution Board is Ready!
+                    {content.title}
                 </h1>
 
                 <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-                    We've built a custom system to help you achieve <strong>{answers.goal}</strong> by overcoming your constraints.
+                    {content.subtitlePart1} <strong>{answers.goal}</strong> {content.subtitlePart2}
                 </p>
 
                 {/* Board Preview Card - Simplified */}
                 <div className="bg-card border border-border rounded-2xl p-8 max-w-lg mx-auto shadow-2xl mb-12 transform rotate-1 hover:rotate-0 transition-transform duration-300">
                     <div className="text-left space-y-6">
                         <div>
-                            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Vision Layer</h3>
+                            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{content.visionLayer}</h3>
                             <p className="text-lg font-medium italic">"{answers.futureSelf?.vision?.length > 80 ? answers.futureSelf.vision.substring(0, 80) + '...' : answers.futureSelf?.vision}"</p>
                         </div>
 
                         <div className="h-px bg-border" />
 
                         <div>
-                            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Execution Layer</h3>
+                            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{content.executionLayer}</h3>
                             <div className="space-y-2">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-green-500" />
-                                    <span className="text-sm">Week 1: Foundation & Planning</span>
+                                    <span className="text-sm">{content.week1}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-green-500" />
-                                    <span className="text-sm">Daily: 3 High-Impact Actions</span>
+                                    <span className="text-sm">{content.daily}</span>
                                 </div>
                             </div>
                         </div>
@@ -92,11 +96,11 @@ export const Step5Reveal: React.FC = () => {
 
                 <div className="max-w-xs mx-auto space-y-4">
                     <ContinueButton onClick={handleContinue} className="w-full">
-                        Enter My Board
+                        {content.enterButton}
                     </ContinueButton>
 
                     <p className="text-xs text-muted-foreground">
-                        Pressing enter will unlock your dashboard
+                        {content.pressEnter}
                     </p>
                 </div>
 

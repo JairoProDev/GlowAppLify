@@ -3,24 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { Loader2, Sparkles, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const LOADING_STEPS = [
-    "Analyzing your goal...",
-    "Designing your execution plan...",
-    "Generating daily actions...",
-    "Building your habits system...",
-    "Creating your obstacle plans...",
-    "Almost there..."
-];
+import { useLanguage } from '../../lib/i18n/LanguageContext';
+import { onboardingContent } from '../../lib/i18n/onboardingContent';
 
-const FACTS = [
-    "Users who complete onboarding are 10x more likely to achieve their goals.",
-    "Breaking goals into daily actions increases completion by 3x.",
-    "The average user completes their first action in under 24 hours.",
-    "1,247 people started their journey this week.",
-    "People who visualize their Future Self are 2x more motivated."
-];
+
 
 export const OnboardingLoading: React.FC = () => {
+    const { language } = useLanguage();
+    const content = onboardingContent[language].loading;
+    const LOADING_STEPS = content.steps;
+    const FACTS = content.facts;
+
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [progress, setProgress] = useState(0);
     const [currentFactIndex, setCurrentFactIndex] = useState(0);
@@ -84,7 +77,7 @@ export const OnboardingLoading: React.FC = () => {
             </div>
 
             <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                Creating your personalized system
+                {content.headline}
             </h2>
 
             <p className="text-lg text-muted-foreground mb-8 min-h-[30px] transition-all duration-300">
@@ -108,7 +101,7 @@ export const OnboardingLoading: React.FC = () => {
                 <div className="flex items-start gap-3">
                     <Lightbulb className="w-6 h-6 text-yellow-500 shrink-0" />
                     <div className="text-left">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Did you know?</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">{content.didYouKnow}</p>
                         <p key={currentFactIndex} className="text-sm animate-in fade-in slide-in-from-right-4 duration-500">
                             {FACTS[currentFactIndex]}
                         </p>

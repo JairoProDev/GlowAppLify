@@ -11,8 +11,8 @@ export const landingContent = {
         hero: {
             badge: "Beta Limitada: Acceso Anticipado",
             headline: "Tu Copiloto de Vida.",
-            subheadline1: "IA que construye todo tu sistema de",
-            subheadline2: "crecimiento personal en 3 minutos.",
+            subheadline1: "IA que analiza, diseña y planifica tu plan de:",
+            subheadline2: "Crecimiento Personal en 3 minutos.",
             description: "Sin plantillas. Sin configuración. Sin tonterías. Solo describe tus metas y mira cómo la IA crea tu hoja de ruta personalizada hacia el éxito.",
             inputPlaceholder: "Ej: Quiero correr una maratón en 6 meses...",
             cta: "Comenzar Transformación",

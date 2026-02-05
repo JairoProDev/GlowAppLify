@@ -4,6 +4,8 @@ import { useOnboardingStore } from '@/lib/onboarding/store';
 import { BloomAIBubble } from '../BloomAIBubble';
 import { ContinueButton } from '../ContinueButton';
 import { StepContainer } from '../StepContainer';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { onboardingContent } from '@/lib/i18n/onboardingContent';
 import { Clock, Battery, DollarSign, Brain, Users, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 // import { Slider } from '@/components/ui/slider'; 
@@ -17,17 +19,19 @@ import { cn } from '@/lib/utils';
 
 type ConstraintType = 'Time' | 'Energy' | 'Money' | 'Skills' | 'Support' | 'Other';
 
-const CONSTRAINTS: { id: ConstraintType; label: string; icon: React.ReactNode }[] = [
-    { id: 'Time', label: 'Time', icon: <Clock className="w-5 h-5" /> },
-    { id: 'Energy', label: 'Energy', icon: <Battery className="w-5 h-5" /> },
-    { id: 'Money', label: 'Money', icon: <DollarSign className="w-5 h-5" /> },
-    { id: 'Skills', label: 'Skills', icon: <Brain className="w-5 h-5" /> },
-    { id: 'Support', label: 'Support', icon: <Users className="w-5 h-5" /> },
-    { id: 'Other', label: 'Other', icon: <HelpCircle className="w-5 h-5" /> },
+const CONSTRAINTS: { id: ConstraintType; icon: React.ReactNode }[] = [
+    { id: 'Time', icon: <Clock className="w-5 h-5" /> },
+    { id: 'Energy', icon: <Battery className="w-5 h-5" /> },
+    { id: 'Money', icon: <DollarSign className="w-5 h-5" /> },
+    { id: 'Skills', icon: <Brain className="w-5 h-5" /> },
+    { id: 'Support', icon: <Users className="w-5 h-5" /> },
+    { id: 'Other', icon: <HelpCircle className="w-5 h-5" /> },
 ];
 
 export const Step2Context: React.FC = () => {
     const { answers, setAnswer, nextStep } = useOnboardingStore();
+    const { language } = useLanguage();
+    const content = onboardingContent[language].step2;
 
     // Local state for the second part of the question (follow up)
     const [showFollowUp, setShowFollowUp] = React.useState(!!answers.constraint);
@@ -52,15 +56,15 @@ export const Step2Context: React.FC = () => {
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <BloomAIBubble
-                            message={`How many hours per day can you realistically dedicate to this?`}
+                            message={content.followUpTime}
                         />
                         <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
                             <div className="flex justify-between mb-4">
-                                <span className="text-sm font-medium text-muted-foreground">15 min</span>
+                                <span className="text-sm font-medium text-muted-foreground">{content.timeLabels.min}</span>
                                 <span className="text-2xl font-bold text-primary">
                                     {answers.timePerDay}h
                                 </span>
-                                <span className="text-sm font-medium text-muted-foreground">8 hrs</span>
+                                <span className="text-sm font-medium text-muted-foreground">{content.timeLabels.max}</span>
                             </div>
                             <input
                                 type="range"
@@ -72,10 +76,10 @@ export const Step2Context: React.FC = () => {
                                 className="w-full h-2 bg-secondary rounded-lg appearance-none cursor-pointer accent-primary"
                             />
                             <p className="text-center text-sm text-muted-foreground mt-4">
-                                Consistent small efforts beat sporadic heroic efforts.
+                                {content.timeLabels.message}
                             </p>
                         </div>
-                        <ContinueButton onClick={handleContinue}>Continue</ContinueButton>
+                        <ContinueButton onClick={handleContinue}>{content.continue}</ContinueButton>
                     </div>
                 );
 
@@ -90,9 +94,9 @@ export const Step2Context: React.FC = () => {
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <BloomAIBubble
-                            message={`Got it. We'll design the system to optimize for ${answers.constraint?.toLowerCase()}.`}
+                            message={content.followUpGeneric.replace('{{constraint}}', answers.constraint?.toLowerCase() || '')}
                         />
-                        <ContinueButton onClick={handleContinue}>Continue</ContinueButton>
+                        <ContinueButton onClick={handleContinue}>{content.continue}</ContinueButton>
                     </div>
                 );
         }
@@ -103,7 +107,7 @@ export const Step2Context: React.FC = () => {
             {!showFollowUp ? (
                 <>
                     <BloomAIBubble
-                        message={`Got it! "${answers.goal}" is a great goal.\n\nNow, what's your biggest constraint right now?\n\nUnderstanding this helps me design actions that fit YOUR life.`}
+                        message={content.initialBubble.replace('{{goal}}', answers.goal)}
                     />
 
                     <div className="grid grid-cols-2 gap-4 mt-8">
@@ -124,7 +128,7 @@ export const Step2Context: React.FC = () => {
                                 )}>
                                     {c.icon}
                                 </div>
-                                <span className="font-medium">{c.label}</span>
+                                <span className="font-medium">{content.constraints[c.id]}</span>
                             </button>
                         ))}
                     </div>
