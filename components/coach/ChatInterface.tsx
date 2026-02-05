@@ -3,10 +3,13 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar } from "@/components/ui/avatar"
 import { Bot, Send, User } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import { useDailyStore } from "@/lib/store/useDailyStore"
+import { useTaskStore } from "@/lib/store/task-store"
+import { useJournalStore } from "@/lib/store/journal-store"
 
 interface Message {
     id: string
@@ -16,11 +19,18 @@ interface Message {
 }
 
 export function ChatInterface() {
+    // Get context from stores
+    const { oneThing, streak } = useDailyStore()
+    const tasks = useTaskStore(state => state.tasks)
+    const entries = useJournalStore(state => state.entries)
+
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
             role: 'assistant',
-            content: "Hello! I'm your Glow Coach. I'm here to help you stay on track with your goals, habits, and routines. How are you feeling today?",
+            content: oneThing?.title
+                ? `Hey! I see you're working on "${oneThing.title}" today. How's it going so far?`
+                : "Hello! I'm your Glow Coach. I'm here to help you stay on track with your goals, habits, and routines. How are you feeling today?",
             createdAt: new Date()
         }
     ])
@@ -48,26 +58,64 @@ export function ChatInterface() {
         setInput("")
         setIsLoading(true)
 
-        // Mock AI Response
-        setTimeout(() => {
+        try {
+            // Build context from stores
+            const context = {
+                goal: oneThing?.title,
+                tasksPending: tasks.filter(t => t.status !== 'done').length,
+                tasksCompleted: tasks.filter(t => t.status === 'done').length,
+                streak: streak,
+                lastCheckIn: entries.length > 0
+                    ? new Date(entries[entries.length - 1].date).toLocaleDateString()
+                    : null
+            }
+
+            // Call the AI API
+            const response = await fetch('/api/coach/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    messages: messages
+                        .concat(userMsg)
+                        .map(m => ({
+                            role: m.role,
+                            content: m.content
+                        })),
+                    context
+                }),
+            })
+
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`)
+            }
+
+            const data = await response.json()
+
             const aiMsg: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: generateMockResponse(userMsg.content),
+                content: data.message,
                 createdAt: new Date()
             }
-            setMessages(prev => [...prev, aiMsg])
-            setIsLoading(false)
-        }, 1500)
-    }
 
-    // Simple rule-based logic for demo
-    const generateMockResponse = (text: string) => {
-        const lower = text.toLowerCase()
-        if (lower.includes("tired") || lower.includes("exhausted")) return "I hear you. Rest is productive too. Have you checked your sleep hours in the Analytics tab?"
-        if (lower.includes("goal") || lower.includes("stuck")) return "Let's look at your 90-day goal. What is the one small step you can take right now to move forward?"
-        if (lower.includes("habit")) return "Building habits takes time. Consistency > Intensity. Keep your streak alive!"
-        return "That's interesting. Tell me more about how that impacts your weekly focus?"
+            setMessages(prev => [...prev, aiMsg])
+        } catch (error) {
+            console.error('Error sending message:', error)
+
+            // Fallback response on error
+            const errorMsg: Message = {
+                id: (Date.now() + 1).toString(),
+                role: 'assistant',
+                content: "I'm having trouble connecting right now. But I'm here for you! In the meantime, check your task list and pick one thing to focus on.",
+                createdAt: new Date()
+            }
+
+            setMessages(prev => [...prev, errorMsg])
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -78,7 +126,7 @@ export function ChatInterface() {
                 </div>
                 <div>
                     <h3 className="font-bold">Glow Coach</h3>
-                    <p className="text-xs text-muted-foreground">Always here for you</p>
+                    <p className="text-xs text-muted-foreground">Your AI accountability partner</p>
                 </div>
             </div>
 
@@ -101,7 +149,7 @@ export function ChatInterface() {
                             </Avatar>
                             <div
                                 className={cn(
-                                    "p-3 rounded-2xl text-sm leading-relaxed",
+                                    "p-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap",
                                     msg.role === 'assistant' ? "bg-secondary rounded-tl-none" : "bg-primary text-primary-foreground rounded-tr-none"
                                 )}
                             >
