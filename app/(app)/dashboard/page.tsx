@@ -1,38 +1,39 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { ExecutionBoard } from "@/lib/types"
-import { getBoard } from "@/lib/storage"
-import { GoalsWidget } from "@/components/dashboard/GoalsWidget"
-import { QuickActionsWidget } from "@/components/dashboard/QuickActionsWidget"
-import { HabitsWidget } from "@/components/dashboard/HabitsWidget"
-import { ProgressOverviewWidget } from "@/components/dashboard/ProgressOverviewWidget"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { useDailyStore } from "@/lib/store/useDailyStore"
+import { useTaskStore } from "@/lib/store/task-store"
+import { useRoutineStore } from "@/lib/store/routine-store"
+import { useNoteStore } from "@/lib/store/note-store"
+import { useJournalStore } from "@/lib/store/journal-store"
+import { CheckCircle2, Flame, Target, TrendingUp, Plus, Calendar, ListTodo, Book, Sparkles } from "lucide-react"
+import Link from "next/link"
+import { format, formatDistanceToNow } from "date-fns"
 
 export default function DashboardPage() {
-    const [board, setBoard] = useState<ExecutionBoard | null>(null)
-    const [loading, setLoading] = useState(true)
+    const { oneThing, otherActions, streak } = useDailyStore()
+    const tasks = useTaskStore(state => state.tasks)
+    const routines = useRoutineStore(state => state.routines)
+    const notes = useNoteStore(state => state.notes)
+    const entries = useJournalStore(state => state.entries)
 
-    useEffect(() => {
-        // In a real app, we might want to fetch fresh data or sync here
-        const data = getBoard()
-        setBoard(data)
-        setLoading(false)
-    }, [])
+    // Calculate quick stats
+    const completedTasks = tasks.filter(t => t.status === 'done').length
+    const pendingTasks = tasks.filter(t => t.status !== 'done').length
+    const completionRate = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0
 
-    if (loading) {
-        return <DashboardSkeleton />
-    }
+    // Recent notes
+    const recentNotes = notes
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+        .slice(0, 3)
 
-    if (!board) {
-        return (
-            <div className="flex flex-col items-center justify-center h-[50vh] space-y-4">
-                <h2 className="text-2xl font-bold">No Board Found</h2>
-                <p className="text-muted-foreground">Please create your Execution Board first.</p>
-                {/* Add button to create board if needed, but sidebar handles navigation */}
-            </div>
-        )
-    }
+    // Today's routines status
+    const morningRoutine = routines.find(r => r.id === 'morning-1')
+    const eveningRoutine = routines.find(r => r.id === 'evening-1')
+    const todayString = format(new Date(), 'yyyy-MM-dd')
+    const morningDone = morningRoutine?.completedDates?.includes(todayString)
+    const eveningDone = eveningRoutine?.completedDates?.includes(todayString)
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
@@ -42,52 +43,201 @@ export default function DashboardPage() {
                     <p className="text-muted-foreground">Welcome back. Here is your life at a glance.</p>
                 </div>
                 <div className="text-sm text-muted-foreground bg-secondary px-3 py-1 rounded-full">
-                    {new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
+                    {format(new Date(), 'EEEE, MMMM d')}
                 </div>
             </div>
 
+            {/* Top Stats Grid */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <QuickActionsWidget board={board} />
-                <ProgressOverviewWidget />
-                <GoalsWidget board={board} />
-                <HabitsWidget board={board} />
-            </div>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Your #1 Focus Today</CardTitle>
+                        <Target className="h-4 w-4 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                        {oneThing ? (
+                            <>
+                                <div className="text-lg font-bold truncate">{oneThing.title}</div>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    {oneThing.completed ? '✓ Completed' : `~${oneThing.duration}`}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <div className="text-lg font-bold text-muted-foreground">Not set</div>
+                                <Link href="/daily" className="text-xs text-primary hover:underline">
+                                    Go to Daily View →
+                                </Link>
+                            </>
+                        )}
+                    </CardContent>
+                </Card>
 
-            {/* Examples of future sections */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <div className="col-span-4 rounded-xl border bg-card text-card-foreground shadow p-6">
-                    <div className="font-semibold leading-none tracking-tight mb-4">Weekly Focus</div>
-                    <div className="h-[200px] flex items-center justify-center text-muted-foreground bg-secondary/20 rounded-lg border border-dashed">
-                        Chart / Analytics Placeholder
-                    </div>
-                </div>
-                <div className="col-span-3 rounded-xl border bg-card text-card-foreground shadow p-6">
-                    <div className="font-semibold leading-none tracking-tight mb-4">Recent Notes</div>
-                    <div className="space-y-4">
-                        {[1, 2, 3].map((_, i) => (
-                            <div key={i} className="flex flex-col gap-1 pb-3 border-b last:border-0">
-                                <span className="text-sm font-medium">Idea for Project X</span>
-                                <span className="text-xs text-muted-foreground">Last modified 2h ago</span>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
+                        <Flame className="h-4 w-4 text-orange-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{streak || 0} days</div>
+                        <p className="text-xs text-muted-foreground">Keep the momentum going!</p>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Task Progress</CardTitle>
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{completedTasks}/{tasks.length}</div>
+                        <p className="text-xs text-muted-foreground">{completionRate}% completion rate</p>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Today's Routines</CardTitle>
+                        <TrendingUp className="h-4 w-4 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex gap-2 items-center">
+                            <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold ${morningDone ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}`}>
+                                AM
                             </div>
-                        ))}
-                    </div>
-                </div>
+                            <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold ${eveningDone ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}`}>
+                                PM
+                            </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                            {morningDone && eveningDone ? 'All done! 🎉' : 'In progress...'}
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
-        </div>
-    )
-}
 
-function DashboardSkeleton() {
-    return (
-        <div className="space-y-6">
-            <div className="space-y-2">
-                <Skeleton className="h-8 w-[200px]" />
-                <Skeleton className="h-4 w-[300px]" />
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Skeleton className="h-[150px] rounded-xl" />
-                <Skeleton className="h-[150px] rounded-xl" />
-                <Skeleton className="h-[150px] rounded-xl col-span-2" />
+            {/* Quick Actions */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <Link href="/tasks">
+                            <Button variant="outline" className="w-full justify-start">
+                                <ListTodo className="mr-2 h-4 w-4" />
+                                View Tasks
+                            </Button>
+                        </Link>
+                        <Link href="/calendar">
+                            <Button variant="outline" className="w-full justify-start">
+                                <Calendar className="mr-2 h-4 w-4" />
+                                Calendar
+                            </Button>
+                        </Link>
+                        <Link href="/journal">
+                            <Button variant="outline" className="w-full justify-start">
+                                <Book className="mr-2 h-4 w-4" />
+                                Journal
+                            </Button>
+                        </Link>
+                        <Link href="/coach">
+                            <Button variant="outline" className="w-full justify-start">
+                                <Sparkles className="mr-2 h-4 w-4" />
+                                AI Coach
+                            </Button>
+                        </Link>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Bottom Section */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                {/* Pending Tasks */}
+                <Card className="col-span-4">
+                    <CardHeader>
+                        <CardTitle>Pending Tasks</CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                            {pendingTasks} tasks remaining
+                        </p>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-3">
+                            {tasks
+                                .filter(t => t.status !== 'done')
+                                .slice(0, 5)
+                                .map(task => (
+                                    <div key={task.id} className="flex items-center justify-between pb-3 border-b last:border-0">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`h-2 w-2 rounded-full ${task.priority === 'urgent' ? 'bg-red-500' :
+                                                task.priority === 'important' ? 'bg-orange-500' :
+                                                    'bg-blue-500'
+                                                }`} />
+                                            <div>
+                                                <p className="text-sm font-medium">{task.title}</p>
+                                                {task.tags && task.tags.length > 0 && (
+                                                    <div className="flex gap-1 mt-1">
+                                                        {task.tags.slice(0, 2).map(tag => (
+                                                            <span key={tag} className="text-xs bg-secondary px-2 py-0.5 rounded">
+                                                                {tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <span className="text-xs text-muted-foreground capitalize">
+                                            {task.status}
+                                        </span>
+                                    </div>
+                                ))}
+                            {pendingTasks === 0 && (
+                                <div className="text-center py-8 text-muted-foreground">
+                                    <CheckCircle2 className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                    <p>All tasks completed! 🎉</p>
+                                </div>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Recent Notes */}
+                <Card className="col-span-3">
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>Recent Notes</CardTitle>
+                        <Link href="/notes">
+                            <Button variant="ghost" size="sm">
+                                <Plus className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {recentNotes.length > 0 ? (
+                                recentNotes.map(note => (
+                                    <Link key={note.id} href="/notes">
+                                        <div className="flex flex-col gap-1 pb-3 border-b last:border-0 hover:bg-accent/50 p-2 -m-2 rounded-lg transition-colors cursor-pointer">
+                                            <span className="text-sm font-medium truncate">{note.title}</span>
+                                            <span className="text-xs text-muted-foreground">
+                                                {formatDistanceToNow(new Date(note.updatedAt), { addSuffix: true })}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                ))
+                            ) : (
+                                <div className="text-center py-8 text-muted-foreground">
+                                    <Book className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                    <p className="text-sm">No notes yet</p>
+                                    <Link href="/notes">
+                                        <Button variant="link" size="sm" className="mt-2">
+                                            Create your first note
+                                        </Button>
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )
