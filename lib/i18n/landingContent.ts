@@ -23,9 +23,11 @@ export const landingContent = {
                 science: "Basado en ciencia del comportamiento"
             },
             mock: {
-                analyzing: "Analizando objetivos...",
+                analyzing: "ANALIZANDO OBJETIVOS...",
                 complete: "Sistema Generado",
-                growthPlan: "Plan de Crecimiento Listo"
+                entropy: "ENTROPÍA (CAOS)",
+                synergy: "SINERGIA (ORDEN)",
+                reduction: "Reducción_Entropía"
             }
         },
         problem: {

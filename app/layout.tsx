@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
+import { DeepDiveModal } from "@/components/landing/DeepDiveModal";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,6 +31,7 @@ export default function RootLayout({
             </TooltipProvider>
           </ThemeProvider>
         </LanguageProvider>
+        <DeepDiveModal />
       </body>
     </html>
   );
