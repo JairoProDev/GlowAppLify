@@ -2,7 +2,7 @@
 export const onboardingContent = {
     es: {
         step1: {
-            bubble: "¡Hola! Soy Bloom, tu coach de ejecución.\n\nTe ayudaré a construir un sistema basado en ciencia para lograr tu meta más importante.\n\nPrimero: ¿cuál es la ÚNICA meta que quieres lograr en los próximos 90 días?",
+            bubble: "SSoy Glow, tu coach de ejecución.\n\nTe ayudaré a construir un sistema basado en ciencia para lograr tu meta más importante.\n\nPrimero: ¿cuál es la ÚNICA meta que quieres lograr en los próximos 90 días?",
             placeholder: "Ej: Lanzar mi MVP y conseguir 10 clientes...",
             quickGoals: [
                 'Lanzar mi startup',

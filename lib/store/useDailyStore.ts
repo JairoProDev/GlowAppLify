@@ -93,6 +93,10 @@ export const useDailyStore = create<DailyState>((set, get) => ({
     },
 
     fetchDailyData: async (userId: string) => {
+        if (!userId) {
+            set({ loading: false });
+            return;
+        }
         set({ loading: true });
         try {
             // 1. Fetch Profile for Name/Streak

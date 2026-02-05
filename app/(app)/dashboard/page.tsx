@@ -10,6 +10,7 @@ import { useJournalStore } from "@/lib/store/journal-store"
 import { CheckCircle2, Flame, Target, TrendingUp, Plus, Calendar, ListTodo, Book, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { format, formatDistanceToNow } from "date-fns"
+import { AreasDashboard } from "@/components/areas/AreasDashboard"
 
 export default function DashboardPage() {
     const { oneThing, otherActions, streak } = useDailyStore()
@@ -114,6 +115,11 @@ export default function DashboardPage() {
                         </p>
                     </CardContent>
                 </Card>
+            </div>
+
+            {/* Life Areas Section */}
+            <div className="py-2">
+                <AreasDashboard />
             </div>
 
             {/* Quick Actions */}

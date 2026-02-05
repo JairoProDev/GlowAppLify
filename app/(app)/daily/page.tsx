@@ -24,8 +24,7 @@ export default function DailyPage() {
             if (user) {
                 fetchDailyData(user.id);
             } else {
-                // Handle guest mode or redirect to login
-                // For now, we allow the store to use its mock fallback if fetch wasn't called with an ID
+                fetchDailyData('');
             }
         }
 

@@ -12,6 +12,17 @@ import { useRoutineStore } from "@/lib/store/routine-store";
 import { useCalendarStore } from "@/lib/store/calendar-store";
 import { useOnboardingStore } from "@/lib/onboarding/store";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { useGoalStore } from "@/lib/store/goal-store";
+import { saveBoard } from "@/lib/storage";
+
+// Simple helper to guess area
+const inferLifeArea = (goal: string): string => {
+    const g = goal.toLowerCase();
+    if (g.includes('dinero') || g.includes('ahorrar') || g.includes('invertir') || g.includes('income')) return 'area-1'; // Finances
+    if (g.includes('salud') || g.includes('peso') || g.includes('correr') || g.includes('fit')) return 'area-2'; // Health
+    if (g.includes('trabajo') || g.includes('negocio') || g.includes('career') || g.includes('cliente')) return 'area-3'; // Career
+    return 'area-5'; // Default to Growth
+};
 
 import Step1Goal from "./steps/Step1Goal";
 import { Step2Context } from "./steps/Step2Context";
@@ -69,6 +80,19 @@ export default function OnboardingFlow() {
             const plan = await res.json();
 
             console.log("Plan created:", plan);
+
+            // --- SAVE BOARD (Local Storage) ---
+            saveBoard(plan);
+
+            // --- 0. POPULATE GOALS (New Store) ---
+            const goalStore = useGoalStore.getState();
+            goalStore.addGoal({
+                title: answers.goal,
+                status: 'active',
+                motivation: answers.motivation,
+                // Simple heuristic to assign a life area based on keywords, or default to Growth
+                lifeAreaId: inferLifeArea(answers.goal)
+            });
 
             // --- 1. POPULATE TASKS (Backlog) ---
             const tasks = plan.executionBoard?.tasks || [];
