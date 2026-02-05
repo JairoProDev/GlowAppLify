@@ -48,7 +48,7 @@ export const Step5Reveal: React.FC = () => {
     }, []);
 
     const handleContinue = () => {
-        router.push('/dashboard');
+        router.push('/daily');
     };
 
     return (
@@ -73,7 +73,7 @@ export const Step5Reveal: React.FC = () => {
                     <div className="text-left space-y-6">
                         <div>
                             <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{content.visionLayer}</h3>
-                            <p className="text-lg font-medium italic">"{answers.futureSelf?.vision?.length > 80 ? answers.futureSelf.vision.substring(0, 80) + '...' : answers.futureSelf?.vision}"</p>
+                            <p className="text-lg font-medium italic">"{answers.futureSelfVision?.length > 80 ? answers.futureSelfVision.substring(0, 80) + '...' : answers.futureSelfVision}"</p>
                         </div>
 
                         <div className="h-px bg-border" />
