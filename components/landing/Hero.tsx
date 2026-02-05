@@ -37,7 +37,7 @@ export function Hero() {
                             <Zap className="w-3 h-3" /> {t.badge}
                         </div>
 
-                        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl md:text-6xl dark:text-white mb-6 leading-tight">
+                        <h1 className="text-[3.5rem] font-extrabold tracking-tight text-zinc-900 dark:text-white mb-6 leading-tight">
                             <InteractiveTrigger diveData={currentDeepDives["hero-headline"]}>
                                 <span className="block text-blue-600 dark:text-blue-400 drop-shadow-sm hover:underline decoration-blue-400/30 underline-offset-4 decoration-2 transition-all cursor-pointer">{t.headline}</span>
                             </InteractiveTrigger>
