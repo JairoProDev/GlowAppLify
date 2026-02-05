@@ -54,6 +54,7 @@ export interface DailyState {
     submitEveningCheckIn: () => Promise<void>;
 
     setView: (view: DailyState['currentView']) => void;
+    setInitialData: (oneThing: DailyAction, otherActions: DailyAction[]) => void;
 }
 
 // Fallback Mock Data (if DB is empty or connection fails)
@@ -219,4 +220,5 @@ export const useDailyStore = create<DailyState>((set, get) => ({
     },
 
     setView: (view) => set({ currentView: view }),
+    setInitialData: (oneThing, otherActions) => set({ oneThing, otherActions }),
 }));
