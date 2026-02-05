@@ -12,7 +12,7 @@ export const landingContent = {
             badge: "Beta Limitada: Acceso Anticipado",
             headline: "Tu Copiloto de Vida.",
             subheadline1: "IA que construye todo tu sistema de",
-            subheadline2: "crecimiento personal—en 3 minutos.",
+            subheadline2: "crecimiento personal en 3 minutos.",
             description: "Sin plantillas. Sin configuración. Sin tonterías. Solo describe tus metas y mira cómo la IA crea tu hoja de ruta personalizada hacia el éxito.",
             inputPlaceholder: "Ej: Quiero correr una maratón en 6 meses...",
             cta: "Comenzar Transformación",
@@ -27,7 +27,22 @@ export const landingContent = {
                 complete: "Sistema Generado",
                 entropy: "ENTROPÍA (CAOS)",
                 synergy: "SINERGIA (ORDEN)",
-                reduction: "Reducción_Entropía"
+                reduction: "Reducción_Entropía",
+                visuals: {
+                    overthinking: "Sobrepensando...",
+                    noPlan: "Sin_Plan_Detectado",
+                    systemOverload: "Sistema Sobrecargado",
+                    analyzingIntent: "analizando_intención...",
+                    vectorizing: "vectorizando_metas [==========] 100%",
+                    constraints: "detectando_restricciones...",
+                    optimizing: "optimizando_ruta...",
+                    scheduleSuccess: "horario_generado_exitosamente",
+                    morningProtocol: "Protocolo Mañanero",
+                    highImpact: "Alto Impacto • 45m",
+                    deepWork: "Bloque de Trabajo Profundo",
+                    goalAlignment: "Alineación de Metas • 2h",
+                    score: "Puntuación 94%"
+                }
             }
         },
         problem: {

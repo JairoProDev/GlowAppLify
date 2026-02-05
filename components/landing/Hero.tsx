@@ -10,12 +10,13 @@ import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
 import { useRouter } from "next/navigation";
 import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
-import { deepDives } from "@/lib/landing/deepDiveContent";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 import { HeroVisualCarousel } from "@/components/landing/HeroVisualCarousel";
 
 export function Hero() {
     const { language } = useLanguage();
     const t = landingContent[language].hero;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
     const [goal, setGoal] = useState("");
     const router = useRouter();
 
@@ -28,7 +29,7 @@ export function Hero() {
     };
 
     return (
-        <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100 via-white to-white dark:from-blue-950 dark:via-zinc-950 dark:to-zinc-950 pt-16 pb-20 sm:pt-24 sm:pb-32 lg:pb-40">
+        <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100 via-white to-white dark:from-blue-950 dark:via-zinc-950 dark:to-zinc-950 pt-8 pb-10 sm:pt-2 sm:pb-2 lg:pb-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
                     <div className="lg:col-span-6 text-center lg:text-left pt-10 relative z-10">
@@ -37,11 +38,11 @@ export function Hero() {
                         </div>
 
                         <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl md:text-6xl dark:text-white mb-6 leading-tight">
-                            <InteractiveTrigger diveData={deepDives["hero-headline"]}>
+                            <InteractiveTrigger diveData={currentDeepDives["hero-headline"]}>
                                 <span className="block text-blue-600 dark:text-blue-400 drop-shadow-sm hover:underline decoration-blue-400/30 underline-offset-4 decoration-2 transition-all cursor-pointer">{t.headline}</span>
                             </InteractiveTrigger>
                             <span className="block font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400">{t.subheadline1}</span>
-                            <InteractiveTrigger diveData={deepDives["hero-time"]}>
+                            <InteractiveTrigger diveData={currentDeepDives["hero-time"]}>
                                 <span className="block text-2xl sm:text-3xl mt-2 font-medium text-zinc-600 dark:text-zinc-300 hover:text-blue-500 transition-colors cursor-pointer w-fit mx-auto lg:mx-0">
                                     {t.subheadline2}
                                 </span>
@@ -55,7 +56,7 @@ export function Hero() {
                         {/* Interactive Input Demo */}
                         <div className="mt-10 max-w-lg mx-auto lg:mx-0">
                             <form onSubmit={handleStart} className="relative group">
-                                <InteractiveTrigger diveData={deepDives["hero-input"]} className="w-full">
+                                <InteractiveTrigger diveData={currentDeepDives["hero-input"]} className="w-full">
                                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                                     <div className="relative flex flex-col sm:flex-row gap-2 p-2 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xl cursor-default">
                                         <Input
@@ -67,7 +68,7 @@ export function Hero() {
                                             onClick={(e) => e.stopPropagation()}
                                         />
 
-                                        <InteractiveTrigger diveData={deepDives["hero-cta"]} onCtaClick={() => {
+                                        <InteractiveTrigger diveData={currentDeepDives["hero-cta"]} onCtaClick={() => {
                                             const params = new URLSearchParams();
                                             if (goal) params.set("goal", goal);
                                             router.push(`/onboarding?${params.toString()}`);

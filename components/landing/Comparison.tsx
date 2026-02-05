@@ -5,10 +5,13 @@ import React from "react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
 import { X, HelpCircle, CheckCircle2 } from "lucide-react";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 
 export function Comparison() {
     const { language } = useLanguage();
     const t = landingContent[language].comparison;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     // Helper to render cell content based on string indicators
     const renderCell = (content: string, isGlow: boolean) => {
@@ -50,9 +53,11 @@ export function Comparison() {
         <section className="py-24 bg-white dark:bg-zinc-950">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-white mb-4">
-                        {t.headline}
-                    </h2>
+                    <InteractiveTrigger diveData={currentDeepDives["comparison-headline"]}>
+                        <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-white mb-4 cursor-pointer hover:text-blue-600 transition-colors inline-block">
+                            {t.headline}
+                        </h2>
+                    </InteractiveTrigger>
                     <p className="text-lg text-zinc-600 dark:text-zinc-400">
                         {t.subtitle}
                     </p>
@@ -65,13 +70,17 @@ export function Comparison() {
                                 <th className="p-4 w-1/5"></th>
                                 {t.headers.slice(1).map((header, i) => (
                                     <th key={i} className={`p-4 w-1/5 text-sm uppercase tracking-wider font-semibold ${i === 3 ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/10 rounded-t-xl border-t-4 border-blue-500 relative' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                                        {header}
-                                        {i === 3 && (
-                                            <span className="absolute top-2 right-2 flex h-2 w-2">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                                            </span>
-                                        )}
+                                        {i === 3 ? (
+                                            <InteractiveTrigger diveData={currentDeepDives["comparison-glow"]}>
+                                                <span className="cursor-pointer flex items-center gap-2 justify-center hover:underline">
+                                                    {header}
+                                                    <span className="flex h-2 w-2 relative">
+                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                                                    </span>
+                                                </span>
+                                            </InteractiveTrigger>
+                                        ) : header}
                                     </th>
                                 ))}
                             </tr>

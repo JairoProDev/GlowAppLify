@@ -4,6 +4,8 @@
 import { FileX, History, AlertTriangle, TrendingDown } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 
 // Map icons to keys since we can't store components in JSON
 const iconMap = [FileX, History, AlertTriangle, TrendingDown];
@@ -11,6 +13,7 @@ const iconMap = [FileX, History, AlertTriangle, TrendingDown];
 export function Problem() {
     const { language } = useLanguage();
     const t = landingContent[language].problem;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     return (
         <section className="bg-white py-24 sm:py-32 dark:bg-zinc-950">
@@ -27,8 +30,8 @@ export function Problem() {
                     <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4">
                         {t.cards.map((card, idx) => {
                             const Icon = iconMap[idx];
-                            return (
-                                <div key={idx} className="group flex flex-col items-start bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl hover:translate-y-[-4px] transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10 hover:bg-white dark:hover:bg-zinc-900 border border-transparent hover:border-red-100 dark:hover:border-red-900/30">
+                            const content = (
+                                <div className="group flex flex-col items-start bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl hover:translate-y-[-4px] transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10 hover:bg-white dark:hover:bg-zinc-900 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 h-full">
                                     <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-3 ring-1 ring-red-100 dark:ring-red-900/30 group-hover:scale-110 transition-transform duration-300">
                                         <Icon className="h-6 w-6 text-red-600 dark:text-red-400" aria-hidden="true" />
                                     </div>
@@ -40,6 +43,16 @@ export function Problem() {
                                     </dd>
                                 </div>
                             );
+
+                            if (idx === 0) {
+                                return (
+                                    <InteractiveTrigger key={idx} diveData={currentDeepDives["problem-generic"]} className="h-full">
+                                        {content}
+                                    </InteractiveTrigger>
+                                );
+                            }
+
+                            return <div key={idx} className="h-full">{content}</div>;
                         })}
                     </dl>
                 </div>

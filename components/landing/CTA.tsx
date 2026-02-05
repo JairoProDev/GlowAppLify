@@ -6,10 +6,13 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { landingContent } from "@/lib/i18n/landingContent";
+import { InteractiveTrigger } from "@/components/landing/InteractiveTrigger";
+import { deepDivesEn, deepDivesEs } from "@/lib/landing/deepDiveContent";
 
 export function CTA() {
     const { language } = useLanguage();
     const t = landingContent[language].cta;
+    const currentDeepDives = language === 'es' ? deepDivesEs : deepDivesEn;
 
     return (
         <section className="relative py-24 px-6 lg:px-8 overflow-hidden bg-blue-900 text-white">
@@ -33,11 +36,13 @@ export function CTA() {
 
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 mb-8">
-                    <Link href="/onboarding">
-                        <Button size="lg" className="h-16 px-8 text-lg rounded-xl bg-white text-blue-900 hover:bg-zinc-100 font-bold shadow-xl shadow-blue-900/50 hover:scale-105 transition-transform">
-                            {t.button} <ArrowRight className="ml-2 w-5 h-5" />
-                        </Button>
-                    </Link>
+                    <InteractiveTrigger diveData={currentDeepDives["cta-footer"]}>
+                        <Link href="/onboarding">
+                            <Button size="lg" className="h-16 px-8 text-lg rounded-xl bg-white text-blue-900 hover:bg-zinc-100 font-bold shadow-xl shadow-blue-900/50 hover:scale-105 transition-transform">
+                                {t.button} <ArrowRight className="ml-2 w-5 h-5" />
+                            </Button>
+                        </Link>
+                    </InteractiveTrigger>
                 </div>
 
                 <p className="mt-6 text-sm text-blue-300 font-medium">
