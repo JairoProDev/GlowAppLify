@@ -78,7 +78,7 @@ export default function AreaDetailPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl shadow-inner border border-primary/20">
-                            <Icon />
+                            {Icon}
                         </div>
                         <div>
                             <div className="flex items-center gap-3">
