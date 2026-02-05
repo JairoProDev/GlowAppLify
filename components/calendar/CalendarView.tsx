@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { CalendarHeader } from "./CalendarHeader"
 import { WeekView } from "./WeekView"
+import { DayView } from "./DayView"
+import { MonthView } from "./MonthView"
 import { EventDialog } from "./EventDialog"
 import { CalendarEvent } from "@/lib/calendar/types"
 
@@ -47,6 +49,13 @@ export default function CalendarView() {
                 />
 
                 <div className="flex-1 relative border-t">
+                    {view === 'day' && (
+                        <DayView
+                            currentDate={currentDate}
+                            onTimeSlotClick={handleTimeSlotClick}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
                     {view === 'week' && (
                         <WeekView
                             currentDate={currentDate}
@@ -54,15 +63,12 @@ export default function CalendarView() {
                             onEventClick={handleEventClick}
                         />
                     )}
-                    {view === 'day' && (
-                        <div className="flex items-center justify-center h-full text-muted-foreground">
-                            Day view coming soon
-                        </div>
-                    )}
                     {view === 'month' && (
-                        <div className="flex items-center justify-center h-full text-muted-foreground">
-                            Month view coming soon
-                        </div>
+                        <MonthView
+                            currentDate={currentDate}
+                            onDateClick={handleTimeSlotClick}
+                            onEventClick={handleEventClick}
+                        />
                     )}
                 </div>
             </div>
