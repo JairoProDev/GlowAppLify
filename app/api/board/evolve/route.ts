@@ -1,7 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
-import { supabase } from '@/lib/supabase';
+import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
 import { ExecutionBoard } from '@/lib/types';
 
 // export const runtime = 'edge'; // Removed for stability until edge compatibility is verified
@@ -42,18 +41,18 @@ Return a partial JSON object containing ONLY the layers that need updates (e.g.,
 The structure must match the ExecutionBoard TypeScript interface.
     `;
 
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4-turbo-preview",
-            messages: [
-                { role: "system", content: "You are a helpful assistant that outputs JSON only." },
-                { role: "user", content: prompt }
-            ],
-            response_format: { type: "json_object" },
+        const response = await geminiClient.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            config: {
+                responseMimeType: 'application/json',
+                temperature: 0.7
+            }
         });
 
-        const content = completion.choices[0].message.content;
+        const content = response.text;
         if (!content) {
-            throw new Error('No content from OpenAI');
+            throw new Error('No content from Gemini');
         }
 
         const updates = JSON.parse(content);
@@ -64,10 +63,6 @@ The structure must match the ExecutionBoard TypeScript interface.
             ...updates,
             updatedAt: new Date().toISOString(),
         };
-
-        // Save to Supabase (Mock save for now as we might need session handling)
-        // In a real app, we'd update the row by ID
-        // const { error } = await supabase.from('execution_boards').update(updatedBoard).eq('id', board.id);
 
         return NextResponse.json({ success: true, board: updatedBoard, updates });
 

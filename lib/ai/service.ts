@@ -1,19 +1,6 @@
 
-import OpenAI from 'openai';
+import { geminiClient, GEMINI_MODEL } from './gemini';
 import { Action, Week } from '@/lib/types'; // Existing types
-import { AnalyticsOverview } from '@/lib/types/analytics';
-
-// Initialize OpenAI Client
-// We use a singleton pattern or creating it per request in Next.js usually
-// checking for key existence to prevent crash on init
-const apiKey = process.env.OPENAI_API_KEY;
-
-const openai = apiKey ? new OpenAI({
-    apiKey: apiKey,
-}) : null;
-
-// Mock fallback for when API key is missing during dev
-const MOCK_MODE = !apiKey;
 
 export interface UserContext {
     name: string;
@@ -29,35 +16,40 @@ export class AIService {
      * Generates a "One Thing" recommendation for tomorrow based on unfinished tasks and goals.
      */
     static async suggestOneThing(context: UserContext): Promise<{ title: string; reasoning: string }> {
-        if (MOCK_MODE || !openai) {
-            console.warn("AI Service running in MOCK mode (No API Key)");
+        if (!process.env.GEMINI_API_KEY) {
+            console.warn("AI Service running in MOCK mode (No Gemini API Key)");
             return {
                 title: "Complete the most urgent pending task",
-                reasoning: "Mock reasoning due to missing API key."
+                reasoning: "Focus on your most impactful pending action to maintain momentum."
             };
         }
 
         try {
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o", // Using optimized model
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are an elite productivity coach. Analyze the user's unfinished tasks and goal. Identify the SINGLE most high-impact action for tomorrow. Return JSON."
-                    },
+            const response = await geminiClient.models.generateContent({
+                model: GEMINI_MODEL,
+                contents: [
                     {
                         role: "user",
-                        content: JSON.stringify({
-                            goal: context.goal,
-                            pending: context.incompleteTasks.map(t => t.title),
-                            mood: context.moodTrend
-                        })
+                        parts: [{
+                            text: `Analyze the user's unfinished tasks and goal. Identify the SINGLE most high-impact action for tomorrow. 
+                            
+                            CONTEXT:
+                            Goal: ${context.goal}
+                            Pending Tasks: ${context.incompleteTasks.map(t => t.title).join(', ')}
+                            Mood Trend (Last 7 days): ${context.moodTrend.join(', ')}
+                            
+                            Return a JSON object with "title" and "reasoning".`
+                        }]
                     }
                 ],
-                response_format: { type: "json_object" }
+                config: {
+                    systemInstruction: "You are an elite productivity coach.",
+                    responseMimeType: 'application/json',
+                    temperature: 0.7
+                }
             });
 
-            const content = response.choices[0].message.content;
+            const content = response.text;
             return content ? JSON.parse(content) : { title: "Focus on your goal", reasoning: "AI parsing failed." };
 
         } catch (error) {
@@ -75,11 +67,11 @@ export class AIService {
         totalCount: number,
         reflection: string
     ) {
-        if (MOCK_MODE || !openai) {
+        if (!process.env.GEMINI_API_KEY) {
             return {
                 title: mood > 2 ? "Great Momentum!" : "Solid Effort",
                 pattern: "You are consistent with your logging.",
-                reason: "Mock data: You completed " + completedCount + " tasks.",
+                reason: "You completed " + completedCount + " tasks today.",
                 suggestion: "Plan tomorrow morning to keep rolling.",
                 actionLabel: "Plan Tomorrow"
             };
@@ -100,19 +92,19 @@ export class AIService {
         `;
 
         try {
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o-mini", // Faster, cheaper for frequent low-latency calls
-                messages: [
-                    { role: "system", content: "You are an empathetic, sharp productivity data analyst." },
-                    { role: "user", content: prompt }
-                ],
-                response_format: { type: "json_object" },
-                temperature: 0.7
+            const response = await geminiClient.models.generateContent({
+                model: GEMINI_MODEL,
+                contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                config: {
+                    systemInstruction: "You are an empathetic, sharp productivity data analyst.",
+                    responseMimeType: 'application/json',
+                    temperature: 0.7
+                }
             });
 
-            return JSON.parse(response.choices[0].message.content || "{}");
+            return JSON.parse(response.text || "{}");
         } catch (error) {
-            console.error(error);
+            console.error("Gemini Insight Error:", error);
             return null;
         }
     }
@@ -121,7 +113,7 @@ export class AIService {
      * Analyzes weekly progress to generate the "Story of the Week".
      */
     static async generateWeeklyStory(weeksData: any): Promise<any> {
-        if (MOCK_MODE || !openai) {
+        if (!process.env.GEMINI_API_KEY) {
             return {
                 title: "Keep Building",
                 content: ["You are making steady progress. Persistence is key."],
@@ -129,16 +121,30 @@ export class AIService {
             };
         }
 
-        // Implementation for weekly story generation...
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o",
-            messages: [
-                { role: "system", content: "Write a 3-sentence narrative summary of this user's week based on the data. Be encouraging but real." },
-                { role: "user", content: JSON.stringify(weeksData) }
-            ],
-            response_format: { type: "json_object" }
-        });
+        try {
+            const response = await geminiClient.models.generateContent({
+                model: GEMINI_MODEL,
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{
+                            text: `Write a 3-sentence narrative summary of this user's week based on the data. Be encouraging but real. Return JSON with "title", "content" (array of strings), and "sentiment".
+                            
+                            WEEK DATA:
+                            ${JSON.stringify(weeksData)}`
+                        }]
+                    }
+                ],
+                config: {
+                    responseMimeType: 'application/json',
+                    temperature: 0.7
+                }
+            });
 
-        return JSON.parse(response.choices[0].message.content || "{}");
+            return JSON.parse(response.text || "{}");
+        } catch (error) {
+            console.error("Gemini Weekly Story Error:", error);
+            return null;
+        }
     }
 }

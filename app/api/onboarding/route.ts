@@ -1,7 +1,8 @@
 
 import { NextResponse } from 'next/server';
+import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
 
-export const runtime = 'edge'; // Optional: Use edge for faster cold starts if supported
+export const runtime = 'nodejs'; // Use nodejs runtime for Gemini SDK if edge has issues, but either should work
 
 export async function POST(req: Request) {
     try {
@@ -66,37 +67,23 @@ export async function POST(req: Request) {
     `;
 
         // Check for API Key
-        if (!process.env.OPENAI_API_KEY) {
-            // Return mock data if no key (Dev mode fallback)
-            console.warn("No OPENAI_API_KEY found. using mock response.");
+        if (!process.env.GEMINI_API_KEY) {
+            console.warn("No GEMINI_API_KEY found. using mock response.");
             return NextResponse.json(getMockResponse(language, goal));
         }
 
-        // Call OpenAI
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: 'gpt-4o',
-                messages: [
-                    { role: "system", content: "You are a helpful JSON API that outputs strictly in the requested language." },
-                    { role: "user", content: prompt }
-                ],
-                temperature: 0.7,
-                response_format: { type: "json_object" }
-            })
+        // Call Gemini
+        const response = await geminiClient.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: [{ role: 'user', parts: [{ text: "Please generate my personalized execution system based on the provided inputs." }] }],
+            config: {
+                systemInstruction: prompt,
+                responseMimeType: 'application/json',
+                temperature: 0.7
+            }
         });
 
-        if (!response.ok) {
-            throw new Error(`OpenAI API Error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const result = JSON.parse(data.choices[0].message.content);
-
+        const result = JSON.parse(response.text || "{}");
         return NextResponse.json(result);
 
     } catch (error) {

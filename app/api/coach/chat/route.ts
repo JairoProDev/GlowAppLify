@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
 
 export async function POST(req: NextRequest) {
     try {
@@ -27,21 +23,26 @@ ${context.lastCheckIn ? `Last check-in: ${context.lastCheckIn}` : ''}
 
 Remember: You're not just a chatbot. You're an accountability partner and strategic advisor. Challenge users when needed, celebrate wins, and always tie conversations back to their specific goals and execution.`;
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                ...messages
-            ],
-            temperature: 0.7,
-            max_tokens: 500,
+        // Map messages to Gemini format
+        const geminiMessages = messages.map((m: any) => ({
+            role: m.role === 'assistant' ? 'model' : m.role,
+            parts: [{ text: m.content }]
+        }));
+
+        const response = await geminiClient.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: geminiMessages,
+            config: {
+                systemInstruction: systemPrompt,
+                temperature: 0.7,
+                maxOutputTokens: 500
+            }
         });
 
-        const assistantMessage = response.choices[0].message.content;
+        const assistantMessage = response.text;
 
         return NextResponse.json({
-            message: assistantMessage,
-            usage: response.usage
+            message: assistantMessage
         });
     } catch (error: any) {
         console.error('Coach chat error:', error);

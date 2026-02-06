@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
 import { supabase } from '@/lib/supabase';
 import { ExecutionBoard } from '@/lib/types';
 
@@ -66,10 +66,8 @@ RETURN ONLY VALID JSON matching this exact structure:
             "time": "[realistic hours]",
             "timeOfDay": "morning" | "afternoon" | "evening"
           }
-          // extensive list for the week (5-7 actions)
         ]
       }
-      // Generate only first 4 weeks in detail for brevity, summarize others if needed or generate all 12
     ]
   },
   "obstacle_layer": {
@@ -88,18 +86,18 @@ RETURN ONLY VALID JSON matching this exact structure:
 }
 `;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview", // Use a smart model regarding instruction following
-      messages: [
-        { role: "system", content: "You are a helpful assistant that outputs JSON only." },
-        { role: "user", content: prompt }
-      ],
-      response_format: { type: "json_object" },
+    const response = await geminiClient.models.generateContent({
+      model: GEMINI_MODEL,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: {
+        responseMimeType: 'application/json',
+        temperature: 0.7
+      }
     });
 
-    const content = completion.choices[0].message.content;
+    const content = response.text;
     if (!content) {
-      throw new Error('No content from OpenAI');
+      throw new Error('No content from Gemini');
     }
 
     const generatedBoard = JSON.parse(content);
@@ -109,20 +107,18 @@ RETURN ONLY VALID JSON matching this exact structure:
       ...generatedBoard,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
-      // Ensure weeks logic is sound (maybe generate full 12 weeks ideally, but for token limits we might do batches. 
-      // For now, let's assume the prompt returns what fits. The prompt asked for "complete" but note about brevity.
-      // If the prompt returns fewer weeks, UI should handle it.
     };
 
     // Attempt to save to Supabase
     try {
-      const { error } = await supabase
-        .from('execution_boards')
-        .insert([board]); // This relies on table existing and matching columns or JSON column
+      if (supabase) {
+        const { error } = await supabase
+          .from('execution_boards')
+          .insert([board]);
 
-      if (error) {
-        console.error('Supabase save error (non-fatal):', error);
-        // We continue to return the board even if save fails (for MVP/No-Auth flow)
+        if (error) {
+          console.error('Supabase save error (non-fatal):', error);
+        }
       }
     } catch (dbError) {
       console.error('Database operation failed:', dbError);

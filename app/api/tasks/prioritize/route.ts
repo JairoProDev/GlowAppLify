@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
 
 export async function POST(req: NextRequest) {
     try {
@@ -56,17 +52,18 @@ ${tasks.map((t: any, i: number) => `${i + 1}. ${t.title}
 
 Analyze and prioritize these tasks strategically.`;
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt }
+        const response = await geminiClient.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: [
+                { role: 'user', parts: [{ text: systemPrompt + "\n\n" + userPrompt }] }
             ],
-            response_format: { type: "json_object" },
-            temperature: 0.7,
+            config: {
+                responseMimeType: 'application/json',
+                temperature: 0.7
+            }
         });
 
-        const result = JSON.parse(response.choices[0].message.content || '{}');
+        const result = JSON.parse(response.text || '{}');
 
         return NextResponse.json(result);
     } catch (error: any) {
