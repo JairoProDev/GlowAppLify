@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Sun, Moon, Zap, Repeat } from "lucide-react"
 import { HabitsLayer, HabitRoutine } from "@/lib/types"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 interface HabitsSectionProps {
     habits: HabitsLayer
@@ -10,6 +11,7 @@ interface HabitsSectionProps {
 }
 
 export function HabitsSection({ habits, isEditing }: HabitsSectionProps) {
+    const { t } = useLanguage()
     const safeHabits = habits || { morning: null, deepWork: null, evening: null };
 
     return (
@@ -21,8 +23,8 @@ export function HabitsSection({ habits, isEditing }: HabitsSectionProps) {
                         <Repeat className="h-6 w-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight">Daily Habits</h2>
-                        <p className="text-sm text-muted-foreground">Automating Excellence with Routines</p>
+                        <h2 className="text-2xl font-bold tracking-tight">{t('board.habits_title')}</h2>
+                        <p className="text-sm text-muted-foreground">{t('board.habits_subtitle')}</p>
                     </div>
                 </div>
             </div>
@@ -30,19 +32,19 @@ export function HabitsSection({ habits, isEditing }: HabitsSectionProps) {
             <CardContent className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <HabitCard
-                        title="Morning Ritual"
+                        title={t('board.morning_ritual')}
                         routine={safeHabits.morning}
                         icon={<Sun className="h-5 w-5 text-amber-500" />}
                         gradient="from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-amber-200/50"
                     />
                     <HabitCard
-                        title="Deep Work"
+                        title={t('board.deep_work')}
                         routine={safeHabits.deepWork}
                         icon={<Zap className="h-5 w-5 text-blue-500" />}
                         gradient="from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-blue-200/50"
                     />
                     <HabitCard
-                        title="Evening Wind-down"
+                        title={t('board.evening_wind_down')}
                         routine={safeHabits.evening}
                         icon={<Moon className="h-5 w-5 text-indigo-500" />}
                         gradient="from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border-indigo-200/50"
@@ -54,6 +56,7 @@ export function HabitsSection({ habits, isEditing }: HabitsSectionProps) {
 }
 
 function HabitCard({ title, routine, icon, gradient }: { title: string, routine: HabitRoutine, icon: React.ReactNode, gradient: string }) {
+    const { t } = useLanguage()
     if (!routine) return null;
     return (
         <div className={`rounded-2xl border p-6 bg-gradient-to-br transition-all hover:shadow-md ${gradient}`}>
@@ -62,7 +65,7 @@ function HabitCard({ title, routine, icon, gradient }: { title: string, routine:
                     {icon}
                 </div>
                 <div className="text-right">
-                    <span className="text-xs font-bold uppercase tracking-wider block text-muted-foreground">Start</span>
+                    <span className="text-xs font-bold uppercase tracking-wider block text-muted-foreground">{t('board.start')}</span>
                     <span className="text-sm font-bold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded-md">
                         {routine.time}
                     </span>
@@ -85,3 +88,4 @@ function HabitCard({ title, routine, icon, gradient }: { title: string, routine:
         </div>
     )
 }
+

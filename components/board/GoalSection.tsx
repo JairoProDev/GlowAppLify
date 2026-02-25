@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Target, Flag, CalendarCheck, TrendingUp } from "lucide-react"
 import { GoalLayer } from "@/lib/types"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 interface GoalSectionProps {
     goal: GoalLayer
@@ -10,7 +11,12 @@ interface GoalSectionProps {
 }
 
 export function GoalSection({ goal, isEditing }: GoalSectionProps) {
-    const safeGoal = goal || { smartGoal: "Loading goal...", deadline: "...", kpis: [] };
+    const { t, language } = useLanguage()
+    const safeGoal = goal || {
+        smartGoal: language === 'es' ? "Cargando meta..." : "Loading goal...",
+        deadline: "...",
+        kpis: []
+    };
     const kpis = safeGoal.kpis || [];
 
     return (
@@ -22,21 +28,21 @@ export function GoalSection({ goal, isEditing }: GoalSectionProps) {
                         <Flag className="h-6 w-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight">The Goal</h2>
-                        <p className="text-sm text-muted-foreground">What success looks like</p>
+                        <h2 className="text-2xl font-bold tracking-tight">{t('board.the_goal')}</h2>
+                        <p className="text-sm text-muted-foreground">{t('board.success_description')}</p>
                     </div>
                 </div>
             </div>
 
             <CardContent className="p-8 space-y-8">
                 <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground block mb-2">SMART Goal</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground block mb-2">{t('board.smart_goal')}</label>
                     <p className="text-xl md:text-2xl font-semibold leading-relaxed text-foreground">
                         {safeGoal.smartGoal}
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 bg-secondary/30 w-fit px-3 py-1 rounded-full">
                         <CalendarCheck className="h-4 w-4" />
-                        <span>Deadline: <span className="font-bold text-foreground">{safeGoal.deadline}</span></span>
+                        <span>{t('board.deadline')}: <span className="font-bold text-foreground">{safeGoal.deadline}</span></span>
                     </div>
                 </div>
 
@@ -49,12 +55,12 @@ export function GoalSection({ goal, isEditing }: GoalSectionProps) {
                             <div className="relative z-10 space-y-3">
                                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                                     <TrendingUp className="h-3 w-3" />
-                                    <span>KPI {idx + 1}</span>
+                                    <span>{t('board.kpi')} {idx + 1}</span>
                                 </div>
                                 <h4 className="text-sm font-medium text-foreground/80 line-clamp-2 min-h-[2.5rem]">{kpi.metric}</h4>
                                 <div className="space-y-1">
                                     <p className="text-2xl font-black text-blue-600 dark:text-blue-400">{kpi.target}</p>
-                                    <p className="text-xs text-muted-foreground">Target by {kpi.deadline}</p>
+                                    <p className="text-xs text-muted-foreground">{t('board.target_by')} {kpi.deadline}</p>
                                 </div>
                             </div>
                         </div>
@@ -64,3 +70,4 @@ export function GoalSection({ goal, isEditing }: GoalSectionProps) {
         </Card>
     )
 }
+

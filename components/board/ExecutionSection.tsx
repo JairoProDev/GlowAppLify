@@ -2,9 +2,9 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle2, Circle, Clock, Flame, CalendarDays } from "lucide-react"
+import { CheckCircle2, Clock, Flame, CalendarDays } from "lucide-react"
 import { ExecutionLayer, Action } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 interface ExecutionSectionProps {
     execution: ExecutionLayer
@@ -12,6 +12,7 @@ interface ExecutionSectionProps {
 }
 
 export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps) {
+    const { t } = useLanguage()
     // Determine current week (fallback to 1)
     const weeks = execution?.weeks || [];
     const currentWeekInfo = weeks.find(w => !w.isCompleted) || weeks[0];
@@ -26,8 +27,8 @@ export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps
                         <Flame className="h-6 w-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight">Execution Plan</h2>
-                        <p className="text-sm text-muted-foreground">Weekly Sprints & Daily Actions</p>
+                        <h2 className="text-2xl font-bold tracking-tight">{t('board.execution_plan')}</h2>
+                        <p className="text-sm text-muted-foreground">{t('board.weekly_sprints')}</p>
                     </div>
                 </div>
             </div>
@@ -42,7 +43,7 @@ export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps
                                     value={`week-${week.weekNumber}`}
                                     className="px-4 py-2 text-sm data-[state=active]:bg-orange-500 data-[state=active]:text-white transition-all"
                                 >
-                                    Week {week.weekNumber}
+                                    {t('board.week')} {week.weekNumber}
                                 </TabsTrigger>
                             ))}
                         </TabsList>
@@ -54,11 +55,11 @@ export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps
                             <div className="bg-secondary/20 rounded-xl p-5 border border-border/50">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                     <div className="space-y-1">
-                                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Weekly Theme</label>
+                                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t('board.weekly_theme')}</label>
                                         <p className="text-lg font-semibold">{week.theme}</p>
                                     </div>
                                     <div className="space-y-1 text-right md:text-left">
-                                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Milestone</label>
+                                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t('board.milestone')}</label>
                                         <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-medium">
                                             <CheckCircle2 className="h-4 w-4" />
                                             <span>{week.milestone}</span>
@@ -81,11 +82,12 @@ export function ExecutionSection({ execution, isEditing }: ExecutionSectionProps
 }
 
 function DailyActionCard({ action }: { action: Action }) {
+    const { t } = useLanguage()
     return (
         <div className="group flex items-start gap-4 p-4 rounded-xl border bg-background hover:bg-muted/30 transition-colors">
             <div className="mt-1">
                 <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    D{action.day}
+                    {t('board.day_abbr')}{action.day}
                 </div>
             </div>
             <div className="flex-1 space-y-1">
@@ -107,3 +109,4 @@ function DailyActionCard({ action }: { action: Action }) {
         </div>
     )
 }
+

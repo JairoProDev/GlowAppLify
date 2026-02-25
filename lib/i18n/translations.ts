@@ -55,6 +55,32 @@ export type TranslationKeys =
     | 'search.tools'
     | 'board.title'
     | 'board.start_daily'
+    | 'board.vision_identity'
+    | 'board.emotional_anchor'
+    | 'board.future_vision'
+    | 'board.mantra'
+    | 'board.the_goal'
+    | 'board.success_description'
+    | 'board.smart_goal'
+    | 'board.deadline'
+    | 'board.kpi'
+    | 'board.target_by'
+    | 'board.execution_plan'
+    | 'board.weekly_sprints'
+    | 'board.weekly_theme'
+    | 'board.milestone'
+    | 'board.day_abbr'
+    | 'board.obstacles_title'
+    | 'board.obstacles_subtitle'
+    | 'board.no_obstacles'
+    | 'board.if'
+    | 'board.then'
+    | 'board.habits_title'
+    | 'board.habits_subtitle'
+    | 'board.morning_ritual'
+    | 'board.deep_work'
+    | 'board.evening_wind_down'
+    | 'board.start'
     | 'nav.home'
     | 'nav.board'
     | 'nav.add'
@@ -105,7 +131,34 @@ export const translations = {
         },
         calendar: {
             new_event: 'New Event',
-            today: 'Today'
+            today: 'Today',
+            schedule_event: 'Schedule Event',
+            edit_event: 'Edit Event',
+            modify_existing: 'Modify existing plan.',
+            plan_effectively: 'Plan your time effectively. Remember to align with your energy.',
+            title: 'Title',
+            placeholder_title: 'e.g., Deep Work Project X',
+            start_time: 'Start Time',
+            end_time: 'End Time',
+            instant_action: 'Instant Action (no duration)',
+            event_type: 'Event Type',
+            energy_required: 'Energy Required',
+            recurrence: 'Recurrence',
+            location: 'Location',
+            placeholder_location: 'e.g., Home, Office, Zoom',
+            description: 'Description (Optional)',
+            placeholder_description: 'Add details, links, or sub-tasks...',
+            save: 'Save Changes',
+            schedule: 'Schedule',
+            cancel: 'Cancel',
+            delete: 'Delete Event',
+            recurrence_options: {
+                none: 'None',
+                daily: 'Daily',
+                interdaily: 'Interdaily (Every 2 days)',
+                weekly: 'Weekly',
+                monthly: 'Monthly'
+            }
         },
         daily: {
             morning: {
@@ -211,7 +264,33 @@ export const translations = {
         },
         board: {
             title: 'Execution Board',
-            start_daily: 'Start Daily Execution'
+            start_daily: 'Start Daily Execution',
+            vision_identity: 'Vision & Identity',
+            emotional_anchor: 'Your emotional anchor',
+            future_vision: 'Fixed Future Vision (90 Days)',
+            mantra: 'Your Mantra',
+            the_goal: 'The Goal',
+            success_description: 'What success looks like',
+            smart_goal: 'SMART Goal',
+            deadline: 'Deadline',
+            kpi: 'KPI',
+            target_by: 'Target by',
+            execution_plan: 'Execution Plan',
+            weekly_sprints: 'Weekly Sprints & Daily Actions',
+            weekly_theme: 'Weekly Theme',
+            milestone: 'Milestone',
+            day_abbr: 'D',
+            obstacles_title: 'Anticipated Obstacles',
+            obstacles_subtitle: 'Proactive If-Then Planning',
+            no_obstacles: 'No obstacles anticipated yet. Good luck!',
+            if: 'IF',
+            then: 'THEN I WILL...',
+            habits_title: 'Daily Habits',
+            habits_subtitle: 'Automating Excellence with Routines',
+            morning_ritual: 'Morning Ritual',
+            deep_work: 'Deep Work',
+            evening_wind_down: 'Evening Wind-down',
+            start: 'Start'
         },
         energy: {
             peak: 'PEAK',
@@ -261,7 +340,34 @@ export const translations = {
         },
         calendar: {
             new_event: 'Nuevo Evento',
-            today: 'Hoy'
+            today: 'Hoy',
+            schedule_event: 'Programar Evento',
+            edit_event: 'Editar Evento',
+            modify_existing: 'Modificar plan existente.',
+            plan_effectively: 'Planifica tu tiempo efectivamente. Recuerda alinearte con tu energía.',
+            title: 'Título',
+            placeholder_title: 'ej. Trabajo Profundo: Proyecto X',
+            start_time: 'Hora de Inicio',
+            end_time: 'Hora de Fin',
+            instant_action: 'Acción Instantánea (sin duración)',
+            event_type: 'Tipo de Evento',
+            energy_required: 'Energía Requerida',
+            recurrence: 'Recurrencia',
+            location: 'Ubicación',
+            placeholder_location: 'ej. Casa, Oficina, Zoom',
+            description: 'Descripción (Opcional)',
+            placeholder_description: 'Añade detalles, links o sub-tareas...',
+            save: 'Guardar cambios',
+            schedule: 'Programar',
+            cancel: 'Cancelar',
+            delete: 'Eliminar Evento',
+            recurrence_options: {
+                none: 'Ninguna',
+                daily: 'Diario',
+                interdaily: 'Interdiario (Cada 2 días)',
+                weekly: 'Semanalmente',
+                monthly: 'Mensualmente'
+            }
         },
         daily: {
             morning: {
@@ -367,7 +473,33 @@ export const translations = {
         },
         board: {
             title: 'Tablero de Ejecución',
-            start_daily: 'Comenzar Ejecución Diaria'
+            start_daily: 'Comenzar Ejecución Diaria',
+            vision_identity: 'Visión e Identidad',
+            emotional_anchor: 'Tu anclaje emocional',
+            future_vision: 'Visión Futura Fija (90 Días)',
+            mantra: 'Tu Mantra',
+            the_goal: 'La Meta',
+            success_description: 'Cómo se ve el éxito',
+            smart_goal: 'Meta SMART',
+            deadline: 'Fecha Límite',
+            kpi: 'KPI',
+            target_by: 'Objetivo para',
+            execution_plan: 'Plan de Ejecución',
+            weekly_sprints: 'Sprints Semanales y Acciones Diarias',
+            weekly_theme: 'Tema Semanal',
+            milestone: 'Hito',
+            day_abbr: 'D',
+            obstacles_title: 'Obstáculos Anticipados',
+            obstacles_subtitle: 'Capa de Escudo y Estrategia',
+            no_obstacles: 'Aún no hay obstáculos anticipados. ¡Buena suerte!',
+            if: 'SI',
+            then: 'ENTONCES HARÉ...',
+            habits_title: 'Hábitos Diarios',
+            habits_subtitle: 'Automatizando la Excelencia con Rutinas',
+            morning_ritual: 'Ritual Mañanero',
+            deep_work: 'Trabajo Profundo',
+            evening_wind_down: 'Cierre del Día',
+            start: 'Inicio'
         },
         energy: {
             peak: 'CIMA',
@@ -375,4 +507,5 @@ export const translations = {
         }
     }
 }
+
 

@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { ShieldAlert, ArrowRight, AlertTriangle } from "lucide-react"
 import { ObstacleLayer } from "@/lib/types"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 interface ObstaclesSectionProps {
     obstacles: ObstacleLayer
@@ -10,6 +11,7 @@ interface ObstaclesSectionProps {
 }
 
 export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps) {
+    const { t } = useLanguage()
     // Defensive check for missing data
     const plans = obstacles?.plans || [];
 
@@ -22,8 +24,8 @@ export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps
                         <ShieldAlert className="h-6 w-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight">Anticipated Obstacles</h2>
-                        <p className="text-sm text-muted-foreground">Proactive If-Then Planning</p>
+                        <h2 className="text-2xl font-bold tracking-tight">{t('board.obstacles_title')}</h2>
+                        <p className="text-sm text-muted-foreground">{t('board.obstacles_subtitle')}</p>
                     </div>
                 </div>
             </div>
@@ -31,7 +33,7 @@ export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps
             <CardContent className="p-6 grid gap-4">
                 {plans.length === 0 ? (
                     <div className="text-center p-8 text-muted-foreground italic">
-                        No obstacles anticipated yet. Good luck!
+                        {t('board.no_obstacles')}
                     </div>
                 ) : (
                     plans.map((plan, idx) => (
@@ -39,14 +41,14 @@ export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps
                             <div className="flex items-start gap-3">
                                 <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
                                 <div>
-                                    <h4 className="font-bold text-foreground">IF {plan.if}</h4>
+                                    <h4 className="font-bold text-foreground">{t('board.if')} {plan.if}</h4>
                                 </div>
                             </div>
 
                             <div className="pl-8 space-y-2">
                                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-green-600 dark:text-green-400">
                                     <ArrowRight className="h-4 w-4" />
-                                    THEN I WILL...
+                                    {t('board.then')}
                                 </div>
                                 <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2 bg-secondary/30 p-3 rounded-lg">
                                     {plan.then.map((action, i) => (
@@ -61,3 +63,4 @@ export function ObstaclesSection({ obstacles, isEditing }: ObstaclesSectionProps
         </Card>
     )
 }
+
