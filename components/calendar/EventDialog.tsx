@@ -9,8 +9,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CalendarEvent, EventType, EVENT_COLORS, RecurrenceFrequency } from "@/lib/calendar/types"
 import { useCalendarStore } from "@/lib/store/calendar-store"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 import { format } from "date-fns"
-import { Trash2, MapPin, RefreshCw, Zap } from "lucide-react"
+import { Trash2, MapPin, RefreshCw } from "lucide-react"
 
 interface EventDialogProps {
     isOpen: boolean
@@ -21,6 +22,7 @@ interface EventDialogProps {
 
 export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: EventDialogProps) {
     const { addEvent, updateEvent, deleteEvent } = useCalendarStore()
+    const { t } = useLanguage()
 
     const [formData, setFormData] = useState({
         title: "",
@@ -110,27 +112,27 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>{isNew ? "Schedule Event" : "Edit Event"}</DialogTitle>
+                    <DialogTitle>{isNew ? t('calendar.schedule_event') : t('calendar.edit_event')}</DialogTitle>
                     <DialogDescription>
-                        {isNew ? "Plan your time effectively. Remember to align with your energy." : "Modify existing plan."}
+                        {isNew ? t('calendar.plan_effectively') : t('calendar.modify_existing')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="title">Title</Label>
+                        <Label htmlFor="title">{t('calendar.title')}</Label>
                         <Input
                             id="title"
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            placeholder="e.g., Deep Work Project X"
+                            placeholder={t('calendar.placeholder_title')}
                             autoFocus
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="start">Start Time</Label>
+                            <Label htmlFor="start">{t('calendar.start_time')}</Label>
                             <Input
                                 id="start"
                                 type="datetime-local"
@@ -139,7 +141,7 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
                             />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="end">End Time</Label>
+                            <Label htmlFor="end">{t('calendar.end_time')}</Label>
                             <Input
                                 id="end"
                                 type="datetime-local"
@@ -165,14 +167,14 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
                             }}
                             className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
-                        <Label htmlFor="isInstant" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Instant Action (no duration)
+                        <Label htmlFor="isInstant" className="text-sm font-medium leading-none">
+                            {t('calendar.instant_action')}
                         </Label>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="type">Event Type</Label>
+                            <Label htmlFor="type">{t('calendar.event_type')}</Label>
                             <Select
                                 value={formData.type}
                                 onValueChange={(val) => setFormData({ ...formData, type: val as EventType })}
@@ -191,7 +193,7 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="energy">Energy Required</Label>
+                            <Label htmlFor="energy">{t('calendar.energy_required')}</Label>
                             <Select
                                 value={formData.energyRequired}
                                 onValueChange={(val) => setFormData({ ...formData, energyRequired: val as any })}
@@ -210,7 +212,7 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="recurrence">Recurrence</Label>
+                            <Label htmlFor="recurrence">{t('calendar.recurrence')}</Label>
                             <Select
                                 value={formData.recurrenceFrequency}
                                 onValueChange={(val) => setFormData({ ...formData, recurrenceFrequency: val as any })}
@@ -219,47 +221,46 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
                                     <SelectValue placeholder="None" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="none">None</SelectItem>
-                                    <SelectItem value="daily">Daily</SelectItem>
-                                    <SelectItem value="interdaily">Interdaily (Every 2 days)</SelectItem>
-                                    <SelectItem value="weekly">Weekly</SelectItem>
-                                    <SelectItem value="monthly">Monthly</SelectItem>
+                                    <SelectItem value="none">{t('calendar.recurrence_options.none')}</SelectItem>
+                                    <SelectItem value="daily">{t('calendar.recurrence_options.daily')}</SelectItem>
+                                    <SelectItem value="interdaily">{t('calendar.recurrence_options.interdaily')}</SelectItem>
+                                    <SelectItem value="weekly">{t('calendar.recurrence_options.weekly')}</SelectItem>
+                                    <SelectItem value="monthly">{t('calendar.recurrence_options.monthly')}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="location">Location</Label>
+                            <Label htmlFor="location">{t('calendar.location')}</Label>
                             <Input
                                 id="location"
                                 value={formData.location}
                                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                placeholder="e.g., Home, Office, Zoom"
+                                placeholder={t('calendar.placeholder_location')}
                             />
                         </div>
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="desc">Description (Optional)</Label>
+                        <Label htmlFor="desc">{t('calendar.description')}</Label>
                         <Textarea
                             id="desc"
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            placeholder="Add details, links, or sub-tasks..."
+                            placeholder={t('calendar.placeholder_description')}
                         />
                     </div>
 
                     <DialogFooter className="flex justify-between items-center sm:justify-between">
-                        {isNew ? (
-                            <div /> // Spacer
-                        ) : (
-                            <Button type="button" variant="destructive" size="icon" onClick={handleDelete} title="Delete Event">
+                        {!isNew && (
+                            <Button type="button" variant="destructive" size="icon" onClick={handleDelete} title={t('calendar.delete')}>
                                 <Trash2 className="h-4 w-4" />
                             </Button>
                         )}
+                        <div className="flex-1" />
 
                         <div className="flex gap-2">
-                            <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-                            <Button type="submit">{isNew ? "Schedule" : "Save Changes"}</Button>
+                            <Button type="button" variant="outline" onClick={onClose}>{t('calendar.cancel')}</Button>
+                            <Button type="submit">{isNew ? t('calendar.schedule') : t('calendar.save')}</Button>
                         </div>
                     </DialogFooter>
                 </form>

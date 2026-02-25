@@ -209,7 +209,69 @@ export const translations = {
                 eveningCheckin: 'Evening Check-in',
                 dailyReflection: 'Daily Reflection (optional)',
                 reflectionPlaceholder: 'What went well? What could be improved? Any insights?',
-                saveCheckin: 'Save Check-in'
+                saveCheckin: 'Save Check-in',
+                scorecard: {
+                    title: "Today's Scorecard",
+                    subtitle: 'Review what you accomplished',
+                    completed: 'Completed',
+                    incomplete: "Didn't Finish",
+                    crushed_it: 'Your ONE Thing - Crushed it! ⭐',
+                    no_worries: "No worries - we'll handle this in a moment.",
+                    actions_done: 'Actions Done',
+                    week: 'Week',
+                    streak: 'Streak',
+                    continue: 'Continue'
+                },
+                reflection_step: {
+                    title: 'Capture today in one sentence',
+                    subtitle: 'Optional. What did you learn? What surprised you?',
+                    placeholder: 'Example: Investor deck took longer but I\'m happy with the result...',
+                    save: 'Save & Close Day',
+                    skip: 'Skip'
+                },
+                insights: {
+                    loading_title: 'Connecting to AI Neural Net...',
+                    loading_subtitle: 'Analyzing mood • Processing reflection • Generating strategy',
+                    your_insights: 'Your AI Insights',
+                    why_happened: 'Why it happened',
+                    suggestion_title: 'Actionable Suggestion',
+                    error_msg: 'AI Service unavailable (Using offline mode)',
+                    fallback_title: 'Day Complete',
+                    fallback_pattern: 'You\'re consistently showing up.',
+                    fallback_reason: 'Data analysis unavailable, but your effort is recorded.',
+                    fallback_suggestion: 'Take some rest and prepare for tomorrow.',
+                    fallback_action: 'Continue'
+                },
+                tomorrow: {
+                    title: "Tomorrow's Preview 🌅",
+                    subtitle: 'Your brain can rest knowing this is handled.',
+                    moved_title: 'Moved from today (Don\'t worry about these)',
+                    rescheduled: 'Rescheduled for tomorrow afternoon',
+                    one_thing: "Tomorrow's One Thing",
+                    ready: "I'm Ready to Close"
+                },
+                closure: {
+                    title: 'TODAY IS COMPLETE',
+                    accomplished: 'You accomplished {count} actions today.',
+                    let_go: 'Tomorrow is planned. You can let go now.',
+                    sleep_mode: 'Enter Sleep Mode',
+                    no_notifications: 'No Notifications Until 7am'
+                }
+            },
+            oneThing: {
+                priority: 'Priority #1',
+                today: 'Today',
+                why_matters: 'Why This Matters',
+                start_deep_work: 'Start Deep Work',
+                schedule: 'Schedule',
+                later: 'Later',
+                recommended: 'Recommended',
+                peak_flow: 'for peak flow state',
+                work_type: 'Work'
+            },
+            other_actions: {
+                title: 'Other Actions',
+                queue: "Today's Queue"
             },
             todayExecution: "Today's Execution",
             dailyProgress: 'Daily Progress',
@@ -418,7 +480,69 @@ export const translations = {
                 eveningCheckin: 'Revisión Nocturna',
                 dailyReflection: 'Reflexión Diaria (opcional)',
                 reflectionPlaceholder: '¿Qué salió bien? ¿Qué podría mejorar? ¿Alguna idea?',
-                saveCheckin: 'Guardar Revisión'
+                saveCheckin: 'Guardar Revisión',
+                scorecard: {
+                    title: 'Puntuación de Hoy',
+                    subtitle: 'Revisa lo que lograste',
+                    completed: 'Completado',
+                    incomplete: 'No Terminado',
+                    crushed_it: '¡Destrozaste tu Cosa #1! ⭐',
+                    no_worries: 'No te preocupes, lo manejaremos en un momento.',
+                    actions_done: 'Acciones Listas',
+                    week: 'Semana',
+                    streak: 'Racha',
+                    continue: 'Continuar'
+                },
+                reflection_step: {
+                    title: 'Captura hoy en una frase',
+                    subtitle: 'Opcional. ¿Qué aprendiste? ¿Qué te sorprendió?',
+                    placeholder: 'Ej: El diseño tomó más tiempo pero estoy feliz con el resultado...',
+                    save: 'Guardar y Cerrar Día',
+                    skip: 'Saltar'
+                },
+                insights: {
+                    loading_title: 'Conectando con la Red Neuronal IA...',
+                    loading_subtitle: 'Analizando humor • Procesando reflexión • Generando estrategia',
+                    your_insights: 'Tus Insights de IA',
+                    why_happened: 'Por qué sucedió',
+                    suggestion_title: 'Sugerencia Accionable',
+                    error_msg: 'Servicio de IA no disponible (Usando modo offline)',
+                    fallback_title: 'Día Completado',
+                    fallback_pattern: 'Estás apareciendo consistentemente.',
+                    fallback_reason: 'Análisis de datos no disponible, pero tu esfuerzo está registrado.',
+                    fallback_suggestion: 'Descansa y prepárate para mañana.',
+                    fallback_action: 'Continuar'
+                },
+                tomorrow: {
+                    title: 'Vista Previa de Mañana 🌅',
+                    subtitle: 'Tu cerebro puede descansar sabiendo que esto está bajo control.',
+                    moved_title: 'Movido de hoy (No te preocupes por esto)',
+                    rescheduled: 'Reprogramado para mañana por la tarde',
+                    one_thing: 'Cosa #1 de Mañana',
+                    ready: 'Estoy Listo para Cerrar'
+                },
+                closure: {
+                    title: 'EL DÍA HA TERMINADO',
+                    accomplished: 'Lograste {count} acciones hoy.',
+                    let_go: 'Mañana está planeado. Puedes soltar ahora.',
+                    sleep_mode: 'Entrar en Modo Sueño',
+                    no_notifications: 'Sin notificaciones hasta las 7 am'
+                }
+            },
+            oneThing: {
+                priority: 'Prioridad #1',
+                today: 'Hoy',
+                why_matters: 'Por Qué Esto Importa',
+                start_deep_work: 'Iniciar Trabajo Profundo',
+                schedule: 'Programar',
+                later: 'Luego',
+                recommended: 'Recomendado',
+                peak_flow: 'para el máximo estado de flujo',
+                work_type: 'Trabajo'
+            },
+            other_actions: {
+                title: 'Otras Acciones',
+                queue: 'Cola de Hoy'
             },
             todayExecution: 'Ejecución de Hoy',
             dailyProgress: 'Progreso Diario',

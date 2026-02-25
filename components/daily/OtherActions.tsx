@@ -4,9 +4,11 @@
 import { useDailyStore } from "@/lib/store/useDailyStore";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function OtherActions() {
     const { otherActions, completeAction } = useDailyStore();
+    const { t } = useLanguage();
 
     if (otherActions.length === 0) return null;
 
@@ -14,12 +16,12 @@ export default function OtherActions() {
         <div className="mt-8 rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-3">
-                    Other Actions
+                    {t('daily.other_actions.title') as string}
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-100 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 font-extrabold">
                         {otherActions.length}
                     </span>
                 </h3>
-                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Today's Queue</span>
+                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{t('daily.other_actions.queue') as string}</span>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -80,3 +82,4 @@ export default function OtherActions() {
         </div>
     );
 }
+

@@ -1,18 +1,22 @@
 
+"use client";
+
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface MoodSelectorProps {
     onSelect: (mood: number) => void;
 }
 
 export default function MoodSelector({ onSelect }: MoodSelectorProps) {
+    const { t } = useLanguage();
     const [selectedMood, setSelectedMood] = useState<number | null>(null);
 
     const moods = [
-        { value: 3, emoji: "😊", label: "Great" },
-        { value: 2, emoji: "😐", label: "OK" },
-        { value: 1, emoji: "😕", label: "Struggled" },
+        { value: 3, emoji: "😊", label: t('moods.great') },
+        { value: 2, emoji: "😐", label: t('moods.ok') },
+        { value: 1, emoji: "😕", label: t('moods.struggled') },
     ];
 
     const handleSelect = (value: number) => {
@@ -25,7 +29,7 @@ export default function MoodSelector({ onSelect }: MoodSelectorProps) {
 
     return (
         <div className="flex min-h-[50vh] flex-col items-center justify-center animate-in fade-in duration-500">
-            <h2 className="mb-12 text-3xl font-bold text-zinc-900 dark:text-white">How did today feel overall?</h2>
+            <h2 className="mb-12 text-3xl font-bold text-zinc-900 dark:text-white">{t('daily.evening.howWasDay') as string}</h2>
 
             <div className="flex w-full max-w-3xl flex-col gap-6 sm:flex-row sm:justify-center">
                 {moods.map((m) => {
@@ -65,3 +69,4 @@ export default function MoodSelector({ onSelect }: MoodSelectorProps) {
         </div>
     );
 }
+

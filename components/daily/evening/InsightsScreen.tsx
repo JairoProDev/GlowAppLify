@@ -1,7 +1,10 @@
 
+"use client"
+
 import { useState, useEffect } from "react";
 import { useDailyStore } from "@/lib/store/useDailyStore";
 import { ArrowRight, BrainCircuit, Sparkles, Clock, Lightbulb, AlertTriangle } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface InsightsScreenProps {
     onContinue: () => void;
@@ -16,6 +19,7 @@ interface AIInsightResponse {
 }
 
 export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(true);
     const [insightContent, setInsightContent] = useState<AIInsightResponse | null>(null);
     const [error, setError] = useState(false);
@@ -58,11 +62,11 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
                     setLoading(false);
                     // Fallback content to ensure flow doesn't break
                     setInsightContent({
-                        title: "Day Complete",
-                        pattern: "You're consistently showing up.",
-                        reason: "Data analysis unavailable, but your effort is recorded.",
-                        suggestion: "Take some rest and prepare for tomorrow.",
-                        actionLabel: "Continue"
+                        title: t('daily.evening.insights.fallback_title'),
+                        pattern: t('daily.evening.insights.fallback_pattern'),
+                        reason: t('daily.evening.insights.fallback_reason'),
+                        suggestion: t('daily.evening.insights.fallback_suggestion'),
+                        actionLabel: t('daily.evening.insights.fallback_action')
                     });
                 }
             }
@@ -76,7 +80,7 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
         });
 
         return () => { mounted = false; };
-    }, [eveningData.mood, eveningData.reflection, oneThing, otherActions]);
+    }, [eveningData.mood, eveningData.reflection, oneThing, otherActions, t]);
 
     if (loading) {
         return (
@@ -87,8 +91,8 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
                         <BrainCircuit className="h-10 w-10 animate-pulse" />
                     </div>
                 </div>
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Connecting to AI Neural Net...</h2>
-                <p className="mt-2 text-zinc-500 animate-pulse">Analyzing mood • Processing reflection • Generating strategy</p>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">{t('daily.evening.insights.loading_title') as string}</h2>
+                <p className="mt-2 text-zinc-500 animate-pulse">{t('daily.evening.insights.loading_subtitle') as string}</p>
             </div>
         );
     }
@@ -99,7 +103,7 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
         <div className="mx-auto w-full max-w-2xl animate-in slide-in-from-bottom-8 fade-in duration-500">
             <div className="mb-6 flex items-center justify-center gap-2">
                 <Sparkles className="h-5 w-5 text-indigo-500" />
-                <span className="text-sm font-bold uppercase tracking-widest text-indigo-500">Your AI Insights</span>
+                <span className="text-sm font-bold uppercase tracking-widest text-indigo-500">{t('daily.evening.insights.your_insights') as string}</span>
             </div>
 
             <div className="overflow-hidden rounded-3xl bg-white shadow-xl shadow-indigo-500/10 ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
@@ -115,7 +119,7 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
                             <Clock className="h-6 w-6 text-zinc-400" />
                         </div>
                         <div>
-                            <h3 className="font-bold text-zinc-900 dark:text-white">Why it happened</h3>
+                            <h3 className="font-bold text-zinc-900 dark:text-white">{t('daily.evening.insights.why_happened') as string}</h3>
                             <p className="text-zinc-500 dark:text-zinc-400">{insightContent.reason}</p>
                         </div>
                     </div>
@@ -127,7 +131,7 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
                                 <Lightbulb className="h-6 w-6 text-amber-500" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-amber-900 dark:text-amber-100">Actionable Suggestion</h3>
+                                <h3 className="font-bold text-amber-900 dark:text-amber-100">{t('daily.evening.insights.suggestion_title') as string}</h3>
                                 <p className="text-amber-800/80 dark:text-amber-200/70">{insightContent.suggestion}</p>
                             </div>
                         </div>
@@ -148,9 +152,10 @@ export default function InsightsScreen({ onContinue }: InsightsScreenProps) {
             {error && (
                 <div className="mt-4 flex items-center justify-center gap-2 text-sm text-yellow-600 dark:text-yellow-500">
                     <AlertTriangle size={16} />
-                    <span>AI Service unavailable (Using offline mode)</span>
+                    <span>{t('daily.evening.insights.error_msg') as string}</span>
                 </div>
             )}
         </div>
     );
 }
+

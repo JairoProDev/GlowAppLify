@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils"
 import { useUIStore } from "@/lib/store/ui-store"
 
 import { ThemeLanguageToggle } from "@/components/ThemeLanguageToggle"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
+import { addMonths, subMonths } from "date-fns"
 
 interface CalendarHeaderProps {
     currentDate: Date
@@ -19,16 +21,18 @@ interface CalendarHeaderProps {
 
 export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, onNewEvent }: CalendarHeaderProps) {
     const { toggleAICoach } = useUIStore()
+    const { t } = useLanguage()
 
     const handlePrev = () => {
         if (view === 'day') onDateChange(subDays(currentDate, 1))
         else if (view === 'week') onDateChange(subWeeks(currentDate, 1))
-        // Month logic can be added later
+        else if (view === 'month') onDateChange(subMonths(currentDate, 1))
     }
 
     const handleNext = () => {
         if (view === 'day') onDateChange(addDays(currentDate, 1))
         else if (view === 'week') onDateChange(addWeeks(currentDate, 1))
+        else if (view === 'month') onDateChange(addMonths(currentDate, 1))
     }
 
     const handleToday = () => onDateChange(new Date())
@@ -45,7 +49,7 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
                         <Button variant="ghost" size="icon" onClick={handlePrev} className="h-8 w-8 hover:bg-muted transition-colors">
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <span className="font-semibold text-lg min-w-[140px] text-center">
+                        <span className="font-semibold text-lg min-w-[140px] text-center capitalize">
                             {format(currentDate, "MMMM yyyy")}
                         </span>
                         <Button variant="ghost" size="icon" onClick={handleNext} className="h-8 w-8 hover:bg-muted transition-colors">
@@ -53,7 +57,7 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
                         </Button>
                     </div>
                     <Button variant="outline" size="sm" onClick={handleToday} className="ml-2 h-7 text-xs font-medium">
-                        Today
+                        {t('calendar.today')}
                     </Button>
                 </div>
 
@@ -70,7 +74,7 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
                                         : "text-muted-foreground hover:text-foreground"
                                 )}
                             >
-                                {v.charAt(0).toUpperCase() + v.slice(1)}
+                                {v === 'day' ? t('common.dailyView').replace(' View', '') : v.charAt(0).toUpperCase() + v.slice(1)}
                             </button>
                         ))}
                     </div>
@@ -96,7 +100,7 @@ export function CalendarHeader({ currentDate, onDateChange, view, onViewChange, 
                         onClick={onNewEvent}
                     >
                         <Plus className="h-4 w-4" />
-                        <span className="hidden sm:inline">New Event</span>
+                        <span className="hidden sm:inline">{t('calendar.new_event')}</span>
                     </Button>
                 </div>
             </div>
