@@ -36,6 +36,18 @@ export const dashboardContent = {
             journal: "Diario",
             aiCoach: "Coach IA",
         },
+        goals: {
+            title: "Meta Táctica de 90 Días",
+            due: "Vence",
+            progress: "Progreso Total",
+            notFound: "Sin meta establecida. Genera tu tablero para comenzar.",
+        },
+        habits: {
+            title: "Hábitos Diarios",
+            morning: "Mañana",
+            deepWork: "Trabajo Profundo",
+            evening: "Noche",
+        },
         pendingTasks: {
             title: "Tareas Pendientes",
             remaining: "tareas restantes",
@@ -141,6 +153,18 @@ export const dashboardContent = {
             calendar: "Calendar",
             journal: "Journal",
             aiCoach: "AI Coach",
+        },
+        goals: {
+            title: "90-Day Tactical Goal",
+            due: "Due",
+            progress: "Overall Progress",
+            notFound: "No goal set. Generate your board to start.",
+        },
+        habits: {
+            title: "Daily Habits",
+            morning: "Morning",
+            deepWork: "Deep Work",
+            evening: "Evening",
         },
         pendingTasks: {
             title: "Pending Tasks",

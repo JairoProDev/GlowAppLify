@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Note } from "@/lib/store/note-store"
 import { useEffect, useState } from "react"
-import { useDebounce } from "@/hooks/use-debounce"
 
 interface NoteEditorProps {
     note: Note
