@@ -14,6 +14,7 @@ export interface Routine {
     type: 'morning' | 'evening' | 'custom';
     steps: RoutineStep[];
     active?: boolean;
+    completedDates?: string[];
 }
 
 interface RoutineState {

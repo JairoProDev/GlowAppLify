@@ -20,7 +20,8 @@ interface Message {
 
 export function ChatInterface() {
     // Get context from stores
-    const { oneThing, streak } = useDailyStore()
+    const { oneThing } = useDailyStore()
+    const streak = useDailyStore(state => state.user.streak)
     const tasks = useTaskStore(state => state.tasks)
     const entries = useJournalStore(state => state.entries)
 

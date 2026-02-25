@@ -7,42 +7,42 @@ import { Zap, Trophy, TrendingUp, CheckCircle2, Target, Flame } from "lucide-rea
 import { useTaskStore } from "@/lib/store/task-store"
 import { useJournalStore } from "@/lib/store/journal-store"
 import { useDailyStore } from "@/lib/store/useDailyStore"
-import { useRoutineStore } from "@/lib/store/routine-store"
+import { useRoutineStore, Routine } from "@/lib/store/routine-store"
 import { useMemo } from "react"
 import { startOfWeek, subWeeks, isAfter } from "date-fns"
 
 export default function AnalyticsPage() {
-    const tasks = useTaskStore(state => state.tasks)
-    const entries = useJournalStore(state => state.entries)
-    const { streak } = useDailyStore()
-    const routines = useRoutineStore(state => state.routines)
+    const tasks = useTaskStore((state) => state.tasks)
+    const entries = useJournalStore((state) => state.entries)
+    const streak = useDailyStore((state) => state.user.streak)
+    const routines = useRoutineStore((state) => state.routines)
 
     // Calculate real analytics
     const analytics = useMemo(() => {
         // Task completion metrics
-        const completedTasks = tasks.filter(t => t.status === 'done')
+        const completedTasks = tasks.filter((t): t is any => t.status === 'done')
         const totalTasks = tasks.length
         const completionRate = totalTasks > 0 ? Math.round((completedTasks.length / totalTasks) * 100) : 0
 
         // Tasks completed in the last 7 days
         const oneWeekAgo = subWeeks(new Date(), 1)
-        const recentTasks = completedTasks.filter(t => {
+        const recentTasks = completedTasks.filter((t: any) => {
             if (!t.completedAt) return false
             return isAfter(new Date(t.completedAt), oneWeekAgo)
         })
         const tasksPerDay = recentTasks.length > 0 ? (recentTasks.length / 7).toFixed(1) : 0
 
         // Average energy from journal entries
-        const recentEntries = entries.filter(e => isAfter(new Date(e.date), oneWeekAgo))
+        const recentEntries = entries.filter((e: any) => isAfter(new Date(e.date), oneWeekAgo))
         const avgEnergy = recentEntries.length > 0
-            ? (recentEntries.reduce((sum, e) => sum + e.mood, 0) / recentEntries.length).toFixed(1)
+            ? Number((recentEntries.reduce((sum: number, e: any) => sum + e.mood, 0) / recentEntries.length).toFixed(1))
             : 0
 
         // Routine completion rate
-        const morningRoutine = routines.find(r => r.id === 'morning-1')
-        const eveningRoutine = routines.find(r => r.id === 'evening-1')
-        const routineCompletionCount = [morningRoutine, eveningRoutine]
-            .filter(r => r?.completedDates && r.completedDates.length > 0)
+        const morningRoutine = routines.find((r: any) => r.id === 'morning-1')
+        const eveningRoutine = routines.find((r: any) => r.id === 'evening-1')
+        const routineCompletionCount = ([morningRoutine, eveningRoutine]
+            .filter((r): r is Routine => !!r && !!r.completedDates && r.completedDates.length > 0) as Routine[])
             .reduce((sum, r) => sum + (r.completedDates?.length || 0), 0)
 
         return {

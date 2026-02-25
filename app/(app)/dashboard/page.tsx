@@ -16,7 +16,8 @@ import { useLanguage } from "@/lib/i18n/LanguageContext"
 import { dashboardContent } from "@/lib/i18n/dashboardContent"
 
 export default function DashboardPage() {
-    const { oneThing, otherActions, streak } = useDailyStore()
+    const { oneThing, otherActions } = useDailyStore()
+    const streak = useDailyStore(state => state.user.streak)
     const tasks = useTaskStore(state => state.tasks)
     const routines = useRoutineStore(state => state.routines)
     const notes = useNoteStore(state => state.notes)
