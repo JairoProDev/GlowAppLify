@@ -1,8 +1,11 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { Week } from '@/lib/types'; // Base Week type
 import { CheckCircle, Circle, Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface WeeklyDeepDiveProps {
     weeks: Week[];
@@ -10,6 +13,7 @@ interface WeeklyDeepDiveProps {
 }
 
 export const WeeklyDeepDive: React.FC<WeeklyDeepDiveProps> = ({ weeks, currentWeekNumber }) => {
+    const { t } = useLanguage();
     const [expandedWeek, setExpandedWeek] = useState<number>(currentWeekNumber);
 
     const toggleWeek = (weekNum: number) => {
@@ -22,7 +26,7 @@ export const WeeklyDeepDive: React.FC<WeeklyDeepDiveProps> = ({ weeks, currentWe
 
     return (
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Week by Week Breakdown</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('analytics.week_breakdown') as string}</h2>
 
             {weeks.map((week) => {
                 const isPast = week.weekNumber < currentWeekNumber;
@@ -56,16 +60,16 @@ export const WeeklyDeepDive: React.FC<WeeklyDeepDiveProps> = ({ weeks, currentWe
                                         isCurrent ? "text-blue-600 dark:text-blue-400" :
                                             isPast ? "text-green-600 dark:text-green-400" : "text-gray-400"
                                     )}>
-                                        Week {week.weekNumber}
+                                        {t('analytics.week_label' as string)} {week.weekNumber}
                                     </span>
-                                    {isCurrent && <span className="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full font-bold">CURRENT</span>}
-                                    {isPast && <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">COMPLETE</span>}
+                                    {isCurrent && <span className="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full font-bold">{t('analytics.current_status' as string)}</span>}
+                                    {isPast && <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">{t('analytics.complete_status_label' as string)}</span>}
                                 </div>
                                 <h3 className={cn("font-bold text-lg", isLocked ? "text-gray-400" : "text-gray-900 dark:text-white")}>
                                     {week.theme}
                                 </h3>
                                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                    {isLocked ? "Complete previous week to unlock" : `Milestone: ${week.milestone}`}
+                                    {isLocked ? t('analytics.unlock_previous') : (t('analytics.milestone_prefix') as string).replace('{milestone}', week.milestone)}
                                 </p>
                             </div>
 
@@ -113,13 +117,13 @@ export const WeeklyDeepDive: React.FC<WeeklyDeepDiveProps> = ({ weeks, currentWe
 
                                 <div className="pt-3 mt-3 border-t border-gray-100 dark:border-zinc-800 flex justify-between items-center">
                                     <span className="text-xs font-medium text-gray-500">
-                                        Estimated completion: {isCurrent ? 'Friday' : '-'}
+                                        {(t('analytics.est_completion') as string).replace('{day}', isCurrent ? 'Friday' : '-')}
                                     </span>
                                     <span className={cn(
                                         "text-xs font-bold px-2 py-1 rounded",
                                         isCurrent || isPast ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
                                     )}>
-                                        {isCurrent ? 'ON TRACK ✓' : isPast ? 'COMPLETED' : 'LOCKED'}
+                                        {isCurrent ? t('analytics.on_track') : isPast ? t('analytics.complete_status_label') : t('analytics.locked_status')}
                                     </span>
                                 </div>
                             </div>
@@ -130,3 +134,4 @@ export const WeeklyDeepDive: React.FC<WeeklyDeepDiveProps> = ({ weeks, currentWe
         </div>
     );
 };
+

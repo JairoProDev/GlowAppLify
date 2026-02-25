@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { ProgressOverview } from './ProgressOverview';
 import { WeeklyDeepDive } from './WeeklyDeepDive';
@@ -10,6 +12,7 @@ import { useDailyStore } from '@/lib/store/useDailyStore'; // Assuming we can ge
 import { LayoutDashboard, List, Lightbulb, Flag, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Week } from '@/lib/types';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 type Tab = 'overview' | 'breakdown' | 'insights' | 'milestones';
 
@@ -18,6 +21,7 @@ export const AnalyticsView: React.FC = () => {
     // but preferably valid types.
     // For now we'll rely on the mock service completely for data.
 
+    const { t } = useLanguage();
     const [data, setData] = useState<AnalyticsOverview | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -62,12 +66,12 @@ export const AnalyticsView: React.FC = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh]">
                 <Loader2 className="h-10 w-10 text-blue-500 animate-spin mb-4" />
-                <p className="text-gray-500 font-medium">Analyzing your progress...</p>
+                <p className="text-gray-500 font-medium">{t('analytics.analyzing') as string}</p>
             </div>
         );
     }
 
-    if (!data) return <div>Failed to load data</div>;
+    if (!data) return <div className="p-8 text-center text-muted-foreground">{t('analytics.failed') as string}</div>;
 
     // Mock weeks for WeeklyDeepDive from the data we just created/fetched
     // Using the dummyBoard structure logic inside getAnalyticsData
@@ -96,25 +100,25 @@ export const AnalyticsView: React.FC = () => {
                     active={activeTab === 'overview'}
                     onClick={() => setActiveTab('overview')}
                     icon={<LayoutDashboard size={18} />}
-                    label="Overview"
+                    label={t('analytics.overview') as string}
                 />
                 <TabButton
                     active={activeTab === 'breakdown'}
                     onClick={() => setActiveTab('breakdown')}
                     icon={<List size={18} />}
-                    label="Weeks"
+                    label={t('analytics.weeks') as string}
                 />
                 <TabButton
                     active={activeTab === 'insights'}
                     onClick={() => setActiveTab('insights')}
                     icon={<Lightbulb size={18} />}
-                    label="Insights"
+                    label={t('analytics.insights') as string}
                 />
                 <TabButton
                     active={activeTab === 'milestones'}
                     onClick={() => setActiveTab('milestones')}
                     icon={<Flag size={18} />}
-                    label="Milestones"
+                    label={t('analytics.milestones') as string}
                 />
             </div>
 
@@ -144,7 +148,7 @@ export const AnalyticsView: React.FC = () => {
                             onClick={() => setShowCelebration(true)}
                             className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg hover:bg-blue-700 transition"
                         >
-                            Demo Celebration Animation
+                            {t('analytics.demo_celebration') as string}
                         </button>
                     </div>
                 )}
@@ -168,3 +172,4 @@ const TabButton = ({ active, onClick, icon, label }: { active: boolean, onClick:
         <span>{label}</span>
     </button>
 );
+

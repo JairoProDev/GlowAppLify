@@ -1,21 +1,26 @@
 
+"use client";
+
 import React from 'react';
 import { Insight } from '@/lib/types/analytics';
 import { Brain, TrendingUp, Zap, Calendar, ArrowRight } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface InsightsTabProps {
     insights: Insight[];
 }
 
 export const InsightsTab: React.FC<InsightsTabProps> = ({ insights }) => {
+    const { t } = useLanguage();
+
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700">
             <div className="bg-purple-50 dark:bg-purple-900/10 p-4 rounded-2xl border border-purple-100 dark:border-purple-900/50 flex items-start gap-3">
                 <BrainClassName className="text-purple-600 mt-1 flex-shrink-0" size={24} />
                 <div>
-                    <h3 className="font-bold text-purple-900 dark:text-purple-100">AI Insights</h3>
+                    <h3 className="font-bold text-purple-900 dark:text-purple-100">{t('analytics.ai_insights') as string}</h3>
                     <p className="text-sm text-purple-700 dark:text-purple-300">
-                        Analysis based on your last 7 days of activity. Updates daily at midnight.
+                        {t('analytics.analysis_7d') as string}
                     </p>
                 </div>
             </div>
@@ -29,19 +34,19 @@ export const InsightsTab: React.FC<InsightsTabProps> = ({ insights }) => {
             {/* Trends Summary */}
             <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800">
                 <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    <TrendingUp className="text-blue-500" /> Your Trends
+                    <TrendingUp className="text-blue-500" /> {t('analytics.your_trends') as string}
                 </h3>
                 <div className="grid gap-4 text-sm">
                     <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-zinc-800 rounded-xl">
-                        <span className="text-gray-600 dark:text-gray-400">Completion rate</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('analytics.completion_rate') as string}</span>
                         <span className="font-bold text-green-600">67% → 75% ↑</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-zinc-800 rounded-xl">
-                        <span className="text-gray-600 dark:text-gray-400">Avg time/action</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('analytics.avg_time') as string}</span>
                         <span className="font-bold text-gray-900 dark:text-white">1.5h (efficient)</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-zinc-800 rounded-xl">
-                        <span className="text-gray-600 dark:text-gray-400">Best day</span>
+                        <span className="text-gray-600 dark:text-gray-400">{t('analytics.best_day') as string}</span>
                         <span className="font-bold text-gray-900 dark:text-white">Tuesday (100%)</span>
                     </div>
                 </div>
@@ -55,6 +60,7 @@ const BrainClassName = ({ className, size }: { className?: string, size: number 
 )
 
 const InsightCard: React.FC<{ insight: Insight }> = ({ insight }) => {
+    const { t } = useLanguage();
     const isPattern = insight.type === 'pattern';
     const isPrediction = insight.type === 'prediction';
 
@@ -66,7 +72,7 @@ const InsightCard: React.FC<{ insight: Insight }> = ({ insight }) => {
                 {!isPattern && !isPrediction && <TrendingUp className="text-green-500" size={18} />}
 
                 <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                    {isPattern ? 'PATTERN DETECTED' : isPrediction ? 'PREDICTION' : 'RECOMMENDATION'}
+                    {isPattern ? t('analytics.pattern_detected') : isPrediction ? t('analytics.prediction') : t('analytics.recommendation')}
                 </span>
             </div>
 
@@ -102,21 +108,22 @@ const InsightCard: React.FC<{ insight: Insight }> = ({ insight }) => {
             )}
 
             <div className="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl">
-                <p className="text-sm font-bold text-blue-800 dark:text-blue-300 mb-2">💡 Suggestion:</p>
+                <p className="text-sm font-bold text-blue-800 dark:text-blue-300 mb-2">{t('analytics.suggestion_label') as string}</p>
                 <p className="text-sm text-blue-700 dark:text-blue-200 mb-3">
                     {insight.action}
                 </p>
                 {insight.canApplyAutomatically && (
                     <button className="flex items-center gap-2 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors">
-                        Apply Adjustment Automatically <ArrowRight size={14} />
+                        {t('analytics.apply_auto')} <ArrowRight size={14} />
                     </button>
                 )}
                 {!insight.canApplyAutomatically && (
                     <button className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
-                        Add Reminder
+                        {t('analytics.add_reminder')}
                     </button>
                 )}
             </div>
         </div>
     );
 };
+

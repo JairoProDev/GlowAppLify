@@ -7,10 +7,12 @@ import { useRoutineStore } from "@/lib/store/routine-store"
 import { useTaskStore } from "@/lib/store/task-store"
 import { useMemo } from "react"
 import { startOfDay, subDays, isSameDay, format } from "date-fns"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 export function HabitHeatmap() {
     const routines = useRoutineStore(state => state.routines)
     const tasks = useTaskStore(state => state.tasks)
+    const { t } = useLanguage()
 
     const heatmapData = useMemo(() => {
         const weeks = 12
@@ -62,9 +64,9 @@ export function HabitHeatmap() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Activity Consistency</CardTitle>
+                <CardTitle>{t('analytics.activity_consistency') as string}</CardTitle>
                 <p className="text-sm text-muted-foreground">
-                    Tasks and routines completed (last 12 weeks)
+                    {t('analytics.activity_desc') as string}
                 </p>
             </CardHeader>
             <CardContent>
@@ -84,7 +86,7 @@ export function HabitHeatmap() {
                                     <div
                                         key={d}
                                         className={cn("h-3 w-3 rounded-sm transition-colors cursor-pointer", colorClass)}
-                                        title={`${day.dateString}: ${day.activityCount} activities`}
+                                        title={`${day.dateString}: ${day.activityCount} ${t('analytics.activities_label')}`}
                                     />
                                 )
                             })}
@@ -92,16 +94,17 @@ export function HabitHeatmap() {
                     ))}
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground mt-4 justify-end">
-                    <span>Less</span>
+                    <span>{t('analytics.less') as string}</span>
                     <div className="flex gap-1">
                         <div className="h-3 w-3 bg-muted rounded-sm" />
                         <div className="h-3 w-3 bg-emerald-200 dark:bg-emerald-900 rounded-sm" />
                         <div className="h-3 w-3 bg-emerald-400 dark:bg-emerald-700 rounded-sm" />
                         <div className="h-3 w-3 bg-emerald-500 dark:bg-emerald-600 rounded-sm" />
                     </div>
-                    <span>More</span>
+                    <span>{t('analytics.more') as string}</span>
                 </div>
             </CardContent>
         </Card>
     )
 }
+

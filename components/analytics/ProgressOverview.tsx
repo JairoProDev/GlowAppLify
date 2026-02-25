@@ -1,8 +1,11 @@
 
+"use client";
+
 import React from 'react';
 import { AnalyticsOverview } from '@/lib/types/analytics';
 import { Target, Calendar, CheckCircle, Clock, TrendingUp, Trophy, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils'; // Assuming this utility exists
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface ProgressOverviewProps {
     data: AnalyticsOverview;
@@ -10,13 +13,15 @@ interface ProgressOverviewProps {
 }
 
 export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onViewDetails }) => {
+    const { t } = useLanguage();
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
             {/* Header Info */}
             <div className="flex justify-between items-end">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Your Progress</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{t('analytics.your_progress') as string}</h2>
                     <p className="text-gray-500 dark:text-gray-400">{data.currentDate}</p>
                 </div>
             </div>
@@ -28,7 +33,7 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onView
                         <Target size={20} />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white">90-Day Goal</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">{t('analytics.goal_90d') as string}</h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{data.goal}</p>
                     </div>
                 </div>
@@ -40,13 +45,13 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onView
                     >
                     </div>
                     <span className="absolute inset-0 flex items-center justify-center font-bold text-sm text-gray-700 dark:text-gray-300">
-                        {data.overallCompletionRate}% Complete
+                        {(t('analytics.complete_status') as string).replace('{percent}', data.overallCompletionRate.toString())}
                     </span>
                 </div>
 
                 <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                    <span>Week {data.currentWeek.weekNumber} of 12</span>
-                    <span>{data.daysActive} days in • {90 - data.daysActive} days to go</span>
+                    <span>{(t('analytics.week_of') as string).replace('{current}', data.currentWeek.weekNumber.toString()).replace('{total}', '12')}</span>
+                    <span>{(t('analytics.days_active') as string).replace('{days}', data.daysActive.toString()).replace('{remaining}', (90 - data.daysActive).toString())}</span>
                 </div>
             </div>
 
@@ -54,7 +59,9 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onView
             <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-100 dark:border-zinc-800 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Current Week: {data.currentWeek.theme}</h3>
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                            {(t('analytics.current_week') as string).replace('{theme}', data.currentWeek.theme)}
+                        </h3>
                         <div className="flex items-center gap-2 mt-1">
                             <div className="h-2 w-24 bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                                 <div className="h-full bg-blue-500 rounded-full" style={{ width: `${data.currentWeek.completionRate}%` }} />
@@ -63,7 +70,7 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onView
                         </div>
                     </div>
                     <div className="text-right">
-                        <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Milestone</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">{t('analytics.milestone_label') as string}</p>
                         <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{data.currentWeek.milestone}</p>
                     </div>
                 </div>
@@ -123,22 +130,22 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onView
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <StatCard
                     icon={<Flame className="text-orange-500" />}
-                    label="Streak"
-                    value={`${data.streak} Days`}
+                    label={t('analytics.streak') as string}
+                    value={`${data.streak} ${t('analytics.days')}`}
                 />
                 <StatCard
                     icon={<CheckCircle className="text-green-500" />}
-                    label="Completed"
+                    label={t('analytics.completed_label') as string}
                     value={`${data.totalActionsCompleted}/${data.totalActions}`}
                 />
                 <StatCard
                     icon={<Clock className="text-blue-500" />}
-                    label="Time Focused"
+                    label={t('analytics.time_focused') as string}
                     value="6.5h"
                 />
                 <StatCard
                     icon={<Target className="text-purple-500" />}
-                    label="Milestones"
+                    label={t('analytics.milestone_label') as string}
                     value="0/12"
                 />
             </div>
@@ -148,7 +155,7 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({ data, onView
                     onClick={onViewDetails}
                     className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors underline decoration-dotted"
                 >
-                    View Weekly Breakdown
+                    {t('analytics.view_breakdown') as string}
                 </button>
             </div>
 
@@ -163,3 +170,4 @@ const StatCard = ({ icon, label, value }: { icon: React.ReactNode, label: string
         <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">{label}</div>
     </div>
 );
+

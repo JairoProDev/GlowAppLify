@@ -1,8 +1,11 @@
 
+"use client";
+
 import { Moon, Check, ShieldCheck } from "lucide-react";
 import { useDailyStore } from "@/lib/store/useDailyStore";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface ClosureScreenProps {
     onComplete: () => void;
@@ -10,6 +13,7 @@ interface ClosureScreenProps {
 
 export default function ClosureScreen({ onComplete }: ClosureScreenProps) {
     const { oneThing, otherActions, user } = useDailyStore();
+    const { t } = useLanguage();
     const [closing, setClosing] = useState(false);
 
     const completedCount = [oneThing, ...otherActions].filter(a => a.completed).length;
@@ -32,12 +36,12 @@ export default function ClosureScreen({ onComplete }: ClosureScreenProps) {
             </div>
 
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                TODAY IS COMPLETE
+                {t('daily.evening.closure.title') as string}
             </h1>
 
             <div className="mb-12 max-w-sm space-y-2 text-zinc-500 dark:text-zinc-400">
-                <p>You accomplished {completedCount} actions today.</p>
-                <p>Tomorrow is planned. You can let go now.</p>
+                <p>{(t('daily.evening.closure.accomplished') as string).replace('{count}', completedCount.toString())}</p>
+                <p>{t('daily.evening.closure.let_go') as string}</p>
             </div>
 
             <button
@@ -46,13 +50,14 @@ export default function ClosureScreen({ onComplete }: ClosureScreenProps) {
                 className="group relative flex items-center gap-3 rounded-full bg-indigo-950 px-10 py-5 text-xl font-bold text-indigo-100 shadow-2xl shadow-indigo-900/50 transition-all hover:scale-105 hover:bg-indigo-900 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-zinc-900 dark:shadow-zinc-900/20"
             >
                 <Moon className="h-6 w-6 fill-current" />
-                Enter Sleep Mode
+                {t('daily.evening.closure.sleep_mode') as string}
             </button>
 
             <div className="mt-8 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400">
                 <ShieldCheck className="h-4 w-4" />
-                No Notifications Until 7am
+                {t('daily.evening.closure.no_notifications') as string}
             </div>
         </div>
     );
 }
+

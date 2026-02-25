@@ -10,10 +10,12 @@ import DeepWorkView from "@/components/daily/DeepWorkView";
 import CelebrationView from "@/components/daily/CelebrationView";
 import EveningView from "@/components/daily/EveningView";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function DailyPage() {
     const { currentView, fetchDailyData, loading } = useDailyStore();
     const [mounted, setMounted] = useState(false);
+    const { t } = useLanguage();
 
     useEffect(() => {
         setMounted(true);
@@ -38,7 +40,7 @@ export default function DailyPage() {
             <div className="flex h-screen w-full items-center justify-center bg-[#F8F9FA] dark:bg-zinc-950">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
-                    <p className="text-sm font-medium text-zinc-500">Syncing your execution board...</p>
+                    <p className="text-sm font-medium text-zinc-500">{t('daily.syncing') as string}</p>
                 </div>
             </div>
         );
@@ -60,6 +62,7 @@ export default function DailyPage() {
         </div>
     );
 }
+
 
 function DevControls() {
     const { setView } = useDailyStore();

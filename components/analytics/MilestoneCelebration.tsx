@@ -1,7 +1,10 @@
 
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { Trophy, Star, ArrowRight, Share2, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface MilestoneCelebrationProps {
     weekNumber: number;
@@ -10,6 +13,7 @@ interface MilestoneCelebrationProps {
 }
 
 export const MilestoneCelebration: React.FC<MilestoneCelebrationProps> = ({ weekNumber, milestoneTitle, onClose }) => {
+    const { t } = useLanguage();
     const [step, setStep] = useState(0);
 
     useEffect(() => {
@@ -43,7 +47,7 @@ export const MilestoneCelebration: React.FC<MilestoneCelebrationProps> = ({ week
                     {/* Title */}
                     <div className={cn("transition-all duration-700", step >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
                         <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2">
-                            WEEK {weekNumber} COMPLETE!
+                            {(t('analytics.week_complete') as string).replace('{num}', weekNumber.toString())}
                         </h2>
                         <p className="text-lg text-yellow-600 dark:text-yellow-400 font-bold mb-8">
                             {milestoneTitle}
@@ -52,7 +56,7 @@ export const MilestoneCelebration: React.FC<MilestoneCelebrationProps> = ({ week
 
                     {/* Accomplishments List */}
                     <div className={cn("text-left space-y-3 mb-8 transition-all duration-700 delay-100", step >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 text-center">What You Accomplished</h3>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 text-center">{t('analytics.what_accomplished') as string}</h3>
                         {[
                             "Interviewed 10 users",
                             "Identified core problem",
@@ -69,12 +73,12 @@ export const MilestoneCelebration: React.FC<MilestoneCelebrationProps> = ({ week
                     {/* Impact Stats */}
                     <div className={cn("grid grid-cols-2 gap-4 mb-8 transition-all duration-700 delay-200", step >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
                         <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-2xl">
-                            <div className="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase mb-1">Progress</div>
+                            <div className="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase mb-1">{t('analytics.progress_label') as string}</div>
                             <div className="text-xl font-black text-blue-900 dark:text-white">0% → 8%</div>
                         </div>
                         <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-2xl">
-                            <div className="text-xs text-purple-600 dark:text-purple-400 font-bold uppercase mb-1">Momentum</div>
-                            <div className="text-xl font-black text-purple-900 dark:text-white">Strong 🔥</div>
+                            <div className="text-xs text-purple-600 dark:text-purple-400 font-bold uppercase mb-1">{t('analytics.momentum_label') as string}</div>
+                            <div className="text-xl font-black text-purple-900 dark:text-white">{t('analytics.momentum_strong') as string}</div>
                         </div>
                     </div>
 
@@ -84,10 +88,10 @@ export const MilestoneCelebration: React.FC<MilestoneCelebrationProps> = ({ week
                             onClick={onClose}
                             className="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                         >
-                            Continue to Week {weekNumber + 1} <ArrowRight size={20} />
+                            {(t('analytics.continue_to_week') as string).replace('{num}', (weekNumber + 1).toString())} <ArrowRight size={20} />
                         </button>
                         <button className="w-full py-3 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors flex items-center justify-center gap-2">
-                            <Share2 size={18} /> Share This Win
+                            <Share2 size={18} /> {t('analytics.share_win') as string}
                         </button>
                     </div>
 
@@ -96,3 +100,4 @@ export const MilestoneCelebration: React.FC<MilestoneCelebrationProps> = ({ week
         </div>
     );
 };
+
