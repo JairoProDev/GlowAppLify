@@ -7,10 +7,12 @@ import { useTaskStore } from "@/lib/store/task-store"
 import { useJournalStore } from "@/lib/store/journal-store"
 import { useMemo } from "react"
 import { format, subDays, startOfDay, isSameDay } from "date-fns"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 export function ProductivityChart() {
     const tasks = useTaskStore(state => state.tasks)
     const entries = useJournalStore(state => state.entries)
+    const { t } = useLanguage()
 
     const chartData = useMemo(() => {
         // Generate last 7 days
@@ -56,9 +58,9 @@ export function ProductivityChart() {
     return (
         <Card className="col-span-2">
             <CardHeader>
-                <CardTitle>Weekly Productivity Score</CardTitle>
+                <CardTitle>{t('analytics.weekly_productivity') as string}</CardTitle>
                 <p className="text-sm text-muted-foreground">
-                    Based on task completions and mood tracking
+                    {t('analytics.prod_desc') as string}
                 </p>
             </CardHeader>
             <CardContent className="pl-0">
@@ -99,9 +101,9 @@ export function ProductivityChart() {
                                         return (
                                             <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
                                                 <p className="font-semibold text-sm mb-1">{data.fullDate}</p>
-                                                <p className="text-xs text-muted-foreground">Score: {data.score}/100</p>
-                                                <p className="text-xs text-muted-foreground">Tasks: {data.tasks}</p>
-                                                <p className="text-xs text-muted-foreground">Mood: {data.mood}</p>
+                                                <p className="text-xs text-muted-foreground">{t('analytics.score_label')}: {data.score}/100</p>
+                                                <p className="text-xs text-muted-foreground">{t('analytics.tasks_label')}: {data.tasks}</p>
+                                                <p className="text-xs text-muted-foreground">{t('analytics.mood_label')}: {data.mood}</p>
                                             </div>
                                         )
                                     }
@@ -123,3 +125,4 @@ export function ProductivityChart() {
         </Card>
     )
 }
+
