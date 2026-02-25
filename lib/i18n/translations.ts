@@ -14,6 +14,7 @@ export type TranslationKeys =
     | 'sidebar.execution'
     | 'sidebar.growth'
     | 'sidebar.review'
+    | 'sidebar.proPlan'
     | 'calendar.new_event'
     | 'calendar.today'
     | 'settings.appearance'
@@ -21,6 +22,42 @@ export type TranslationKeys =
     | 'settings.dark_mode'
     | 'settings.light_mode'
     | 'settings.system_mode'
+    | 'settings.title'
+    | 'settings.subtitle'
+    | 'settings.general'
+    | 'settings.account'
+    | 'settings.data'
+    | 'settings.notifications'
+    | 'settings.notifications_desc'
+    | 'settings.push_notifications'
+    | 'settings.push_notifications_desc'
+    | 'settings.profile'
+    | 'settings.profile_desc'
+    | 'settings.change_avatar'
+    | 'settings.uploading'
+    | 'settings.max_size'
+    | 'settings.display_name'
+    | 'settings.email'
+    | 'settings.theme_prefs'
+    | 'settings.theme_desc'
+    | 'settings.data_mgmt'
+    | 'settings.data_desc'
+    | 'settings.export_data'
+    | 'settings.export_desc'
+    | 'settings.export_button'
+    | 'settings.danger_zone'
+    | 'settings.danger_desc'
+    | 'settings.clear_data'
+    | 'search.placeholder'
+    | 'search.command_placeholder'
+    | 'search.no_results'
+    | 'search.suggestions'
+    | 'search.tools'
+    | 'board.title'
+    | 'board.start_daily'
+    | 'nav.home'
+    | 'nav.board'
+    | 'nav.add'
     | 'energy.peak'
     | 'energy.dip'
 
@@ -44,7 +81,20 @@ export const translations = {
             core: 'Core',
             execution: 'Execution',
             growth: 'Growth',
-            review: 'Review'
+            review: 'Review',
+            proPlan: 'Pro Plan'
+        },
+        nav: {
+            home: 'Home',
+            board: 'Board',
+            add: 'Add'
+        },
+        search: {
+            placeholder: 'Search website...',
+            command_placeholder: 'Type a command or search...',
+            no_results: 'No results found.',
+            suggestions: 'Suggestions',
+            tools: 'Tools'
         },
         account: {
             title: 'My Account',
@@ -127,11 +177,41 @@ export const translations = {
             amazing: 'Amazing'
         },
         settings: {
+            title: 'Settings',
+            subtitle: 'Manage your account and preferences.',
+            general: 'General',
+            account: 'Account',
             appearance: 'Appearance',
+            data: 'Data Zone',
             language: 'Language',
             dark_mode: 'Dark',
             light_mode: 'Light',
-            system_mode: 'System'
+            system_mode: 'System',
+            notifications: 'Notifications',
+            notifications_desc: 'Configure how you receive alerts.',
+            push_notifications: 'Push Notifications',
+            push_notifications_desc: 'Receive daily summaries and habit reminders.',
+            profile: 'Profile',
+            profile_desc: 'Update your personal information.',
+            change_avatar: 'Change Avatar',
+            uploading: 'Uploading...',
+            max_size: 'Max size: 2MB',
+            display_name: 'Display Name',
+            email: 'Email',
+            theme_prefs: 'Theme Preferences',
+            theme_desc: 'Select the theme for the application.',
+            data_mgmt: 'Data Management',
+            data_desc: 'Control your local data.',
+            export_data: 'Export Data',
+            export_desc: 'Download a JSON copy of all your boards, tasks, and notes.',
+            export_button: 'Export',
+            danger_zone: 'Danger Zone',
+            danger_desc: 'Permanently delete all local data. This cannot be undone.',
+            clear_data: 'Clear All Data'
+        },
+        board: {
+            title: 'Execution Board',
+            start_daily: 'Start Daily Execution'
         },
         energy: {
             peak: 'PEAK',
@@ -157,7 +237,20 @@ export const translations = {
             core: 'Principal',
             execution: 'Ejecución',
             growth: 'Crecimiento',
-            review: 'Revisión'
+            review: 'Revisión',
+            proPlan: 'Plan Pro'
+        },
+        nav: {
+            home: 'Inicio',
+            board: 'Tablero',
+            add: 'Agregar'
+        },
+        search: {
+            placeholder: 'Buscar en la plataforma...',
+            command_placeholder: 'Escribe un comando o busca...',
+            no_results: 'No se encontraron resultados.',
+            suggestions: 'Sugerencias',
+            tools: 'Herramientas'
         },
         account: {
             title: 'Mi Cuenta',
@@ -240,11 +333,41 @@ export const translations = {
             amazing: 'Increíble'
         },
         settings: {
+            title: 'Ajustes',
+            subtitle: 'Gestiona tu cuenta y preferencias.',
+            general: 'General',
+            account: 'Cuenta',
             appearance: 'Apariencia',
+            data: 'Zona de Datos',
             language: 'Idioma',
             dark_mode: 'Oscuro',
             light_mode: 'Claro',
-            system_mode: 'Sistema'
+            system_mode: 'Sistema',
+            notifications: 'Notificaciones',
+            notifications_desc: 'Configura cómo recibes las alertas.',
+            push_notifications: 'Notificaciones Push',
+            push_notifications_desc: 'Recibe resúmenes diarios y recordatorios de hábitos.',
+            profile: 'Perfil',
+            profile_desc: 'Actualiza tu información personal.',
+            change_avatar: 'Cambiar Avatar',
+            uploading: 'Subiendo...',
+            max_size: 'Máx: 2MB',
+            display_name: 'Nombre mostrado',
+            email: 'Correo electrónico',
+            theme_prefs: 'Preferencias de Tema',
+            theme_desc: 'Selecciona el tema para la aplicación.',
+            data_mgmt: 'Gestión de Datos',
+            data_desc: 'Controla tus datos locales.',
+            export_data: 'Exportar Datos',
+            export_desc: 'Descarga una copia JSON de todos tus tableros, tareas y notas.',
+            export_button: 'Exportar',
+            danger_zone: 'Zona de Peligro',
+            danger_desc: 'Elimina permanentemente todos los datos locales. Esto no se puede deshacer.',
+            clear_data: 'Borrar Todos los Datos'
+        },
+        board: {
+            title: 'Tablero de Ejecución',
+            start_daily: 'Comenzar Ejecución Diaria'
         },
         energy: {
             peak: 'CIMA',
@@ -252,3 +375,4 @@ export const translations = {
         }
     }
 }
+

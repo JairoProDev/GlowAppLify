@@ -6,11 +6,13 @@ import { ExecutionBoard } from "@/lib/types"
 import { getBoard, saveBoard } from "@/lib/storage"
 import ExecutionBoardView from "@/components/ExecutionBoardView"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 export default function BoardPage() {
     const [board, setBoard] = useState<ExecutionBoard | null>(null)
     const [loading, setLoading] = useState(true)
     const router = useRouter()
+    const { t, language } = useLanguage()
 
     useEffect(() => {
         const existingBoard = getBoard()
@@ -29,23 +31,18 @@ export default function BoardPage() {
     }
 
     const handleStartDaily = () => {
-        // Navigate to Daily view (maybe separate route later)
-        // For now we might keep daily within board or make it a route
-        // Roadmap suggests it's a tool/view.
-        // Let's assume /daily route or keep as is?
-        // Current DailyView is a component.
-        router.push("/daily") // We should create this route too
+        router.push("/daily")
     }
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">{language === 'es' ? 'Cargando...' : 'Loading...'}</div>
 
     if (!board) return null // Redirecting
 
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Execution Board</h1>
-                <Button onClick={handleStartDaily}>Start Daily Execution</Button>
+                <h1 className="text-3xl font-bold tracking-tight">{t('board.title')}</h1>
+                <Button onClick={handleStartDaily}>{t('board.start_daily')}</Button>
             </div>
             <ExecutionBoardView
                 board={board}
@@ -55,3 +52,4 @@ export default function BoardPage() {
         </div>
     )
 }
+

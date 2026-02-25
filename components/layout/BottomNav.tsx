@@ -4,16 +4,18 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { LayoutDashboard, Target, Calendar, Plus, Bot } from "lucide-react"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 export function BottomNav() {
     const pathname = usePathname()
+    const { t } = useLanguage()
 
     const items = [
-        { label: "Home", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "Board", icon: Target, href: "/board" },
-        { label: "Add", icon: Plus, href: "/new-task", highlight: true },
-        { label: "Calendar", icon: Calendar, href: "/calendar" },
-        { label: "Coach", icon: Bot, href: "/coach" },
+        { label: t('nav.home'), icon: LayoutDashboard, href: "/dashboard" },
+        { label: t('nav.board'), icon: Target, href: "/board" },
+        { label: t('nav.add'), icon: Plus, href: "/new-task", highlight: true },
+        { label: t('nav.calendar'), icon: Calendar, href: "/calendar" },
+        { label: t('nav.aiCoach'), icon: Bot, href: "/coach" },
     ]
 
     return (
@@ -52,3 +54,4 @@ export function BottomNav() {
         </div>
     )
 }
+

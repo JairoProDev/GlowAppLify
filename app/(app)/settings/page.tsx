@@ -20,10 +20,11 @@ import {
 } from "@/components/ui/tabs"
 import { useSettingsStore } from "@/lib/store/settings-store"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Moon, Sun, Monitor, User, Bell, Database, Trash2, Download } from "lucide-react"
+import { Moon, Sun, Monitor, User, Bell, Database, Trash2, Download, Languages } from "lucide-react"
 import { toast } from "react-hot-toast"
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
+import { useLanguage } from "@/lib/i18n/LanguageContext"
 
 export default function SettingsPage() {
     const {
@@ -34,6 +35,8 @@ export default function SettingsPage() {
         updateProfile,
         toggleNotifications
     } = useSettingsStore()
+
+    const { language, setLanguage, t } = useLanguage()
 
     // Local state for form management
     const [name, setName] = useState(profile.name)
@@ -53,13 +56,13 @@ export default function SettingsPage() {
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
-            toast.error('Please select an image file')
+            toast.error(language === 'es' ? 'Por favor selecciona un archivo de imagen' : 'Please select an image file')
             return
         }
 
         // Validate file size (max 2MB)
         if (file.size > 2 * 1024 * 1024) {
-            toast.error('Image size should be less than 2MB')
+            toast.error(language === 'es' ? 'La imagen debe ser menor a 2MB' : 'Image size should be less than 2MB')
             return
         }
 
@@ -70,30 +73,35 @@ export default function SettingsPage() {
             reader.onloadend = () => {
                 const base64String = reader.result as string
                 updateProfile({ avatarUrl: base64String })
-                toast.success('Avatar updated successfully')
+                toast.success(language === 'es' ? 'Avatar actualizado' : 'Avatar updated successfully')
                 setIsUploadingAvatar(false)
             }
             reader.onerror = () => {
-                toast.error('Failed to read image')
+                toast.error(language === 'es' ? 'Error al leer la imagen' : 'Failed to read image')
                 setIsUploadingAvatar(false)
             }
             reader.readAsDataURL(file)
         } catch (error) {
             console.error('Avatar upload error:', error)
-            toast.error('Failed to upload avatar')
+            toast.error(language === 'es' ? 'Error al subir avatar' : 'Failed to upload avatar')
             setIsUploadingAvatar(false)
         }
     }
 
     const handleProfileSave = () => {
         updateProfile({ name, email })
-        toast.success("Profile updated successfully")
+        toast.success(t('settings.profile') + " " + (language === 'es' ? 'actualizado' : 'updated'))
     }
 
-    const handleThemeChange = (t: 'light' | 'dark' | 'system') => {
-        setStoreTheme(t)
-        setNextTheme(t) // Sync with next-themes if used, or manage class manually
-        toast.success(`Theme set to ${t}`)
+    const handleThemeChange = (t_theme: 'light' | 'dark' | 'system') => {
+        setStoreTheme(t_theme)
+        setNextTheme(t_theme) // Sync with next-themes if used, or manage class manually
+        toast.success(`${language === 'es' ? 'Tema cambiado a' : 'Theme set to'} ${t_theme}`)
+    }
+
+    const handleLanguageChange = (lang: 'en' | 'es') => {
+        setLanguage(lang)
+        toast.success(`${language === 'es' ? 'Idioma cambiado a' : 'Language set to'} ${lang === 'es' ? 'Español' : 'English'}`)
     }
 
     const handleExportData = () => {
@@ -114,11 +122,15 @@ export default function SettingsPage() {
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
-        toast.success("Backup downloaded")
+        toast.success(language === 'es' ? "Respaldo descargado" : "Backup downloaded")
     }
 
     const handleClearData = () => {
-        if (confirm("Are you sure? This will wipe all your data!")) {
+        const confirmMsg = language === 'es'
+            ? "¿Estás seguro? ¡Esto borrará todos tus datos!"
+            : "Are you sure? This will wipe all your data!"
+
+        if (confirm(confirmMsg)) {
             localStorage.clear();
             window.location.reload();
         }
@@ -127,30 +139,53 @@ export default function SettingsPage() {
     return (
         <div className="container mx-auto py-6 max-w-4xl space-y-8 animate-in fade-in duration-500">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-                <p className="text-muted-foreground">Manage your account and preferences.</p>
+                <h1 className="text-3xl font-bold tracking-tight">{t('settings.title')}</h1>
+                <p className="text-muted-foreground">{t('settings.subtitle')}</p>
             </div>
 
             <Tabs defaultValue="general" className="w-full">
                 <TabsList className="w-full justify-start h-auto p-1 bg-secondary/30">
-                    <TabsTrigger value="general">General</TabsTrigger>
-                    <TabsTrigger value="account">Account</TabsTrigger>
-                    <TabsTrigger value="appearance">Appearance</TabsTrigger>
-                    <TabsTrigger value="data" className="text-destructive data-[state=active]:text-destructive">Data Zone</TabsTrigger>
+                    <TabsTrigger value="general">{t('settings.general')}</TabsTrigger>
+                    <TabsTrigger value="account">{t('settings.account')}</TabsTrigger>
+                    <TabsTrigger value="appearance">{t('settings.appearance')}</TabsTrigger>
+                    <TabsTrigger value="data" className="text-destructive data-[state=active]:text-destructive">{t('settings.data')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="general" className="space-y-4 mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Bell className="h-5 w-5" /> Notifications</CardTitle>
-                            <CardDescription>Configure how you receive alerts.</CardDescription>
+                            <CardTitle className="flex items-center gap-2"><Bell className="h-5 w-5" /> {t('settings.notifications')}</CardTitle>
+                            <CardDescription>{t('settings.notifications_desc')}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex items-center justify-between">
                             <div className="space-y-0.5">
-                                <Label className="text-base">Push Notifications</Label>
-                                <p className="text-sm text-muted-foreground">Receive daily summaries and habit reminders.</p>
+                                <Label className="text-base">{t('settings.push_notifications')}</Label>
+                                <p className="text-sm text-muted-foreground">{t('settings.push_notifications_desc')}</p>
                             </div>
                             <Switch checked={notificationsEnabled} onCheckedChange={toggleNotifications} />
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Languages className="h-5 w-5" /> {t('settings.language')}</CardTitle>
+                            <CardDescription>{language === 'es' ? 'Selecciona tu idioma preferido.' : 'Select your preferred language.'}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-2 gap-4">
+                            <div
+                                className={`cursor-pointer rounded-xl border-2 p-4 flex flex-col items-center gap-2 hover:bg-accent transition-all ${language === 'es' ? 'border-primary bg-accent' : 'border-transparent'}`}
+                                onClick={() => handleLanguageChange('es')}
+                            >
+                                <span className="text-2xl">🇪🇸</span>
+                                <span className="font-medium">Español</span>
+                            </div>
+                            <div
+                                className={`cursor-pointer rounded-xl border-2 p-4 flex flex-col items-center gap-2 hover:bg-accent transition-all ${language === 'en' ? 'border-primary bg-accent' : 'border-transparent'}`}
+                                onClick={() => handleLanguageChange('en')}
+                            >
+                                <span className="text-2xl">🇺🇸</span>
+                                <span className="font-medium">English</span>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -158,8 +193,8 @@ export default function SettingsPage() {
                 <TabsContent value="account" className="space-y-4 mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> Profile</CardTitle>
-                            <CardDescription>Update your personal information.</CardDescription>
+                            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> {t('settings.profile')}</CardTitle>
+                            <CardDescription>{t('settings.profile_desc')}</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="flex items-center gap-6">
@@ -180,24 +215,24 @@ export default function SettingsPage() {
                                         disabled={isUploadingAvatar}
                                         onClick={() => document.getElementById('avatar-upload')?.click()}
                                     >
-                                        {isUploadingAvatar ? 'Uploading...' : 'Change Avatar'}
+                                        {isUploadingAvatar ? t('settings.uploading') : t('settings.change_avatar')}
                                     </Button>
                                     <p className="text-xs text-muted-foreground mt-2">
-                                        Max size: 2MB
+                                        {t('settings.max_size')}
                                     </p>
                                 </div>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Display Name</Label>
+                                <Label htmlFor="name">{t('settings.display_name')}</Label>
                                 <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="email">{t('settings.email')}</Label>
                                 <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button onClick={handleProfileSave}>Save Changes</Button>
+                            <Button onClick={handleProfileSave}>{t('daily.celebration.done')}</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -205,8 +240,8 @@ export default function SettingsPage() {
                 <TabsContent value="appearance" className="space-y-4 mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Theme Preferences</CardTitle>
-                            <CardDescription>Select the theme for the application.</CardDescription>
+                            <CardTitle>{t('settings.theme_prefs')}</CardTitle>
+                            <CardDescription>{t('settings.theme_desc')}</CardDescription>
                         </CardHeader>
                         <CardContent className="grid grid-cols-3 gap-4">
                             <div
@@ -214,21 +249,21 @@ export default function SettingsPage() {
                                 onClick={() => handleThemeChange('light')}
                             >
                                 <Sun className="h-8 w-8" />
-                                <span className="font-medium">Light</span>
+                                <span className="font-medium">{t('settings.light_mode')}</span>
                             </div>
                             <div
                                 className={`cursor-pointer rounded-xl border-2 p-4 flex flex-col items-center gap-2 hover:bg-accent transition-all ${storeTheme === 'dark' ? 'border-primary bg-accent' : 'border-transparent'}`}
                                 onClick={() => handleThemeChange('dark')}
                             >
                                 <Moon className="h-8 w-8" />
-                                <span className="font-medium">Dark</span>
+                                <span className="font-medium">{t('settings.dark_mode')}</span>
                             </div>
                             <div
                                 className={`cursor-pointer rounded-xl border-2 p-4 flex flex-col items-center gap-2 hover:bg-accent transition-all ${storeTheme === 'system' ? 'border-primary bg-accent' : 'border-transparent'}`}
                                 onClick={() => handleThemeChange('system')}
                             >
                                 <Monitor className="h-8 w-8" />
-                                <span className="font-medium">System</span>
+                                <span className="font-medium">{t('settings.system_mode')}</span>
                             </div>
                         </CardContent>
                     </Card>
@@ -237,27 +272,27 @@ export default function SettingsPage() {
                 <TabsContent value="data" className="space-y-4 mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Database className="h-5 w-5" /> Data Management</CardTitle>
-                            <CardDescription>Control your local data.</CardDescription>
+                            <CardTitle className="flex items-center gap-2"><Database className="h-5 w-5" /> {t('settings.data_mgmt')}</CardTitle>
+                            <CardDescription>{t('settings.data_desc')}</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-center justify-between p-4 border rounded-lg bg-secondary/10">
                                 <div>
-                                    <h4 className="font-medium">Export Data</h4>
-                                    <p className="text-sm text-muted-foreground">Download a JSON copy of all your boards, tasks, and notes.</p>
+                                    <h4 className="font-medium">{t('settings.export_data')}</h4>
+                                    <p className="text-sm text-muted-foreground">{t('settings.export_desc')}</p>
                                 </div>
                                 <Button variant="outline" onClick={handleExportData}>
-                                    <Download className="h-4 w-4 mr-2" /> Export
+                                    <Download className="h-4 w-4 mr-2" /> {t('settings.export_button')}
                                 </Button>
                             </div>
 
                             <div className="flex items-center justify-between p-4 border border-destructive/20 rounded-lg bg-destructive/5">
                                 <div>
-                                    <h4 className="font-medium text-destructive">Danger Zone</h4>
-                                    <p className="text-sm text-muted-foreground">Permanently delete all local data. This cannot be undone.</p>
+                                    <h4 className="font-medium text-destructive">{t('settings.danger_zone')}</h4>
+                                    <p className="text-sm text-muted-foreground">{t('settings.danger_desc')}</p>
                                 </div>
                                 <Button variant="destructive" onClick={handleClearData}>
-                                    <Trash2 className="h-4 w-4 mr-2" /> Clear All Data
+                                    <Trash2 className="h-4 w-4 mr-2" /> {t('settings.clear_data')}
                                 </Button>
                             </div>
                         </CardContent>
@@ -267,3 +302,4 @@ export default function SettingsPage() {
         </div>
     )
 }
+

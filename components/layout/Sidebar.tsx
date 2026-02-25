@@ -189,7 +189,7 @@ export function Sidebar() {
                                 {!collapsed && (
                                     <div className="flex flex-col items-start translate-x-1">
                                         <span className="text-xs font-semibold text-foreground truncate w-32">{userName || 'User'}</span>
-                                        <span className="text-[10px] text-muted-foreground">Pro Plan</span>
+                                        <span className="text-[10px] text-muted-foreground">{t('sidebar.proPlan')}</span>
                                     </div>
                                 )}
                             </Button>
