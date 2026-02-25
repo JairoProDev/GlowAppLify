@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { CalendarEvent, EventType, EVENT_COLORS } from "@/lib/calendar/types"
+import { CalendarEvent, EventType, EVENT_COLORS, RecurrenceFrequency } from "@/lib/calendar/types"
 import { useCalendarStore } from "@/lib/store/calendar-store"
 import { format } from "date-fns"
-import { Trash2 } from "lucide-react"
+import { Trash2, MapPin, RefreshCw, Zap } from "lucide-react"
 
 interface EventDialogProps {
     isOpen: boolean
@@ -25,10 +25,13 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
     const [formData, setFormData] = useState({
         title: "",
         description: "",
+        location: "",
         startTime: "",
         endTime: "",
         type: "BLOCKER" as EventType,
-        energyRequired: "medium" as "low" | "medium" | "high"
+        energyRequired: "medium" as "low" | "medium" | "high",
+        isInstant: false,
+        recurrenceFrequency: "none" as RecurrenceFrequency
     })
 
     useEffect(() => {
@@ -36,10 +39,13 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
             setFormData({
                 title: eventToEdit.title,
                 description: eventToEdit.description || "",
+                location: eventToEdit.location || "",
                 startTime: format(new Date(eventToEdit.startTime), "yyyy-MM-dd'T'HH:mm"),
                 endTime: format(new Date(eventToEdit.endTime), "yyyy-MM-dd'T'HH:mm"),
                 type: eventToEdit.type,
-                energyRequired: eventToEdit.energyRequired
+                energyRequired: eventToEdit.energyRequired,
+                isInstant: eventToEdit.isInstant || false,
+                recurrenceFrequency: eventToEdit.recurrenceFrequency || "none"
             })
         } else if (initialDate) {
             // Default to 1 hour duration
@@ -49,10 +55,13 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
             setFormData({
                 title: "",
                 description: "",
+                location: "",
                 startTime: format(start, "yyyy-MM-dd'T'HH:mm"),
                 endTime: format(end, "yyyy-MM-dd'T'HH:mm"),
                 type: "DEEP_WORK_ANALYTICAL",
-                energyRequired: "high"
+                energyRequired: "high",
+                isInstant: false,
+                recurrenceFrequency: "none"
             })
         }
     }, [eventToEdit, initialDate, isOpen])
@@ -61,28 +70,28 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
         e.preventDefault()
 
         // Validations
-        if (!formData.title || !formData.startTime || !formData.endTime) return
+        if (!formData.title || !formData.startTime || (!formData.isInstant && !formData.endTime)) return
 
-        const eventData = {
+        const eventData: Omit<CalendarEvent, 'id'> = {
             title: formData.title,
             description: formData.description,
+            location: formData.location,
             startTime: new Date(formData.startTime),
-            endTime: new Date(formData.endTime),
+            endTime: formData.isInstant ? new Date(formData.startTime) : new Date(formData.endTime),
             type: formData.type,
             energyRequired: formData.energyRequired,
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             status: (eventToEdit?.status || 'scheduled') as any, // Keep existing status or default
-            isRecurring: eventToEdit?.isRecurring || false
+            isRecurring: formData.recurrenceFrequency !== 'none',
+            recurrenceFrequency: formData.recurrenceFrequency,
+            isInstant: formData.isInstant,
+            userId: eventToEdit?.userId || 'current-user-id'
         }
 
         if (eventToEdit) {
             updateEvent(eventToEdit.id, eventData)
         } else {
-            // Default userId for now
-            addEvent({
-                ...eventData,
-                userId: 'current-user-id',
-            })
+            addEvent(eventData)
         }
 
         onClose()
@@ -135,9 +144,30 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
                                 id="end"
                                 type="datetime-local"
                                 value={formData.endTime}
+                                disabled={formData.isInstant}
                                 onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
                             />
                         </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            id="isInstant"
+                            checked={formData.isInstant}
+                            onChange={(e) => {
+                                const checked = e.target.checked
+                                setFormData({
+                                    ...formData,
+                                    isInstant: checked,
+                                    endTime: checked ? formData.startTime : formData.endTime
+                                })
+                            }}
+                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        />
+                        <Label htmlFor="isInstant" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Instant Action (no duration)
+                        </Label>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -175,6 +205,36 @@ export function EventDialog({ isOpen, onClose, initialDate, eventToEdit }: Event
                                     <SelectItem value="low">☕ Low (Easy)</SelectItem>
                                 </SelectContent>
                             </Select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="recurrence">Recurrence</Label>
+                            <Select
+                                value={formData.recurrenceFrequency}
+                                onValueChange={(val) => setFormData({ ...formData, recurrenceFrequency: val as any })}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="None" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="none">None</SelectItem>
+                                    <SelectItem value="daily">Daily</SelectItem>
+                                    <SelectItem value="interdaily">Interdaily (Every 2 days)</SelectItem>
+                                    <SelectItem value="weekly">Weekly</SelectItem>
+                                    <SelectItem value="monthly">Monthly</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="location">Location</Label>
+                            <Input
+                                id="location"
+                                value={formData.location}
+                                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                placeholder="e.g., Home, Office, Zoom"
+                            />
                         </div>
                     </div>
 

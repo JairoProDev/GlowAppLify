@@ -28,12 +28,15 @@ export type EventType =
 
 export type EventStatus = 'scheduled' | 'completed' | 'skipped' | 'rescheduled';
 
+export type RecurrenceFrequency = 'daily' | 'interdaily' | 'weekly' | 'monthly' | 'none';
+
 export interface CalendarEvent {
     id: string;
     userId: string;
     goalId?: string;
     title: string;
     description?: string;
+    location?: string;
     startTime: Date | string;
     endTime: Date | string;
     timeZone: string;
@@ -43,7 +46,11 @@ export interface CalendarEvent {
     focusScore?: number; // 0-100
     status: EventStatus;
     isRecurring: boolean;
+    recurrenceFrequency?: RecurrenceFrequency;
     recurrenceRule?: string;
+    isInstant?: boolean;
+    isVirtualInstance?: boolean;
+    originalEventId?: string;
 }
 
 export interface DraggedEvent {

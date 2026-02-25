@@ -5,6 +5,8 @@ import { useCalendarStore } from "@/lib/store/calendar-store"
 import { CalendarEvent, EVENT_COLORS } from "@/lib/calendar/types"
 import { format, startOfDay, endOfDay, isSameDay, setHours, setMinutes } from "date-fns"
 import { cn } from "@/lib/utils"
+import { expandRecurringEvents } from "@/lib/calendar/recurrence"
+import { MapPin, RefreshCw } from "lucide-react"
 
 interface DayViewProps {
     currentDate: Date
@@ -20,9 +22,7 @@ export function DayView({ currentDate, onTimeSlotClick, onEventClick }: DayViewP
         const dayStart = startOfDay(currentDate)
         const dayEnd = endOfDay(currentDate)
 
-        return events.filter(event =>
-            isSameDay(new Date(event.startTime), currentDate)
-        )
+        return expandRecurringEvents(events, dayStart, dayEnd)
     }, [events, currentDate])
 
     // Generate time slots (5AM - 11PM)
@@ -45,11 +45,15 @@ export function DayView({ currentDate, onTimeSlotClick, onEventClick }: DayViewP
 
         // Offset from 5 AM
         const topPosition = (startHour - 5) * 60 // 60px per hour
-        const height = (endHour - startHour) * 60
+        let height = (endHour - startHour) * 60
+
+        if (event.isInstant) {
+            height = 24
+        }
 
         return {
             top: `${Math.max(0, topPosition)}px`,
-            height: `${Math.max(30, height)}px`, // Minimum 30px height
+            height: `${Math.max(event.isInstant ? 24 : 30, height)}px`,
         }
     }
 
@@ -96,20 +100,38 @@ export function DayView({ currentDate, onTimeSlotClick, onEventClick }: DayViewP
                                     key={event.id}
                                     className={cn(
                                         "absolute left-2 right-2 rounded-lg p-2 text-xs overflow-hidden cursor-pointer pointer-events-auto shadow-sm border",
-                                        "hover:shadow-md hover:scale-[1.02] transition-all"
+                                        "hover:shadow-md hover:scale-[1.02] transition-all",
+                                        event.isInstant && "border-l-4"
                                     )}
                                     style={{
                                         ...style,
                                         backgroundColor: color.bg,
                                         borderColor: color.border
                                     }}
-                                    onClick={() => onEventClick(event)}
+                                    onClick={() => {
+                                        if (event.isVirtualInstance) {
+                                            const original = events.find(e => e.id === event.id.split('-')[0])
+                                            if (original) onEventClick(original)
+                                        } else {
+                                            onEventClick(event)
+                                        }
+                                    }}
                                 >
-                                    <div className={cn("font-semibold truncate", color.text)}>
+                                    <div className={cn("font-semibold truncate flex items-center gap-1", color.text)}>
+                                        {event.isInstant && <RefreshCw className="h-3 w-3" />}
                                         {event.title}
                                     </div>
-                                    <div className="text-xs opacity-70 mt-0.5">
-                                        {format(new Date(event.startTime), 'h:mm a')} - {format(new Date(event.endTime), 'h:mm a')}
+                                    <div className="text-[10px] opacity-70 mt-0.5 flex flex-wrap gap-x-2">
+                                        <span>
+                                            {format(new Date(event.startTime), 'h:mm a')}
+                                            {!event.isInstant && ` - ${format(new Date(event.endTime), 'h:mm a')}`}
+                                        </span>
+                                        {event.location && (
+                                            <span className="flex items-center gap-0.5">
+                                                <MapPin className="h-2 w-2" />
+                                                {event.location}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             )

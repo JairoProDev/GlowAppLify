@@ -18,6 +18,8 @@ import { cn } from '@/lib/utils'
 import { useCalendarStore } from '@/lib/store/calendar-store'
 import { useEnergyStore } from '@/lib/store/energy-store'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { expandRecurringEvents } from '@/lib/calendar/recurrence'
+import { MapPin, RefreshCw } from 'lucide-react'
 
 interface WeekViewProps {
     currentDate: Date
@@ -34,6 +36,11 @@ export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekVie
     const start = startOfWeek(currentDate, { weekStartsOn: 1 }) // Monday start
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
     const days = eachDayOfInterval({ start, end })
+
+    // Expanded events including recurring ones
+    const displayEvents = expandRecurringEvents(events, start, end)
+
+    // ... (rest of the component logic handles displayEvents instead of events)
 
     // Scroll to 8am on mount
     useEffect(() => {
@@ -61,20 +68,25 @@ export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekVie
         e.preventDefault()
         const eventId = e.dataTransfer.getData('eventId')
         const durationStr = e.dataTransfer.getData('duration')
+        const isVirtualStr = e.dataTransfer.getData('isVirtual')
 
         if (eventId && durationStr) {
+            // Logic for moving events. If it's a virtual instance, we currently update the original event.
+            // In a more advanced version, we might want to split the recurrence.
             const durationMin = parseInt(durationStr, 10)
             const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
             const offsetY = e.clientY - rect.top
 
-            // 64px height = 60 minutes
             const minutesInSlot = Math.floor((offsetY / 64) * 60)
-            const snappedMinutes = Math.round(minutesInSlot / 15) * 15 // Snap to 15 min
+            const snappedMinutes = Math.round(minutesInSlot / 15) * 15
 
             const newStart = setMinutes(setHours(day, hour), snappedMinutes)
             const newEnd = addMinutes(newStart, durationMin)
 
-            updateEvent(eventId, {
+            // Get the real ID (if it was a virtual ID like "1-123456", the original is "1")
+            const realId = isVirtualStr === 'true' ? eventId.split('-')[0] : eventId
+
+            updateEvent(realId, {
                 startTime: newStart,
                 endTime: newEnd
             })
@@ -160,12 +172,24 @@ export function WeekView({ currentDate, onEventClick, onTimeSlotClick }: WeekVie
                 {/* Events Layer */}
                 <div className="absolute inset-0 pl-16 w-full flex pointer-events-none">
                     {days.map((day) => {
-                        const dayEvents = events.filter(e => isSameDay(new Date(e.startTime), day))
+                        const dayEvents = displayEvents.filter(e => isSameDay(new Date(e.startTime), day))
 
                         return (
                             <div key={day.toISOString()} className="flex-1 relative h-[1536px] pointer-events-auto">
                                 {dayEvents.map(event => (
-                                    <EventItem key={event.id} event={event} onClick={() => onEventClick(event)} />
+                                    <EventItem
+                                        key={event.id}
+                                        event={event}
+                                        onClick={() => {
+                                            // Pass the original event even if it's a virtual instance
+                                            if (event.isVirtualInstance) {
+                                                const original = events.find(e => e.id === event.id.split('-')[0])
+                                                if (original) onEventClick(original)
+                                            } else {
+                                                onEventClick(event)
+                                            }
+                                        }}
+                                    />
                                 ))}
                             </div>
                         )
@@ -206,11 +230,16 @@ function EventItem({ event, onClick }: { event: CalendarEvent, onClick: () => vo
     const handleDragStart = (e: React.DragEvent) => {
         e.dataTransfer.setData('eventId', event.id)
         e.dataTransfer.setData('duration', durationMin.toString())
+        e.dataTransfer.setData('isVirtual', event.isVirtualInstance ? 'true' : 'false')
         e.dataTransfer.effectAllowed = 'move'
     }
 
     const top = (startMin / 60) * 64
-    const height = Math.max((durationMin / 60) * 64, 28) // Minimum height for readability
+    let height = Math.max((durationMin / 60) * 64, 28)
+
+    if (event.isInstant) {
+        height = 24 // Fixed small height for instant actions
+    }
 
     const styles = EVENT_COLORS[event.type] || EVENT_COLORS.BLOCKER
 
@@ -225,6 +254,7 @@ function EventItem({ event, onClick }: { event: CalendarEvent, onClick: () => vo
             className={cn(
                 "absolute inset-x-1 rounded-md border p-2 text-xs transition-all hover:z-30 cursor-pointer overflow-hidden",
                 "group shadow-sm hover:shadow-lg hover:scale-[1.02] duration-200",
+                event.isInstant && "border-l-4",
                 styles.bg,
                 styles.border,
                 styles.text,
@@ -238,13 +268,21 @@ function EventItem({ event, onClick }: { event: CalendarEvent, onClick: () => vo
             <div className="flex flex-col h-full">
                 <div className="font-semibold truncate flex items-center gap-1">
                     {event.energyRequired === 'high' && <span title="High Energy">⚡</span>}
+                    {event.isInstant && <RefreshCw className="h-3 w-3 inline" />}
                     {event.title}
                 </div>
-                {height > 40 && (
-                    <div className="opacity-80 truncate mt-0.5 text-[10px] items-center flex gap-1">
-                        <span>{format(start, 'h:mm a')}</span>
-                        <span>-</span>
-                        <span>{format(end, 'h:mm a')}</span>
+                {height > 35 && (
+                    <div className="opacity-80 truncate mt-0.5 text-[10px] items-center flex flex-wrap gap-x-2">
+                        <span className="flex items-center gap-0.5">
+                            {format(start, 'h:mm a')}
+                            {!event.isInstant && ` - ${format(end, 'h:mm a')}`}
+                        </span>
+                        {event.location && (
+                            <span className="flex items-center gap-0.5 ml-auto">
+                                <MapPin className="h-2 w-2" />
+                                {event.location}
+                            </span>
+                        )}
                     </div>
                 )}
             </div>
