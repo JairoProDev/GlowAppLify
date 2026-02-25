@@ -92,3 +92,13 @@ export interface OnboardingData {
     vision: string;
   };
 }
+
+export interface DailyLog {
+  id?: string;
+  boardId: string;
+  date: string;
+  completedActions: string[];
+  mood?: number;
+  reflection?: string;
+  createdAt?: string;
+}

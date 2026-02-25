@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ExecutionBoard } from '@/lib/types';
 import { Language, detectLanguage, t } from '@/lib/i18n';
-import LoadingState from './LoadingState';
+import { LoadingState } from './LoadingState';
 import toast from 'react-hot-toast';
 
 interface OnboardingFormProps {
@@ -64,7 +64,7 @@ export default function OnboardingForm({ onBoardGenerated }: OnboardingFormProps
   };
 
   if (loading) {
-    return <LoadingState lang={lang} />;
+    return <LoadingState text={t('generating', lang)} fullScreen />;
   }
 
   return (

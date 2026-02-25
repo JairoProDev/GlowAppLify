@@ -37,10 +37,10 @@ export default function JournalPage() {
                     <p className="text-muted-foreground">Reflect on your journey.</p>
                 </div>
                 <div className="flex bg-secondary p-1 rounded-lg">
-                    <Button variant={view === 'write' ? 'bg-background shadow' : 'ghost'} size="sm" onClick={() => setView('write')}>
+                    <Button variant="ghost" size="sm" className={view === 'write' ? 'bg-background shadow' : ''} onClick={() => setView('write')}>
                         <PenLine className="h-4 w-4 mr-2" /> Write
                     </Button>
-                    <Button variant={view === 'history' ? 'bg-background shadow' : 'ghost'} size="sm" onClick={() => setView('history')}>
+                    <Button variant="ghost" size="sm" className={view === 'history' ? 'bg-background shadow' : ''} onClick={() => setView('history')}>
                         <BookOpen className="h-4 w-4 mr-2" /> History
                     </Button>
                 </div>

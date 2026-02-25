@@ -1,28 +1,6 @@
 export type Language = 'en' | 'es'
 
-export type TranslationKeys =
-    | 'common.dashboard'
-    | 'common.calendar'
-    | 'common.tasks'
-    | 'common.journal'
-    | 'common.routines'
-    | 'common.aiCoach'
-    | 'common.notes'
-    | 'common.analytics'
-    | 'common.settings'
-    | 'sidebar.core'
-    | 'sidebar.execution'
-    | 'sidebar.growth'
-    | 'sidebar.review'
-    | 'calendar.new_event'
-    | 'calendar.today'
-    | 'settings.appearance'
-    | 'settings.language'
-    | 'settings.dark_mode'
-    | 'settings.light_mode'
-    | 'settings.system_mode'
-    | 'energy.peak'
-    | 'energy.dip'
+export type TranslationKeys = string;
 
 export const translations = {
     en: {
