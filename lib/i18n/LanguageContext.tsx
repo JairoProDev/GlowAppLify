@@ -6,7 +6,7 @@ import { translations, Language, TranslationKeys } from './translations'
 interface LanguageContextType {
     language: Language
     setLanguage: (lang: Language) => void
-    t: (key: TranslationKeys) => string
+    t: (key: TranslationKeys | string) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -40,7 +40,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('language', lang)
     }
 
-    const t = (key: TranslationKeys): string => {
+    const t = (key: TranslationKeys | string): string => {
         const keys = key.split('.')
         let current: any = translations[language]
 

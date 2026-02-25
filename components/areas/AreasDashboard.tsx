@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useLifeAreasStore } from '@/store/useLifeAreasStore';
+// LifeAreaCard now uses useAreaModulesStore internally for health scores
 import { LifeAreaCard } from './LifeAreaCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -18,22 +19,7 @@ const ALL_AREA_TYPES: AreaType[] = [
 ];
 
 const DashboardCardWrapper = ({ area }: { area: any }) => {
-    const { fetchAreaStats } = useLifeAreasStore();
-    const [stats, setStats] = React.useState({ activeGoals: 0, completedActions: 0, totalActions: 0 });
-
-    useEffect(() => {
-        const stats = fetchAreaStats(area.id);
-        setStats(stats);
-    }, [area.id, fetchAreaStats]);
-
-    return (
-        <LifeAreaCard
-            area={area}
-            activeGoalsCount={stats.activeGoals}
-            completedActionsCount={stats.completedActions}
-            totalActionsCount={stats.totalActions}
-        />
-    );
+    return <LifeAreaCard area={area} />;
 };
 
 export const AreasDashboard: React.FC = () => {

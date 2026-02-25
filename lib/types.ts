@@ -79,6 +79,16 @@ export interface ExecutionBoard {
   settings?: any;
 }
 
+export interface DailyLog {
+  id?: string;
+  boardId: string;
+  date: string; // ISO date string 'YYYY-MM-DD'
+  completedActions: string[];
+  mood?: 1 | 2 | 3 | 4 | 5;
+  reflection?: string;
+  createdAt?: string;
+}
+
 export interface OnboardingData {
   goal: string;
   context: {

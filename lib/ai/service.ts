@@ -35,7 +35,7 @@ export class AIService {
                             
                             CONTEXT:
                             Goal: ${context.goal}
-                            Pending Tasks: ${context.incompleteTasks.map(t => t.title).join(', ')}
+                            Pending Tasks: ${context.incompleteTasks.map(t => t.action).join(', ')}
                             Mood Trend (Last 7 days): ${context.moodTrend.join(', ')}
                             
                             Return a JSON object with "title" and "reasoning".`

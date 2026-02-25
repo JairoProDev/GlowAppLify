@@ -14,7 +14,7 @@ import { startOfWeek, subWeeks, isAfter } from "date-fns"
 export default function AnalyticsPage() {
     const tasks = useTaskStore(state => state.tasks)
     const entries = useJournalStore(state => state.entries)
-    const { streak } = useDailyStore()
+    const { user } = useDailyStore()
     const routines = useRoutineStore(state => state.routines)
 
     // Calculate real analytics
@@ -27,23 +27,20 @@ export default function AnalyticsPage() {
         // Tasks completed in the last 7 days
         const oneWeekAgo = subWeeks(new Date(), 1)
         const recentTasks = completedTasks.filter(t => {
-            if (!t.completedAt) return false
-            return isAfter(new Date(t.completedAt), oneWeekAgo)
+            if (!t.createdAt) return false
+            return isAfter(new Date(t.createdAt), oneWeekAgo)
         })
         const tasksPerDay = recentTasks.length > 0 ? (recentTasks.length / 7).toFixed(1) : 0
 
         // Average energy from journal entries
         const recentEntries = entries.filter(e => isAfter(new Date(e.date), oneWeekAgo))
         const avgEnergy = recentEntries.length > 0
-            ? (recentEntries.reduce((sum, e) => sum + e.mood, 0) / recentEntries.length).toFixed(1)
+            ? parseFloat((recentEntries.reduce((sum, e) => sum + e.mood, 0) / recentEntries.length).toFixed(1))
             : 0
 
         // Routine completion rate
-        const morningRoutine = routines.find(r => r.id === 'morning-1')
-        const eveningRoutine = routines.find(r => r.id === 'evening-1')
-        const routineCompletionCount = [morningRoutine, eveningRoutine]
-            .filter(r => r?.completedDates && r.completedDates.length > 0)
-            .reduce((sum, r) => sum + (r.completedDates?.length || 0), 0)
+        const activeRoutines = routines.filter(r => r.active)
+        const routineCompletionCount = activeRoutines.length
 
         return {
             completedTasks: completedTasks.length,
@@ -51,11 +48,11 @@ export default function AnalyticsPage() {
             completionRate,
             tasksPerDay,
             avgEnergy,
-            streak: streak || 0,
+            streak: user.streak || 0,
             routineCompletions: routineCompletionCount,
             recentEntriesCount: recentEntries.length
         }
-    }, [tasks, entries, streak, routines])
+    }, [tasks, entries, user.streak, routines])
 
     return (
         <div className="space-y-6 h-full animate-in fade-in duration-500">

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useDailyStore } from "@/stores/useDailyStore";
+import { useDailyStore } from "@/lib/store/useDailyStore";
 import MorningView from "@/components/daily/MorningView";
 import DeepWorkView from "@/components/daily/DeepWorkView";
 import CelebrationView from "@/components/daily/CelebrationView";

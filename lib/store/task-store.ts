@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { v4 as uuidv4 } from 'uuid'
 
 // Fallback UUID if uuid package issues, though most environments have crypto.randomUUID
 const generateId = () => typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);

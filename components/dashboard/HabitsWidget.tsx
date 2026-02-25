@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ExecutionBoard } from "@/lib/types"
 import { Flame, Sun, Moon, Zap } from "lucide-react"

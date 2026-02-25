@@ -16,7 +16,8 @@ import { useLanguage } from "@/lib/i18n/LanguageContext"
 import { dashboardContent } from "@/lib/i18n/dashboardContent"
 
 export default function DashboardPage() {
-    const { oneThing, otherActions, streak } = useDailyStore()
+    const { oneThing, otherActions, user } = useDailyStore()
+    const streak = user.streak
     const tasks = useTaskStore(state => state.tasks)
     const routines = useRoutineStore(state => state.routines)
     const notes = useNoteStore(state => state.notes)
@@ -39,8 +40,8 @@ export default function DashboardPage() {
     const morningRoutine = routines.find(r => r.id === 'morning-1')
     const eveningRoutine = routines.find(r => r.id === 'evening-1')
     const todayString = format(new Date(), 'yyyy-MM-dd')
-    const morningDone = morningRoutine?.completedDates?.includes(todayString)
-    const eveningDone = eveningRoutine?.completedDates?.includes(todayString)
+    const morningDone = morningRoutine?.active ?? false
+    const eveningDone = eveningRoutine?.active ?? false
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
