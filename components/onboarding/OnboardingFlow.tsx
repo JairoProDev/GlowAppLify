@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect } from "react";
@@ -13,17 +14,9 @@ import { useCalendarStore } from "@/lib/store/calendar-store";
 import { useOnboardingStore } from "@/lib/onboarding/store";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { useGoalStore } from "@/lib/store/goal-store";
-import { saveBoard } from "@/lib/storage";
+import { saveBoard, STORAGE_KEYS } from "@/lib/storage";
 
-// Simple helper to guess area
-const inferLifeArea = (goal: string): string => {
-    const g = goal.toLowerCase();
-    if (g.includes('dinero') || g.includes('ahorrar') || g.includes('invertir') || g.includes('income')) return 'area-1'; // Finances
-    if (g.includes('salud') || g.includes('peso') || g.includes('correr') || g.includes('fit')) return 'area-2'; // Health
-    if (g.includes('trabajo') || g.includes('negocio') || g.includes('career') || g.includes('cliente')) return 'area-3'; // Career
-    return 'area-5'; // Default to Growth
-};
-
+import Step0Name from "./steps/Step0Name";
 import Step1Goal from "./steps/Step1Goal";
 import { Step2Context } from "./steps/Step2Context";
 import { Step3Past } from "./steps/Step3Past";
@@ -47,22 +40,19 @@ export default function OnboardingFlow() {
         setLoading
     } = useOnboardingStore();
 
-    // Trigger AI generation when we reach step 5 (after future vision)
+    // Trigger AI generation when we reach step 6 (loading)
     useEffect(() => {
-        if (currentStep === 5 && answers.futureSelfVision && !isLoading) {
+        if (currentStep === 6 && !isLoading) {
             handleComplete();
         }
     }, [currentStep]);
 
-    const handleStep1Next = () => {
-        if (answers.goal) {
-            storeNextStep();
-        }
-    };
-
     const handleComplete = async () => {
         setLoading(true);
         try {
+            // Save user name to local storage immediately
+            localStorage.setItem('user_name', answers.name);
+
             // Call the AI API with all collected data
             const res = await fetch('/api/onboarding', {
                 method: 'POST',
@@ -77,38 +67,81 @@ export default function OnboardingFlow() {
                 throw new Error(`API error: ${res.status}`);
             }
 
-            const plan = await res.json();
+            const rawPlan = await res.json();
+            console.log("Plan created:", rawPlan);
 
-            console.log("Plan created:", plan);
+            // --- MAP TO EXECUTION BOARD INTERFACE (Fixes "Vision loading..." bug) ---
+            const plan = {
+                vision_layer: {
+                    futureVision: rawPlan.vision.title + ": " + rawPlan.vision.motivation,
+                    mantra: rawPlan.vision.identity
+                },
+                goal_layer: {
+                    smartGoal: answers.goal,
+                    deadline: "90 days",
+                    kpis: [
+                        { metric: "Consistency", target: "90%", deadline: "30 days" }
+                    ]
+                },
+                execution_layer: {
+                    weeks: rawPlan.strategy.phases.map((phase: string, idx: number) => ({
+                        weekNumber: idx + 1,
+                        theme: phase,
+                        milestone: "Complete phase objective",
+                        actions: []
+                    }))
+                },
+                obstacle_layer: {
+                    plans: answers.obstacles.map(obs => ({
+                        if: obs,
+                        then: ["Focus on the primary lever", "Breathe and re-center"]
+                    }))
+                },
+                habits_layer: {
+                    morning: {
+                        time: "07:00",
+                        duration: "20 min",
+                        steps: rawPlan.habits?.morning?.map((h: any) => typeof h === 'string' ? h : h.title) || []
+                    },
+                    deepWork: {
+                        time: "09:00",
+                        duration: "90 min",
+                        steps: ["Focus on the hardest task first"]
+                    },
+                    evening: {
+                        time: "21:00",
+                        duration: "15 min",
+                        steps: rawPlan.habits?.evening?.map((h: any) => typeof h === 'string' ? h : h.title) || []
+                    }
+                }
+            };
 
             // --- SAVE BOARD (Local Storage) ---
             saveBoard(plan);
 
-            // --- 0. POPULATE GOALS (New Store) ---
+            // --- 0. POPULATE GOALS ---
             const goalStore = useGoalStore.getState();
             goalStore.addGoal({
                 title: answers.goal,
                 status: 'active',
-                motivation: answers.motivation,
-                // Simple heuristic to assign a life area based on keywords, or default to Growth
-                lifeAreaId: inferLifeArea(answers.goal)
+                motivation: rawPlan.vision.motivation,
+                lifeAreaId: answers.goalCategory
             });
 
-            // --- 1. POPULATE TASKS (Backlog) ---
-            const tasks = plan.executionBoard?.tasks || [];
+            // --- 1. POPULATE TASKS ---
+            const tasks = rawPlan.executionBoard?.tasks || [];
             const taskStore = useTaskStore.getState();
-
             tasks.forEach((t: any) => {
                 taskStore.addTask({
                     title: t.title,
                     priority: t.priority || 'important',
                     status: 'todo',
                     tags: [t.tag || 'onboarding'],
-                    description: `Generated by Glow AI for goal: ${answers.goal}`
+                    description: `Generated for goal: ${answers.goal}`
                 });
             });
 
-            // --- 2. POPULATE DAILY VIEW (The "One Thing") ---
+            // --- 2. POPULATE DAILY VIEW ---
             if (tasks.length > 0) {
                 const oneThing = {
                     id: tasks[0].id || `task-${Date.now()}`,
@@ -120,60 +153,16 @@ export default function OnboardingFlow() {
                     completed: false,
                     priority: 'one-thing'
                 };
-
-                const otherActions = tasks.slice(1, 5).map((t: any, idx: number) => ({
-                    id: t.id || `task-${Date.now()}-${idx}`,
-                    title: t.title,
-                    duration: '45 min',
-                    type: 'admin',
-                    why: 'Supporting action',
-                    bestTime: 'Afternoon',
-                    completed: false,
-                    priority: 'secondary'
-                }));
-
-                setInitialData(oneThing, otherActions);
+                setInitialData(oneThing, []);
             }
 
-            // --- 3. POPULATE ROUTINES (Habits) ---
-            const routineStore = useRoutineStore.getState();
-            if (plan.habits) {
-                if (plan.habits.morning) {
-                    const morningSteps = plan.habits.morning.map((h: any, i: number) => ({
-                        id: `m-ai-${i}`,
-                        title: typeof h === 'string' ? h : h.title,
-                        duration: (typeof h === 'object' && h.duration) ? h.duration : 10
-                    }));
-
-                    routineStore.updateRoutine('morning-1', {
-                        steps: morningSteps,
-                        description: `Optimized for: ${answers.goal}`
-                    });
-                }
-
-                if (plan.habits.evening) {
-                    const eveningSteps = plan.habits.evening.map((h: any, i: number) => ({
-                        id: `e-ai-${i}`,
-                        title: typeof h === 'string' ? h : h.title,
-                        duration: (typeof h === 'object' && h.duration) ? h.duration : 10
-                    }));
-
-                    routineStore.updateRoutine('evening-1', {
-                        steps: eveningSteps,
-                        description: `Review and prep for: ${answers.goal}`
-                    });
-                }
-            }
-
-            // --- 4. POPULATE CALENDAR ---
+            // --- 3. POPULATE CALENDAR ---
             const calendarStore = useCalendarStore.getState();
-            if (plan.calendar?.blocks) {
+            if (rawPlan.calendar?.blocks) {
                 const today = startOfDay(new Date());
-                plan.calendar.blocks.forEach((block: any) => {
-                    // Parse "HH:MM"
+                rawPlan.calendar.blocks.forEach((block: any) => {
                     const [startH, startM] = block.start.split(':').map(Number);
                     const [endH, endM] = block.end.split(':').map(Number);
-
                     calendarStore.addEvent({
                         userId: 'current-user',
                         title: block.title,
@@ -194,7 +183,6 @@ export default function OnboardingFlow() {
         } catch (error) {
             console.error("Error creating plan", error);
             setLoading(false);
-            // Show error to user
             alert("Hubo un error al generar tu plan. Por favor intenta de nuevo.");
         }
     };
@@ -203,64 +191,83 @@ export default function OnboardingFlow() {
         return <OnboardingLoading language={language} />;
     }
 
-    // If we're on step 6 (after generation), show reveal
-    if (currentStep === 6) {
+    if (currentStep === 7) {
         return <Step5Reveal />;
     }
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
+        <div className="w-full max-w-2xl mx-auto py-12 px-4">
             {/* Progress Bar */}
-            <div className="mb-8 h-1 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                <div
-                    className="h-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-500 ease-out"
-                    style={{ width: `${(currentStep / 5) * 100}%` }}
-                />
+            <div className="mb-12">
+                <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden shadow-inner">
+                    <motion.div
+                        className="h-full bg-primary transition-all duration-700 ease-out shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(currentStep / 5) * 100}%` }}
+                    />
+                </div>
             </div>
 
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentStep}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                     {currentStep === 1 && (
+                        <Step0Name
+                            value={answers.name}
+                            onChange={(v) => setAnswer('name', v)}
+                            onNext={storeNextStep}
+                            content={t.step0}
+                        />
+                    )}
+
+                    {currentStep === 2 && (
                         <Step1Goal
-                            value={answers.goal}
-                            onChange={(v) => setAnswer('goal', v)}
-                            onNext={handleStep1Next}
+                            name={answers.name}
+                            goal={answers.goal}
+                            category={answers.goalCategory}
+                            onChange={setAnswer}
+                            onNext={storeNextStep}
                             content={t.step1}
                         />
                     )}
 
-                    {currentStep === 2 && <Step2Context />}
+                    {currentStep === 3 && (
+                        <Step2Context
+                            timePerDay={answers.timePerDay}
+                            energyPeak={answers.energyPeak}
+                            scheduleConstraints={answers.scheduleConstraints}
+                            onChange={setAnswer}
+                            onNext={storeNextStep}
+                            content={t.step2}
+                        />
+                    )}
 
-                    {currentStep === 3 && <Step3Past />}
+                    {currentStep === 4 && (
+                        <Step3Past
+                            selectedObstacles={answers.obstacles}
+                            onChange={setAnswer}
+                            onNext={storeNextStep}
+                            content={t.step3}
+                        />
+                    )}
 
-                    {currentStep === 4 && <Step4Future />}
+                    {currentStep === 5 && (
+                        <Step4Future
+                            goal={answers.goal}
+                            wantsVisualization={answers.wantsVisualization}
+                            futureSelfVision={answers.futureSelfVision}
+                            onChange={setAnswer}
+                            onNext={storeNextStep}
+                            content={t.step4}
+                        />
+                    )}
                 </motion.div>
             </AnimatePresence>
-
-            {/* Dev Skip Button (only in development) */}
-            {process.env.NODE_ENV === 'development' && currentStep < 4 && (
-                <div className="mt-8 text-center">
-                    <button
-                        onClick={() => {
-                            // Fill minimal data and skip to generation
-                            if (!answers.goal) setAnswer('goal', 'Mejorar mi salud y productividad');
-                            if (!answers.constraint) setAnswer('constraint', 'Time');
-                            if (answers.obstacles.length === 0) setAnswer('obstacles', ['Falta de motivación']);
-                            if (!answers.futureSelfVision) setAnswer('futureSelfVision', 'Me siento energizado y productivo cada día');
-                            setStep(5);
-                        }}
-                        className="text-xs text-zinc-400 hover:text-zinc-600 dark:text-zinc-600 dark:hover:text-zinc-400"
-                    >
-                        Dev Skip →
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

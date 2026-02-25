@@ -3,23 +3,34 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Send, Sparkles } from "lucide-react";
+import { Send, Sparkles, Heart, DollarSign, Briefcase, Users, Zap, Target } from "lucide-react";
+import { OnboardingAnswers } from "@/lib/onboarding/types";
 
 interface StepProps {
-    value: string;
-    onChange: (val: string) => void;
+    name: string;
+    goal: string;
+    category: OnboardingAnswers['goalCategory'];
+    onChange: (key: keyof OnboardingAnswers, val: any) => void;
     onNext: () => void;
-    content: any; // Type from onboardingContent
+    content: any;
 }
 
-export default function Step1Goal({ value, onChange, onNext, content }: StepProps) {
-    const [typedText, setTypedText] = useState("");
-    const fullText = content.bubble;
+const CATEGORIES = [
+    { id: 'health', icon: Heart, color: 'text-red-500 bg-red-500/10' },
+    { id: 'wealth', icon: DollarSign, color: 'text-emerald-500 bg-emerald-500/10' },
+    { id: 'career', icon: Briefcase, color: 'text-blue-500 bg-blue-500/10' },
+    { id: 'relationships', icon: Users, color: 'text-pink-500 bg-pink-500/10' },
+    { id: 'growth', icon: Zap, color: 'text-amber-500 bg-amber-500/10' },
+    { id: 'other', icon: Target, color: 'text-zinc-500 bg-zinc-500/10' },
+];
 
-    // Typewriter effect for the AI Bubble
+export default function Step1Goal({ name, goal, category, onChange, onNext, content }: StepProps) {
+    const [typedText, setTypedText] = useState("");
+    const fullText = content.bubble.replace('{{name}}', name);
+
     useEffect(() => {
         let i = 0;
-        const speed = 20;
+        const speed = 15;
         setTypedText("");
         const interval = setInterval(() => {
             if (i < fullText.length) {
@@ -32,81 +43,91 @@ export default function Step1Goal({ value, onChange, onNext, content }: StepProp
         return () => clearInterval(interval);
     }, [fullText]);
 
-    const handleQuickSelect = (goal: string) => {
-        onChange(goal);
-    };
-
-    const isComplete = value.length > 3;
+    const isComplete = goal.length > 3 && category;
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
             {/* AI Bubble */}
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 rounded-2xl rounded-tl-none shadow-sm relative"
-            >
-                <div className="absolute -left-3 -top-3 bg-gradient-to-br from-indigo-500 to-purple-600 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
-                    <Sparkles className="w-5 h-5 text-white" />
+            <div className="flex gap-4">
+                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Sparkles className="h-5 w-5 text-primary" />
                 </div>
-                <p className="text-lg leading-relaxed whitespace-pre-wrap text-zinc-800 dark:text-zinc-100">
-                    {typedText}
-                </p>
-            </motion.div>
+                <div className="bg-card rounded-2xl p-6 border shadow-sm relative flex-1">
+                    <p className="text-lg leading-relaxed whitespace-pre-wrap">
+                        {typedText}
+                    </p>
+                    <div className="absolute -left-2 top-4 w-4 h-4 bg-card border-l border-t rotate-45" />
+                </div>
+            </div>
 
             {/* Input Area */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="space-y-4"
+                className="pl-14 space-y-8"
             >
                 <div>
                     <input
                         type="text"
-                        value={value}
-                        onChange={(e) => onChange(e.target.value)}
+                        value={goal}
+                        onChange={(e) => onChange('goal', e.target.value)}
                         placeholder={content.placeholder}
-                        className="w-full bg-transparent text-xl md:text-2xl border-b-2 border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 outline-none py-4 transition-all placeholder:text-zinc-300 dark:placeholder:text-zinc-700"
+                        className="w-full bg-transparent text-2xl md:text-3xl border-b-2 border-zinc-200 dark:border-zinc-800 focus:border-primary outline-none py-4 transition-all placeholder:text-zinc-300 dark:placeholder:text-zinc-700"
                         autoFocus
                         onKeyDown={(e) => e.key === 'Enter' && isComplete && onNext()}
                     />
                 </div>
 
-                {/* Quick Goals Pills */}
-                <div className="flex flex-wrap gap-2">
-                    {content.quickGoals.map((goal: string) => (
-                        <button
-                            key={goal}
-                            onClick={() => handleQuickSelect(goal)}
-                            className={`px-4 py-2 rounded-full text-sm transition-all border ${value === goal
-                                    ? 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800'
-                                    : 'bg-transparent border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 text-zinc-600 dark:text-zinc-400'
-                                }`}
-                        >
-                            {goal}
-                        </button>
-                    ))}
+                {/* Categories */}
+                <div className="space-y-4">
+                    <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{content.areas.label}</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {CATEGORIES.map((cat) => {
+                            const Icon = cat.icon;
+                            const isSelected = category === cat.id;
+                            return (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => onChange('goalCategory', cat.id)}
+                                    className={`
+                                        flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left
+                                        ${isSelected
+                                            ? 'border-primary bg-primary/5 shadow-md shadow-primary/10'
+                                            : 'border-transparent bg-secondary/50 hover:bg-secondary'
+                                        }
+                                    `}
+                                >
+                                    <div className={`p-2 rounded-lg ${cat.color}`}>
+                                        <Icon className="h-5 w-5" />
+                                    </div>
+                                    <span className={`font-medium ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                        {content.areas[cat.id]}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Continue Button */}
+                <div className="flex justify-end pt-4">
+                    <button
+                        onClick={onNext}
+                        disabled={!isComplete}
+                        className={`
+                            group flex items-center gap-2 px-8 py-4 rounded-2xl font-bold transition-all
+                            ${isComplete
+                                ? 'bg-primary text-primary-foreground hover:scale-105 shadow-xl shadow-primary/20'
+                                : 'bg-secondary text-muted-foreground cursor-not-allowed'
+                            }
+                        `}
+                    >
+                        {content.continue}
+                        <Send className={`w-5 h-5 transition-transform ${isComplete ? 'group-hover:translate-x-1' : ''}`} />
+                    </button>
                 </div>
             </motion.div>
-
-            {/* Continue Button */}
-            <div className="flex justify-end pt-4">
-                <button
-                    onClick={onNext}
-                    disabled={!isComplete}
-                    className={`
-                        group flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all
-                        ${isComplete
-                            ? 'bg-black dark:bg-white text-white dark:text-black hover:scale-105 shadow-lg'
-                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed'
-                        }
-                    `}
-                >
-                    {content.continue}
-                    <Send className={`w-4 h-4 transition-transform ${isComplete ? 'group-hover:translate-x-1' : ''}`} />
-                </button>
-            </div>
         </div>
     );
 }

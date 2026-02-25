@@ -4,63 +4,79 @@ import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
 
 export const runtime = 'nodejs'; // Use nodejs runtime for Gemini SDK if edge has issues, but either should work
 
+
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { goal, constraint, timeframe, style, deepDive, language = 'es' } = body;
+        const {
+            name,
+            goal,
+            goalCategory,
+            timePerDay,
+            energyPeak,
+            scheduleConstraints,
+            obstacles,
+            futureSelfVision,
+            language = 'es'
+        } = body;
 
         // Construct a rich prompt based on user inputs
         const prompt = `
-      Act as "Bloom", a world-class elite productivity coach.
+      Act as "Bloom", a world-class elite performance and execution coach. 
+      Your mission is to transform a user's raw ambition into a military-grade execution system.
       
-      USER CONTEXT:
-      - Goal: "${goal}"
-      - Constraint: "${constraint}"
-      - Timeframe: "${timeframe || '90 days'}"
-      - Work Style: "${style || 'Flexible'}"
-      - Deep Context: "${deepDive || 'N/A'}"
+      USER DOSSIER:
+      - Name: "${name}"
+      - Primary Objective: "${goal}"
+      - Area of Life: "${goalCategory}"
+      - Daily Allocation: "${timePerDay}"
+      - Circadian Peak (Energy): "${energyPeak}"
+      - Grid Constraints: "${scheduleConstraints}"
+      - Recorded Friction (Past Obstacles): "${obstacles.join(', ')}"
+      - Projected Identity (Future Vision): "${futureSelfVision || 'N/A'}"
       
-      YOUR TASK:
-      Create a comprehensive, personalized execution system.
+      CRITICAL OPERATIONAL RULES:
+      1. LANGUAGE: Respond EXCLUSIVELY in ${language === 'es' ? 'SPANISH (Español)' : 'English'}.
+      2. TONE: Elite, analytical, high-stakes, yet deeply encouraging. No corporate fluff.
+      3. ARCHITECTURE: The system must be tactical and realistic. No generic advice.
       
-      CRITICAL RULES:
-      1. LANGUAGE: You MUST response in ${language === 'es' ? 'SPANISH (Español)' : 'English'}. This is non-negotiable. Even the JSON keys should be compatible, but the CONTENT values must be Spanish.
-      2. TONE: Encouraging, strategic, scientific, slightly gamified.
-      3. OUTPUT FORMAT: valid JSON only.
-      
-      JSON STRUCTURE:
+      REQUIRED OUTPUT (JSON ONLY):
       {
         "vision": {
-           "title": "Title of the goal",
-           "motivation": "Why this matters (based on context)",
-           "identity": "The new identity the user is building"
+           "title": "A brief, powerful title for the 90-day mission",
+           "motivation": "A 2-sentence emotional fuel injection based on the user's 'why'",
+           "identity": "A 5-word mantra for their new identity (e.g., 'The Relentless Founder')"
         },
         "strategy": {
-           "phases": ["Phase 1 Name", "Phase 2 Name", "Phase 3 Name"],
-           "focus": "The core lever to pull"
+           "phases": [
+              "Phase 1: Foundation (Days 1-30) - [Specific focus]",
+              "Phase 2: Aggression (Days 31-60) - [Specific focus]",
+              "Phase 3: Conquest (Days 61-90) - [Specific focus]"
+           ],
+           "focus": "The SINGLE most important lever to pull for 10x ROI"
         },
         "executionBoard": {
-           "columns": ["To Do", "In Progress", "Done"],
            "tasks": [
-              {"id": "t1", "title": "Obtain your first customer", "tag": "Win", "priority": "urgent-important"},
-              {"id": "t2", "title": "Define your offer", "tag": "Strategy", "priority": "important"},
-              {"id": "t3", "title": "Setup landing page", "tag": "Tech", "priority": "low"}
+              {"id": "t1", "title": "[Most leveraged action]", "tag": "Strategic", "priority": "urgent-important"},
+              {"id": "t2", "title": "[Critical infrastructure setup]", "tag": "Tactical", "priority": "important"},
+              {"id": "t3", "title": "[Key relationship or outreach]", "tag": "Networking", "priority": "important"},
+              {"id": "t4", "title": "[Systematization or learning]", "tag": "Growth", "priority": "low"}
            ]
         },
         "habits": {
            "morning": [
-              {"title": "Meditation", "duration": 10},
-              {"title": "Review Goals", "duration": 5}
+              {"title": "[Action for clarity]", "duration": 5},
+              {"title": "[Action for momentum]", "duration": 15}
            ],
            "evening": [
-              {"title": "Plan Tomorrow", "duration": 5},
-              {"title": "Reading", "duration": 30}
+              {"title": "[Action for closure/review]", "duration": 10},
+              {"title": "[Digital wind down]", "duration": 20}
            ]
         },
         "calendar": {
            "blocks": [
-              {"title": "Deep Work Block", "start": "09:00", "end": "11:00", "type": "DEEP_WORK_CREATIVE"},
-              {"title": "Admin Block", "start": "13:00", "end": "14:00", "type": "ADMIN_SHALLOW"}
+              {"title": "Elite Focus: [Goal focus]", "start": "${energyPeak === 'morning' ? '08:00' : '14:00'}", "end": "${energyPeak === 'morning' ? '10:00' : '16:00'}", "type": "DEEP_WORK_CREATIVE"},
+              {"title": "Tactical Logistics", "start": "13:00", "end": "14:00", "type": "ADMIN_SHALLOW"}
            ]
         }
       }

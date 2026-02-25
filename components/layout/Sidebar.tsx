@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -90,6 +91,15 @@ export function Sidebar() {
     const { sidebarOpen, toggleSidebar } = useUIStore()
     const { t } = useLanguage()
     const collapsed = !sidebarOpen
+    const [userName, setUserName] = useState<string | null>(null)
+
+    useEffect(() => {
+        // Safe access to localStorage in client component
+        if (typeof window !== 'undefined') {
+            const storedName = localStorage.getItem('user_name')
+            setUserName(storedName)
+        }
+    }, [])
 
     return (
         <aside
@@ -174,12 +184,12 @@ export function Sidebar() {
                             <Button variant="ghost" className={cn("w-full justify-start gap-2 px-1 hover:bg-sidebar-accent", collapsed && "justify-center px-0")}>
                                 <Avatar className="h-6 w-6">
                                     <AvatarImage src="/placeholder-user.jpg" alt="@user" />
-                                    <AvatarFallback>CN</AvatarFallback>
+                                    <AvatarFallback>{userName ? userName[0].toUpperCase() : 'U'}</AvatarFallback>
                                 </Avatar>
                                 {!collapsed && (
-                                    <div className="flex flex-col items-start text-xs">
-                                        <span className="font-semibold text-foreground">Jairo Pro</span>
-                                        <span className="text-muted-foreground">Pro Plan</span>
+                                    <div className="flex flex-col items-start translate-x-1">
+                                        <span className="text-xs font-semibold text-foreground truncate w-32">{userName || 'User'}</span>
+                                        <span className="text-[10px] text-muted-foreground">Pro Plan</span>
                                     </div>
                                 )}
                             </Button>

@@ -15,29 +15,34 @@ export interface OnboardingState {
 }
 
 export interface OnboardingAnswers {
+    // Step 0: Profile
+    name: string;
+
     // Step 1: Goal
     goal: string;
-    goalCategory?: string;
+    goalCategory: 'health' | 'wealth' | 'career' | 'relationships' | 'growth' | 'other';
 
-    // Step 2: Context
-    constraint: 'Time' | 'Energy' | 'Money' | 'Skills' | 'Support' | 'Other' | null;
-    timePerDay?: number; // hours (if constraint is Time)
-    budget?: string; // (if constraint is Money)
-    skillNeeded?: string; // (if constraint is Skills)
-    energyPeak?: string; // (if constraint is Energy)
+    // Step 2: Context & Schedule
+    timePerDay: string; // e.g. "1-2 hours"
+    energyPeak: 'morning' | 'afternoon' | 'evening';
+    scheduleConstraints: string; // e.g. "Work 9-5", "Kids in afternoon"
 
     // Step 3: Past Attempts
-    triedBefore: 'Yes, multiple times' | 'Yes, once' | 'No, first time' | null;
     obstacles: string[];
 
-    // Step 4: Future Self
+    // Step 4: Future Self (Optional/Guided)
+    wantsVisualization: boolean;
     futureSelfVision: string;
 }
 
 export const INITIAL_ANSWERS: OnboardingAnswers = {
+    name: '',
     goal: '',
-    constraint: null,
-    triedBefore: null,
+    goalCategory: 'growth',
+    timePerDay: '',
+    energyPeak: 'morning',
+    scheduleConstraints: '',
     obstacles: [],
+    wantsVisualization: true,
     futureSelfVision: '',
 };
