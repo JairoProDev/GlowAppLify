@@ -3,7 +3,7 @@
 
 import { ExecutionBoard, DailyLog } from './types';
 
-const STORAGE_KEYS = {
+export const STORAGE_KEYS = {
   BOARD: 'execution_board',
   LOGS: 'daily_logs',
   USER_ID: 'user_id',

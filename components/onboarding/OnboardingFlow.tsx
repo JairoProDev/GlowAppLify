@@ -147,11 +147,11 @@ export default function OnboardingFlow() {
                     id: tasks[0].id || `task-${Date.now()}`,
                     title: tasks[0].title,
                     duration: '90 min',
-                    type: 'creative',
+                    type: 'creative' as const,
                     why: 'Highest leverage for your goal',
                     bestTime: 'Morning',
                     completed: false,
-                    priority: 'one-thing'
+                    priority: 'one-thing' as const
                 };
                 setInitialData(oneThing, []);
             }

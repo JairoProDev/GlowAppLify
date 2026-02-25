@@ -7,9 +7,9 @@ if (!apiKey) {
     console.warn("Missing GEMINI_API_KEY in environment variables");
 }
 
-export const geminiClient = new GoogleGenAI({
+export const genAI = new GoogleGenAI({
     apiKey: apiKey || 'dummy-key',
 });
 
-// Default model to use
-export const GEMINI_MODEL = 'gemini-3-flash-preview'; 
+// Default model to use - Gemini 1.5 Flash is the best balance of speed, cost and performance.
+export const GEMINI_MODEL = 'gemini-1.5-flash';

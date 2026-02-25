@@ -1,5 +1,5 @@
 
-import { geminiClient, GEMINI_MODEL } from './gemini';
+import { genAI, GEMINI_MODEL } from './gemini';
 import { Action, Week } from '@/lib/types'; // Existing types
 
 export interface UserContext {
@@ -25,7 +25,7 @@ export class AIService {
         }
 
         try {
-            const response = await geminiClient.models.generateContent({
+            const response = await genAI.models.generateContent({
                 model: GEMINI_MODEL,
                 contents: [
                     {
@@ -35,7 +35,7 @@ export class AIService {
                             
                             CONTEXT:
                             Goal: ${context.goal}
-                            Pending Tasks: ${context.incompleteTasks.map(t => t.title).join(', ')}
+                            Pending Tasks: ${context.incompleteTasks.map(t => t.action).join(', ')}
                             Mood Trend (Last 7 days): ${context.moodTrend.join(', ')}
                             
                             Return a JSON object with "title" and "reasoning".`
@@ -92,7 +92,7 @@ export class AIService {
         `;
 
         try {
-            const response = await geminiClient.models.generateContent({
+            const response = await genAI.models.generateContent({
                 model: GEMINI_MODEL,
                 contents: [{ role: 'user', parts: [{ text: prompt }] }],
                 config: {
@@ -122,7 +122,7 @@ export class AIService {
         }
 
         try {
-            const response = await geminiClient.models.generateContent({
+            const response = await genAI.models.generateContent({
                 model: GEMINI_MODEL,
                 contents: [
                     {

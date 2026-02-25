@@ -4,7 +4,6 @@
 import { motion } from "framer-motion"
 import { Sparkles, Clock, Zap, Timer, Send } from "lucide-react"
 import { OnboardingAnswers } from "@/lib/onboarding/types"
-import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
 
 interface StepProps {
@@ -64,8 +63,8 @@ export function Step2Context({
                                 key={t}
                                 onClick={() => onChange('timePerDay', t)}
                                 className={`p-4 rounded-xl border-2 transition-all font-medium ${timePerDay === t
-                                        ? 'border-primary bg-primary/5 text-foreground'
-                                        : 'border-transparent bg-secondary'
+                                    ? 'border-primary bg-primary/5 text-foreground'
+                                    : 'border-transparent bg-secondary'
                                     }`}
                             >
                                 {t}
@@ -86,8 +85,8 @@ export function Step2Context({
                                 key={opt.id}
                                 onClick={() => onChange('energyPeak', opt.id)}
                                 className={`flex-1 p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${energyPeak === opt.id
-                                        ? 'border-primary bg-primary/5 text-foreground'
-                                        : 'border-transparent bg-secondary'
+                                    ? 'border-primary bg-primary/5 text-foreground'
+                                    : 'border-transparent bg-secondary'
                                     }`}
                             >
                                 <opt.icon className={`h-6 w-6 ${energyPeak === opt.id ? 'text-primary' : 'text-muted-foreground'}`} />

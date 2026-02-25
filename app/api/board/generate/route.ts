@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
+import { genAI, GEMINI_MODEL } from '@/lib/ai/gemini';
 import { supabase } from '@/lib/supabase';
 import { ExecutionBoard } from '@/lib/types';
 
@@ -86,7 +86,7 @@ RETURN ONLY VALID JSON matching this exact structure:
 }
 `;
 
-    const response = await geminiClient.models.generateContent({
+    const response = await genAI.models.generateContent({
       model: GEMINI_MODEL,
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {

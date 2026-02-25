@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
+import { genAI, GEMINI_MODEL } from '@/lib/ai/gemini';
 
 export const runtime = 'nodejs'; // Use nodejs runtime for Gemini SDK if edge has issues, but either should work
 
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
         }
 
         // Call Gemini
-        const response = await geminiClient.models.generateContent({
+        const response = await genAI.models.generateContent({
             model: GEMINI_MODEL,
             contents: [{ role: 'user', parts: [{ text: "Please generate my personalized execution system based on the provided inputs." }] }],
             config: {

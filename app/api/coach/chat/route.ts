@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
+import { genAI, GEMINI_MODEL } from '@/lib/ai/gemini';
 
 export async function POST(req: NextRequest) {
     try {
@@ -29,7 +29,7 @@ Remember: You're not just a chatbot. You're an accountability partner and strate
             parts: [{ text: m.content }]
         }));
 
-        const response = await geminiClient.models.generateContent({
+        const response = await genAI.models.generateContent({
             model: GEMINI_MODEL,
             contents: geminiMessages,
             config: {

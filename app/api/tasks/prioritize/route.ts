@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
+import { genAI, GEMINI_MODEL } from '@/lib/ai/gemini';
 
 export async function POST(req: NextRequest) {
     try {
@@ -52,7 +52,7 @@ ${tasks.map((t: any, i: number) => `${i + 1}. ${t.title}
 
 Analyze and prioritize these tasks strategically.`;
 
-        const response = await geminiClient.models.generateContent({
+        const response = await genAI.models.generateContent({
             model: GEMINI_MODEL,
             contents: [
                 { role: 'user', parts: [{ text: systemPrompt + "\n\n" + userPrompt }] }

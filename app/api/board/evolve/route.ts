@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { geminiClient, GEMINI_MODEL } from '@/lib/ai/gemini';
+import { genAI, GEMINI_MODEL } from '@/lib/ai/gemini';
 import { ExecutionBoard } from '@/lib/types';
 
 // export const runtime = 'edge'; // Removed for stability until edge compatibility is verified
@@ -41,7 +41,7 @@ Return a partial JSON object containing ONLY the layers that need updates (e.g.,
 The structure must match the ExecutionBoard TypeScript interface.
     `;
 
-        const response = await geminiClient.models.generateContent({
+        const response = await genAI.models.generateContent({
             model: GEMINI_MODEL,
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
